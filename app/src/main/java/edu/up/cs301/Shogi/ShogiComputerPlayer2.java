@@ -91,7 +91,7 @@ public class ShogiComputerPlayer2 extends ShogiComputerPlayer1 {
 					new Runnable() {
 						public void run() {
 						if (counterValueTextView != null && currentGameState != null) {
-							counterValueTextView.setText("" + currentGameState.getCounter());
+
 						}
 					}});
 		}

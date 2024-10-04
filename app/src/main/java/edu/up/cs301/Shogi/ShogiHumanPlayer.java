@@ -61,7 +61,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements OnClickListener
 	 */
 	protected void updateDisplay() {
 		// set the text in the appropriate widget
-		counterValueTextView.setText("" + state.getCounter());
+
 	}
 
 	/**

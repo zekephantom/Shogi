@@ -79,11 +79,11 @@ public class ShogiMainActivity extends GameMainActivity {
 	 * create a local game
 	 * 
 	 * @return
-	 * 		the local game, a counter game
+	 * 		the local game
 	 */
 	@Override
 	public LocalGame createLocalGame(GameState state) {
-		if (state == null) state = new ShogiState(0);
+		if (state == null) state = new ShogiState();
 		return new ShogiLocalGame(state);
 	}
 
