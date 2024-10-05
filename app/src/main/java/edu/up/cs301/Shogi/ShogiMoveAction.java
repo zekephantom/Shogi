@@ -4,7 +4,7 @@ import edu.up.cs301.GameFramework.players.GamePlayer;
 import edu.up.cs301.GameFramework.actionMessage.GameAction;
 
 /**
- * A CounterMoveAction is an action that is a "move" the game: either increasing
+ * A ShogiMoveAction is an action that is a "move" the game: either increasing
  * or decreasing the counter value.
  * 
  * @author Steven R. Vegdahl
