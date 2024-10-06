@@ -3,10 +3,9 @@ package edu.up.cs301.Shogi;
 import java.util.ArrayList;
 import edu.up.cs301.GameFramework.infoMessage.GameState;
 
-
 /**
  * This contains the state for Shogi.
- * 
+ *
  * @author Steven R. Vegdahl
  * @author Ezekiel Rafanan
  * @author Jona Bodirsky
@@ -100,7 +99,6 @@ public class ShogiState extends GameState {
 		// Copy game phase
 		this.gamePhase = orig.gamePhase;
 	}
-
 
 	// Getters and Setters for various instance variables
 	public ArrayList<ShogiPiece> getPlayer1Pieces() {
