@@ -35,6 +35,7 @@ public class ShogiMoveAction extends GameAction {
 	 * @return
 	 * 		a boolean that tells whether this move is a "plus"
 	 */
+
 	public boolean isPlus() {
 		return isPlus;
 		

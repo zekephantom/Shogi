@@ -45,7 +45,7 @@ public class ShogiBoard extends SurfaceView implements SurfaceHolder.Callback {
         Bitmap pawn = BitmapFactory.decodeResource(getResources(), R.drawable.pawn);
         Bitmap prom_pawn = BitmapFactory.decodeResource(getResources(), R.drawable.prom_pawn);
 
-
+/*
         // bottom side players pieces
         shogiPieces.add(new ShogiPiece(pawn, 6, 0));
         shogiPieces.add(new ShogiPiece(pawn, 6, 1));
@@ -91,7 +91,7 @@ public class ShogiBoard extends SurfaceView implements SurfaceHolder.Callback {
 
         // captured pieces (row: maybe 0 for left/upper pieces and 1 for right/lower pieces
         // future automate that specific piece automatically has location specified
-        capturedPieces.add(new ShogiPiece(pawn, 8, 1));
+        capturedPieces.add(new ShogiPiece(pawn, 8, 1));*/
     }
 
     @Override

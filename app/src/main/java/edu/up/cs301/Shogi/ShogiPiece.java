@@ -16,27 +16,24 @@ public class ShogiPiece {
     // Whether the piece is on the board
     private boolean onBoard;
 
-    // Bitmap representing the visual appearance of the piece
-    private Bitmap bitmap;
+
 
     // Position on the board
     private int row;
     private int col;
 
     // Constructor
-    public ShogiPiece(String type, int owner, int row, int col, Bitmap bitmap) {
+    public ShogiPiece(String type, int owner, int row, int col) {
         this.type = type;
         this.owner = owner;
         this.row = row;
         this.col = col;
-        this.bitmap = bitmap;
         this.promoted = false; // Default to not promoted
         this.onBoard = false; // Default to on the board
     }
 
     // Constructor to match ShogiBoard expectations
-    public ShogiPiece(Bitmap bitmap, int row, int col) {
-        this.bitmap = bitmap;
+    public ShogiPiece(int row, int col) {
         this.row = row;
         this.col = col;
         this.promoted = false; // Default to not promoted
@@ -49,7 +46,6 @@ public class ShogiPiece {
         this.owner = original.owner;
         this.promoted = original.promoted;
         this.onBoard = original.onBoard;
-        this.bitmap = original.bitmap;
         this.row = original.row;
         this.col = original.col;
     }
@@ -82,14 +78,6 @@ public class ShogiPiece {
     public boolean isOnBoard() { return onBoard; }
 
     public void setOnBoard(boolean onBoard) { this.onBoard = onBoard; }
-
-    public Bitmap getBitmap() {
-        return bitmap;
-    }
-
-    public void setBitmap(Bitmap bitmap) {
-        this.bitmap = bitmap;
-    }
 
     public int getRow() {
         return row;

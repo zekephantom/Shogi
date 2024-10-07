@@ -1,7 +1,13 @@
 package edu.up.cs301.Shogi;
 
+
+import android.graphics.BitmapFactory;
+import android.graphics.Bitmap;
+
+
 import java.util.ArrayList;
 import edu.up.cs301.GameFramework.infoMessage.GameState;
+import edu.up.cs301.shogi.R;
 
 /**
  * This contains the state for Shogi.
@@ -42,13 +48,21 @@ public class ShogiState extends GameState {
 
 	// Constructor for ShogiState
 	public ShogiState() {
-		pieces = new ArrayList<>(40);
-		this.initPieces;
+		pieces = new ArrayList<>();
+		this.initPieces();
 		gameBoard = new ShogiPiece[9][9]; // Shogi board is 9x9
 		currentPlayer = 0; // Start with Player 1
 		player1Score = 0;
 		player2Score = 0;
 		gamePhase = "Setup";
+
+
+	}
+
+	private void initPieces(){
+		pieces.add(new ShogiPiece("King", 1, 8, 4));
+
+
 	}
 
 	/*
