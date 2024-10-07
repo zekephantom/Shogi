@@ -18,7 +18,6 @@ public class ShogiState extends GameState {
 
 	// to satisfy Serializable interface
 	private static final long serialVersionUID = 7737393762469851826L;
-
 	private static final String TAG = "ShogiState";
 
 	/*
@@ -45,7 +44,8 @@ public class ShogiState extends GameState {
 	// Current state of the game phase
 	private String gamePhase; // Setup, Placement, Main Play, etc.
 
-	// Constructor for ShogiState
+
+	// Default Constructor for ShogiState
 	public ShogiState() {
 		player1Pieces = new ArrayList<>();
 		player2Pieces = new ArrayList<>();
