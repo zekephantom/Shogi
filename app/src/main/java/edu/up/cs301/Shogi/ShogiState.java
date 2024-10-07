@@ -21,8 +21,9 @@ public class ShogiState extends GameState {
 
 	private static final String TAG = "ShogiState";
 
-	// Instance Variables for Shogi State
-
+	/*
+	* Instance Variables for Shogi State
+	* */
 	// Information about each player's resources
 	private ArrayList<ShogiPiece> player1Pieces; // Pieces for Player 1
 	private ArrayList<ShogiPiece> player2Pieces; // Pieces for Player 2
@@ -57,6 +58,9 @@ public class ShogiState extends GameState {
 		gamePhase = "Setup";
 	}
 
+	/*
+	* Deep copy constructor
+	* */
 	public ShogiState(ShogiState orig) {
 		// Deep copy player pieces
 		this.player1Pieces = new ArrayList<>();
@@ -101,55 +105,29 @@ public class ShogiState extends GameState {
 	}
 
 	// Getters and Setters for various instance variables
-	public ArrayList<ShogiPiece> getPlayer1Pieces() {
-		return player1Pieces;
-	}
+	public ArrayList<ShogiPiece> getPlayer1Pieces() {return player1Pieces;}
 
-	public ArrayList<ShogiPiece> getPlayer2Pieces() {
-		return player2Pieces;
-	}
+	public ArrayList<ShogiPiece> getPlayer2Pieces() {return player2Pieces;}
 
-	public ShogiPiece[][] getGameBoard() {
-		return gameBoard;
-	}
+	public ShogiPiece[][] getGameBoard() {return gameBoard;}
 
-	public int getCurrentPlayer() {
-		return currentPlayer;
-	}
+	public int getCurrentPlayer() {return currentPlayer;}
 
-	public void setCurrentPlayer(int currentPlayer) {
-		this.currentPlayer = currentPlayer;
-	}
+	public void setCurrentPlayer(int currentPlayer) {this.currentPlayer = currentPlayer;}
 
-	public boolean[][] getPlayer1Visibility() {
-		return player1Visibility;
-	}
+	public boolean[][] getPlayer1Visibility() {return player1Visibility;}
 
-	public boolean[][] getPlayer2Visibility() {
-		return player2Visibility;
-	}
+	public boolean[][] getPlayer2Visibility() {return player2Visibility;}
 
-	public int getPlayer1Score() {
-		return player1Score;
-	}
+	public int getPlayer1Score() {return player1Score;}
 
-	public void setPlayer1Score(int player1Score) {
-		this.player1Score = player1Score;
-	}
+	public void setPlayer1Score(int player1Score) {	this.player1Score = player1Score;}
 
-	public int getPlayer2Score() {
-		return player2Score;
-	}
+	public int getPlayer2Score() {return player2Score;}
 
-	public void setPlayer2Score(int player2Score) {
-		this.player2Score = player2Score;
-	}
+	public void setPlayer2Score(int player2Score) {	this.player2Score = player2Score;}
 
-	public String getGamePhase() {
-		return gamePhase;
-	}
+	public String getGamePhase() {return gamePhase;	}
 
-	public void setGamePhase(String gamePhase) {
-		this.gamePhase = gamePhase;
-	}
+	public void setGamePhase(String gamePhase) {this.gamePhase = gamePhase;	}
 }

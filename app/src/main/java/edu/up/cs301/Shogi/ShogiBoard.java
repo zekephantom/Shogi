@@ -25,10 +25,10 @@ public class ShogiBoard extends SurfaceView implements SurfaceHolder.Callback {
         // Initialize the list of game pieces
         shogiPieces = new ArrayList<>();
         capturedPieces = new ArrayList<>();
-        loadGamePieces(context);
+        loadShogiPieces(context);
     }
 
-    private void loadGamePieces(Context context) {
+    private void loadShogiPieces(Context context) {
         // Load Bitmaps for different pieces
         Bitmap kingLower = BitmapFactory.decodeResource(getResources(), R.drawable.kinglower);
         Bitmap rook = BitmapFactory.decodeResource(getResources(), R.drawable.rook);
@@ -147,7 +147,7 @@ public class ShogiBoard extends SurfaceView implements SurfaceHolder.Callback {
 
         // Add initial pieces for Player 1 and Player 2.
         // (This code can be similar to the `loadGamePieces()` method but more tailored to setting up the board at the start of a game.)
-        loadGamePieces(getContext()); // Load initial pieces.
+        loadShogiPieces(getContext()); // Load initial pieces.
 
         // Request an initial draw to display the board.
         if (drawingThread != null) {

@@ -26,6 +26,9 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.TabHost.TabSpec;
+
+import androidx.appcompat.app.AlertDialog;
+
 import edu.up.cs301.GameFramework.gameConfiguration.GameConfig;
 import edu.up.cs301.GameFramework.gameConfiguration.GamePlayerType;
 import edu.up.cs301.GameFramework.infoMessage.GameState;
