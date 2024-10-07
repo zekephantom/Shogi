@@ -6,17 +6,15 @@ import edu.up.cs301.GameFramework.actionMessage.GameAction;
 /**
  * A ShogiMoveAction is an action that is a "move" the game: moving a piece to a given location
  *
- * @author Steven R. Vegdahl
- * @author Andrew M. Nuxoll
- * @version September 2012
+ * @author Jona Bodirsky
+ * @author Makengo Lokombo
+ * @author Arnaj Sandhu
+ * @author James Pham
+ * @version October 2024
  */
 public class ShogiMoveAction extends GameAction {
-	
-	// to satisfy the serializable interface
-	private static final long serialVersionUID = 28062013L;
 
-	//whether this move is a plus (true) or minus (false)
-	private boolean isPlus;
+	//the
 	
 	/**
 	 * Constructor for the CounterMoveAction class.

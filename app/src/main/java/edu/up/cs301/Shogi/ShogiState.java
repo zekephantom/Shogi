@@ -24,9 +24,8 @@ public class ShogiState extends GameState {
 	/*
 	* Instance Variables for Shogi State
 	* */
-	// Information about each player's resources
-	private ArrayList<ShogiPiece> player1Pieces; // Pieces for Player 1
-	private ArrayList<ShogiPiece> player2Pieces; // Pieces for Player 2
+	// Information about all the pieces
+	private ArrayList<ShogiPiece> pieces;
 
 	// State of the board
 	private ShogiPiece[][] gameBoard; // Represents the board with pieces
@@ -43,8 +42,8 @@ public class ShogiState extends GameState {
 
 	// Constructor for ShogiState
 	public ShogiState() {
-		player1Pieces = new ArrayList<>();
-		player2Pieces = new ArrayList<>();
+		pieces = new ArrayList<>(40);
+		this.initPieces;
 		gameBoard = new ShogiPiece[9][9]; // Shogi board is 9x9
 		currentPlayer = 0; // Start with Player 1
 		player1Score = 0;
@@ -57,14 +56,9 @@ public class ShogiState extends GameState {
 	* */
 	public ShogiState(ShogiState orig) {
 		// Deep copy player pieces
-		this.player1Pieces = new ArrayList<>();
-		for (ShogiPiece piece : orig.player1Pieces) {
-			this.player1Pieces.add(new ShogiPiece(piece));
-		}
-
-		this.player2Pieces = new ArrayList<>();
-		for (ShogiPiece piece : orig.player2Pieces) {
-			this.player2Pieces.add(new ShogiPiece(piece));
+		this.pieces = new ArrayList<>();
+		for (ShogiPiece piece : orig.pieces) {
+			this.pieces.add(new ShogiPiece(piece));
 		}
 
 		// Deep copy game board
@@ -91,9 +85,7 @@ public class ShogiState extends GameState {
 	}
 
 	// Getters and Setters for various instance variables
-	public ArrayList<ShogiPiece> getPlayer1Pieces() {return player1Pieces;}
-
-	public ArrayList<ShogiPiece> getPlayer2Pieces() {return player2Pieces;}
+	public ArrayList<ShogiPiece> getPieces() {return pieces;}
 
 	public ShogiPiece[][] getGameBoard() {return gameBoard;}
 
@@ -114,7 +106,7 @@ public class ShogiState extends GameState {
 	public void setGamePhase(String gamePhase) {this.gamePhase = gamePhase;	}
 
 	public boolean moveAction(ShogiMoveAction action) {
-		
+
 	}
 
 	@Override
@@ -125,8 +117,7 @@ public class ShogiState extends GameState {
 		sb.append("Game Phase: ").append(gamePhase).append("\n");
 		sb.append("Player 1 Score: ").append(player1Score).append("\n");
 		sb.append("Player 2 Score: ").append(player2Score).append("\n");
-		sb.append("Player 1 Pieces: ").append(player1Pieces).append("\n");
-		sb.append("Player 2 Pieces: ").append(player2Pieces).append("\n");
+		sb.append("Pieces: ").append(pieces).append("\n");
 		sb.append("Game Board:\n");
 		for (int i = 0; i < 9; i++) {
 			for (int j = 0; j < 9; j++) {
