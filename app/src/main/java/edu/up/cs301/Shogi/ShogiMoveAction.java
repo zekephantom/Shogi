@@ -4,9 +4,8 @@ import edu.up.cs301.GameFramework.players.GamePlayer;
 import edu.up.cs301.GameFramework.actionMessage.GameAction;
 
 /**
- * A ShogiMoveAction is an action that is a "move" the game: either increasing
- * or decreasing the counter value.
- * 
+ * A ShogiMoveAction is an action that is a "move" the game: moving a piece to a given location
+ *
  * @author Steven R. Vegdahl
  * @author Andrew M. Nuxoll
  * @version September 2012

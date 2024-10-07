@@ -34,10 +34,6 @@ public class ShogiState extends GameState {
 	// Whose turn is it?
 	private int currentPlayer; // 0 for Player 1, 1 for Player 2
 
-	// Visibility information for each player
-	private boolean[][] player1Visibility; // Visibility of pieces for Player 1
-	private boolean[][] player2Visibility; // Visibility of pieces for Player 2
-
 	// Current score of each player
 	private int player1Score;
 	private int player2Score;
@@ -51,8 +47,6 @@ public class ShogiState extends GameState {
 		player2Pieces = new ArrayList<>();
 		gameBoard = new ShogiPiece[9][9]; // Shogi board is 9x9
 		currentPlayer = 0; // Start with Player 1
-		player1Visibility = new boolean[9][9];
-		player2Visibility = new boolean[9][9];
 		player1Score = 0;
 		player2Score = 0;
 		gamePhase = "Setup";
@@ -88,14 +82,6 @@ public class ShogiState extends GameState {
 		// Copy current player
 		this.currentPlayer = orig.currentPlayer;
 
-		// Deep copy visibility arrays
-		this.player1Visibility = new boolean[9][9];
-		this.player2Visibility = new boolean[9][9];
-		for (int i = 0; i < 9; i++) {
-			System.arraycopy(orig.player1Visibility[i], 0, this.player1Visibility[i], 0, 9);
-			System.arraycopy(orig.player2Visibility[i], 0, this.player2Visibility[i], 0, 9);
-		}
-
 		// Copy scores
 		this.player1Score = orig.player1Score;
 		this.player2Score = orig.player2Score;
@@ -114,10 +100,6 @@ public class ShogiState extends GameState {
 	public int getCurrentPlayer() {return currentPlayer;}
 
 	public void setCurrentPlayer(int currentPlayer) {this.currentPlayer = currentPlayer;}
-
-	public boolean[][] getPlayer1Visibility() {return player1Visibility;}
-
-	public boolean[][] getPlayer2Visibility() {return player2Visibility;}
 
 	public int getPlayer1Score() {return player1Score;}
 
