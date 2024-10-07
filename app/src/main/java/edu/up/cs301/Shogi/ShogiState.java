@@ -130,4 +130,24 @@ public class ShogiState extends GameState {
 	public String getGamePhase() {return gamePhase;	}
 
 	public void setGamePhase(String gamePhase) {this.gamePhase = gamePhase;	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Shogi State:\n");
+		sb.append("Current Player: ").append(currentPlayer == 0 ? "Player 1" : "Player 2").append("\n");
+		sb.append("Game Phase: ").append(gamePhase).append("\n");
+		sb.append("Player 1 Score: ").append(player1Score).append("\n");
+		sb.append("Player 2 Score: ").append(player2Score).append("\n");
+		sb.append("Player 1 Pieces: ").append(player1Pieces).append("\n");
+		sb.append("Player 2 Pieces: ").append(player2Pieces).append("\n");
+		sb.append("Game Board:\n");
+		for (int i = 0; i < 9; i++) {
+			for (int j = 0; j < 9; j++) {
+				sb.append(gameBoard[i][j] == null ? "[ ]" : "[P]").append(" ");
+			}
+			sb.append("\n");
+		}
+		return sb.toString();
+	}
 }
