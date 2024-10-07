@@ -113,6 +113,10 @@ public class ShogiState extends GameState {
 
 	public void setGamePhase(String gamePhase) {this.gamePhase = gamePhase;	}
 
+	public boolean moveAction(ShogiMoveAction action) {
+		
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
