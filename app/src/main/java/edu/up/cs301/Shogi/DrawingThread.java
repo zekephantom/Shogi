@@ -146,6 +146,15 @@ public class DrawingThread extends Thread {
             canvas.drawLine(cellDimensions, y, cellDimensions+fieldDimensions, y, paintBlack);
         }
 
+        // Draw 4 circles to indicate promotion zones
+            canvas.drawCircle(cellDimensions*4, cellDimensions*3,cellDimensions/13, paintBlack);
+            canvas.drawCircle(cellDimensions*7, cellDimensions*3,cellDimensions/13, paintBlack);
+            canvas.drawCircle(cellDimensions*4, cellDimensions*6,cellDimensions/13, paintBlack);
+            canvas.drawCircle(cellDimensions*7, cellDimensions*6,cellDimensions/13, paintBlack);
+
+
+
+
         // draw fields for captured pieces
         // Player 2
         for (int i = 0; i < 7; i++){
