@@ -132,4 +132,5 @@ public class ShogiState extends GameState {
 		}
 		return sb.toString();
 	}
+
 }
