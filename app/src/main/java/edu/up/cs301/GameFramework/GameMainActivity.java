@@ -34,6 +34,7 @@ import edu.up.cs301.GameFramework.utilities.IPCoder;
 import edu.up.cs301.GameFramework.utilities.Logger;
 import edu.up.cs301.GameFramework.utilities.MessageBox;
 import edu.up.cs301.GameFramework.utilities.Saving;
+import edu.up.cs301.Shogi.ShogiBoard;
 import edu.up.cs301.shogi.R;
 
 /**
@@ -605,6 +606,13 @@ public abstract class GameMainActivity extends Activity implements
         //Start Game Button
         else if (button.getId() == R.id.playGameButton) {
             String msg = startGame();
+            if(msg == null){
+                setContentView(R.layout.game_interface);
+            }
+            ShogiBoard shogiBoard = findViewById(R.id.shogiBoard);
+            if(shogiBoard != null){
+                shogiBoard.initializeBoard();
+            }
             if (msg != null) {
                 // we have an error message
                 MessageBox.popUpMessage(msg, this);

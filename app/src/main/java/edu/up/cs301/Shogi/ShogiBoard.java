@@ -140,4 +140,18 @@ public class ShogiBoard extends SurfaceView implements SurfaceHolder.Callback {
         matrix.postRotate(180);
         return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
     }
+
+    public void initializeBoard() {
+        // Set up game pieces in their initial positions.
+        shogiPieces.clear(); // Clear any existing pieces.
+
+        // Add initial pieces for Player 1 and Player 2.
+        // (This code can be similar to the `loadGamePieces()` method but more tailored to setting up the board at the start of a game.)
+        loadGamePieces(getContext()); // Load initial pieces.
+
+        // Request an initial draw to display the board.
+        if (drawingThread != null) {
+            drawingThread.requestRedraw();
+        }
+    }
 }
