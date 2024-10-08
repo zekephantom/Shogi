@@ -121,26 +121,49 @@ public class ShogiState extends GameState {
 		int currentCol = selectedPiece.getCol();
 		int moveRow = action.getMoveRow();
 		int moveCol = action.getMoveCol();
-		int rowDiff = (Math.abs(currentRow-moveRow));
+		int rowDiff = Math.abs(currentRow-moveRow);
 		int colDiff = Math.abs(currentCol-moveCol);
+
 		// Check if target is occupied
+		if (checkForPiece(moveRow, moveCol)) return false;
 
-		// check if path is blocked
-
-		// change depending on player
-
-		// checking for each piece
+		// checking for each piece if the move is allowed
 		switch (action.getPiece().getType()){
 			case("King"):
-				if (rowDiff == 1 && colDiff == 1){
+				if ((rowDiff == 1 && colDiff == 1) || (rowDiff == 1 && colDiff == 0) || (rowDiff == 0 && colDiff == 1)){
 					return true;
 				}
 					break;
-			case("GoldGeneral"):
+			case("GoldGeneral"): // make sure both player directions work accordingly
 				if ((rowDiff == 1 && colDiff == 0) || (rowDiff == 0 && colDiff == 1) || (rowDiff == 1 && colDiff == 1 && moveRow < currentRow)){
 					return true;
 				}
 				break;
+			case("SilverGeneral"): // make sure both player directions work accordingly
+
+				break;
+			case("Knight"): // make sure both player directions work accordingly
+
+				break;
+			case("Lance"): // make sure both player directions work accordingly
+
+				break;
+			case("Bishop"):
+				// check if path is blocked
+				if (pathBlocked(selectedPiece, moveRow, moveCol)) return false;
+
+				break;
+			case("Rook"):
+				// check if path is blocked
+				if (pathBlocked(selectedPiece, moveRow, moveCol)) return false;
+
+				break;
+			case("Pawn"): // make sure both player directions work accordingly
+
+				break;
+
+			// Implement promoted pieces
+
 		}
 			return false;
 	}
@@ -162,6 +185,52 @@ public class ShogiState extends GameState {
 			sb.append("\n");
 		}
 		return sb.toString();
+	}
+
+	private boolean pathBlocked(ShogiPiece piece, int moveRow, int moveCol){
+		int currentRow = piece.getRow();
+		int currentCol = piece.getCol();
+
+		if (piece.getType() == "Rook"){
+
+			if (moveRow == currentRow && moveCol < currentCol) {
+
+			}else if(moveRow ==  currentRow && moveCol > currentCol) {
+
+			}else if(moveRow < currentRow && moveCol == currentCol)	{
+
+			}else if(moveRow > currentRow && moveCol == currentCol)	{
+
+			}
+
+
+			return false;
+		}else {
+
+			// 0 - left up, 1 - right up, 2 - left down, 3 - right down
+
+			if (moveRow < currentRow && moveCol < currentCol) {
+
+			}else if(moveRow > currentRow && moveCol < currentCol)	{
+
+			}else if(moveRow < currentRow && moveCol > currentCol)	{
+
+			}else if(moveRow > currentRow && moveCol > currentCol)	{
+
+			}
+
+			return false;
+		}
+
+	}
+
+	private boolean checkForPiece(int row, int col){
+		for(ShogiPiece piece : pieces){
+			if (piece.getRow() == row && piece.getCol() == col){
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private void initPieces(){
