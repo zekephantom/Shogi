@@ -14,30 +14,18 @@ import edu.up.cs301.GameFramework.actionMessage.GameAction;
  */
 public class ShogiMoveAction extends GameAction {
 
-	//the
+	ShogiPiece piece;
+	int moveRow;
+	int moveCol;
 	
 	/**
 	 * Constructor for the CounterMoveAction class.
-	 * 
-	 * @param player
-	 *            the player making the move
-	 * @param isPlus
-	 *            value to initialize this.isPlus
+	 *
 	 */
-	public ShogiMoveAction(GamePlayer player, boolean isPlus) {
+	public ShogiMoveAction(GamePlayer player, ShogiPiece piece, int moveRow, int moveCol) {
 		super(player);
-		this.isPlus = isPlus;
+		this.piece = piece;
+		this.moveRow = moveRow;
+		this.moveCol = moveCol;
 	}
-	
-	/**
-	 * getter method, to tell whether the move is a "plus"
-	 * 
-	 * @return
-	 * 		a boolean that tells whether this move is a "plus"
-	 */
-
-	public boolean isPlus() {
-		return isPlus;
-		
-	}
-}//class CounterMoveAction
+}//class ShogiMoveAction
