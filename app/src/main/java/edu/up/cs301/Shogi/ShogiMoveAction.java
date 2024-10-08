@@ -10,6 +10,7 @@ import edu.up.cs301.GameFramework.actionMessage.GameAction;
  * @author Makengo Lokombo
  * @author Arnaj Sandhu
  * @author James Pham
+ * @author Ezekiel Rafanan
  * @version October 2024
  */
 public class ShogiMoveAction extends GameAction {
@@ -50,7 +51,6 @@ public class ShogiMoveAction extends GameAction {
 	public void setPiece(ShogiPiece piece) {
 		this.piece = piece;
 	}
-
 	public void setMoveRow(int moveRow) {
 		this.moveRow = moveRow;
 	}

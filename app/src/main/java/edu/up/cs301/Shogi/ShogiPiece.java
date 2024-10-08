@@ -16,8 +16,6 @@ public class ShogiPiece {
     // Whether the piece is on the board
     private boolean onBoard;
 
-
-
     // Position on the board
     private int row;
     private int col;

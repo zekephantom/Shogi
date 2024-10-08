@@ -28,7 +28,6 @@ public class ShogiComputerPlayer2 extends ShogiComputerPlayer1 {
 	/*
 	 * instance variables
 	 */
-	
 	// the most recent game state, as given to us by the CounterLocalGame
 	private ShogiState currentGameState = null;
 	
