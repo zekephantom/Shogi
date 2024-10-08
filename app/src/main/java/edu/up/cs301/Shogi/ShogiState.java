@@ -1,7 +1,13 @@
 package edu.up.cs301.Shogi;
 
+
+import android.graphics.BitmapFactory;
+import android.graphics.Bitmap;
+
+
 import java.util.ArrayList;
 import edu.up.cs301.GameFramework.infoMessage.GameState;
+import edu.up.cs301.shogi.R;
 
 /**
  * This contains the state for Shogi.
@@ -42,14 +48,17 @@ public class ShogiState extends GameState {
 
 	// Default Constructor for ShogiState
 	public ShogiState() {
-		pieces = new ArrayList<>(40);
-		this.initPieces;
+		pieces = new ArrayList<>();
+		this.initPieces();
 		gameBoard = new ShogiPiece[9][9]; // Shogi board is 9x9
 		currentPlayer = 0; // Start with Player 1
 		player1Score = 0;
 		player2Score = 0;
 		gamePhase = "Setup";
+
+
 	}
+
 
 	/*
 	* Deep copy constructor
@@ -127,5 +136,40 @@ public class ShogiState extends GameState {
 		}
 		return sb.toString();
 	}
+
+	private void initPieces(){
+
+		// Player 1 pieces
+		pieces.add(new ShogiPiece("King", 1, 8, 4));
+		pieces.add(new ShogiPiece("GoldGeneral", 1, 8,3));
+		pieces.add(new ShogiPiece("GoldGeneral", 1, 8,5));
+		pieces.add(new ShogiPiece("SilverGeneral", 1, 8,2));
+		pieces.add(new ShogiPiece("SilverGeneral", 1, 8,6));
+		pieces.add(new ShogiPiece("Knight", 1, 8,1));
+		pieces.add(new ShogiPiece("Knight", 1, 8,7));
+		pieces.add(new ShogiPiece("Lance", 1, 8,0));
+		pieces.add(new ShogiPiece("Lance", 1, 8,8));
+		pieces.add(new ShogiPiece("Bishop", 1, 7,1));
+		pieces.add(new ShogiPiece("Rook", 1, 7,7));
+		for (int i = 0; i < 9; i++){
+			pieces.add(new ShogiPiece("Pawn", 1, 6,i));
+		}
+		// Player 2 pieces
+		pieces.add(new ShogiPiece("King", 2, 8, 4));
+		pieces.add(new ShogiPiece("GoldGeneral", 2, 8,3));
+		pieces.add(new ShogiPiece("GoldGeneral", 2, 8,5));
+		pieces.add(new ShogiPiece("SilverGeneral", 2, 8,2));
+		pieces.add(new ShogiPiece("SilverGeneral", 2, 8,6));
+		pieces.add(new ShogiPiece("Knight", 2, 8,1));
+		pieces.add(new ShogiPiece("Knight", 2, 8,7));
+		pieces.add(new ShogiPiece("Lance", 2, 8,0));
+		pieces.add(new ShogiPiece("Lance", 2, 8,8));
+		pieces.add(new ShogiPiece("Bishop", 2, 7,1));
+		pieces.add(new ShogiPiece("Rook", 2, 7,7));
+		for (int i = 0; i < 9; i++){
+			pieces.add(new ShogiPiece("Pawn", 2, 6,i));
+		}
+
+	}//initPieces
 
 }
