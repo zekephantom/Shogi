@@ -9,7 +9,7 @@ import edu.up.cs301.GameFramework.LocalGame;
 import edu.up.cs301.GameFramework.gameConfiguration.*;
 
 /**
- * this is the primary activity for Counter game
+ * this is the primary activity for Shogi game
  * 
  * @author Andrew M. Nuxoll
  * @author Steven R. Vegdahl
@@ -53,12 +53,12 @@ public class ShogiMainActivity extends GameMainActivity {
 				return new ShogiComputerPlayer2(name);
 			}});
 
-		// Create a game configuration class for Counter:
+		// Create a game configuration class for Shogi:
 		// - player types as given above
 		// - from 1 to 2 players
-		// - name of game is "Counter Game"
+		// - name of game is "Shogi Game"
 		// - port number as defined above
-		GameConfig defaultConfig = new GameConfig(playerTypes, 1, 2, "Counter Game",
+		GameConfig defaultConfig = new GameConfig(playerTypes, 1, 2, "Shogi Game",
 				PORT_NUMBER);
 
 		// Add the default players to the configuration

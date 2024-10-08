@@ -1,13 +1,7 @@
 package edu.up.cs301.Shogi;
 
-
-import android.graphics.BitmapFactory;
-import android.graphics.Bitmap;
-
-
 import java.util.ArrayList;
 import edu.up.cs301.GameFramework.infoMessage.GameState;
-import edu.up.cs301.shogi.R;
 
 /**
  * This contains the state for Shogi.
@@ -27,8 +21,8 @@ public class ShogiState extends GameState {
 	private static final String TAG = "ShogiState";
 
 	/*
-	* Instance Variables for Shogi State
-	* */
+	 * Instance Variables for Shogi State
+	 */
 	// Information about all the pieces
 	private ArrayList<ShogiPiece> pieces;
 
@@ -45,7 +39,6 @@ public class ShogiState extends GameState {
 	// Current state of the game phase
 	private String gamePhase; // Setup, Placement, Main Play, etc.
 
-
 	// Default Constructor for ShogiState
 	public ShogiState() {
 		pieces = new ArrayList<>();
@@ -55,13 +48,11 @@ public class ShogiState extends GameState {
 		player1Score = 0;
 		player2Score = 0;
 		gamePhase = "Setup";
-
 	}
 
-
 	/*
-	* Deep copy constructor
-	* */
+	 * Deep copy constructor
+	 */
 	public ShogiState(ShogiState orig) {
 		// Deep copy player pieces
 		this.pieces = new ArrayList<>();
@@ -93,26 +84,45 @@ public class ShogiState extends GameState {
 	}
 
 	// Getters and Setters for various instance variables
-	public ArrayList<ShogiPiece> getPieces() {return pieces;}
+	public ArrayList<ShogiPiece> getPieces() {
+		return pieces;
+	}
 
-	public ShogiPiece[][] getGameBoard() {return gameBoard;}
+	public ShogiPiece[][] getGameBoard() {
+		return gameBoard;
+	}
 
-	public int getCurrentPlayer() {return currentPlayer;}
+	public int getCurrentPlayer() {
+		return currentPlayer;
+	}
 
-	public void setCurrentPlayer(int currentPlayer) {this.currentPlayer = currentPlayer;}
+	public void setCurrentPlayer(int currentPlayer) {
+		this.currentPlayer = currentPlayer;
+	}
 
-	public int getPlayer1Score() {return player1Score;}
+	public int getPlayer1Score() {
+		return player1Score;
+	}
 
-	public void setPlayer1Score(int player1Score) {	this.player1Score = player1Score;}
+	public void setPlayer1Score(int player1Score) {
+		this.player1Score = player1Score;
+	}
 
-	public int getPlayer2Score() {return player2Score;}
+	public int getPlayer2Score() {
+		return player2Score;
+	}
 
-	public void setPlayer2Score(int player2Score) {	this.player2Score = player2Score;}
+	public void setPlayer2Score(int player2Score) {
+		this.player2Score = player2Score;
+	}
 
-	public String getGamePhase() {return gamePhase;	}
+	public String getGamePhase() {
+		return gamePhase;
+	}
 
-	public void setGamePhase(String gamePhase) {this.gamePhase = gamePhase;	}
-
+	public void setGamePhase(String gamePhase) {
+		this.gamePhase = gamePhase;
+	}
 
 	public boolean moveAction(ShogiMoveAction action) {
 		ShogiPiece selectedPiece = action.getPiece();
@@ -121,51 +131,44 @@ public class ShogiState extends GameState {
 		int currentCol = selectedPiece.getCol();
 		int moveRow = action.getMoveRow();
 		int moveCol = action.getMoveCol();
-		int rowDiff = Math.abs(currentRow-moveRow);
-		int colDiff = Math.abs(currentCol-moveCol);
+		int rowDiff = Math.abs(currentRow - moveRow);
+		int colDiff = Math.abs(currentCol - moveCol);
 
 		// Check if target is occupied
 		if (checkForPiece(moveRow, moveCol)) return false;
 
 		// checking for each piece if the move is allowed
-		switch (action.getPiece().getType()){
-			case("King"):
-				if ((rowDiff == 1 && colDiff == 1) || (rowDiff == 1 && colDiff == 0) || (rowDiff == 0 && colDiff == 1)){
-					return true;
-				}
-					break;
-			case("GoldGeneral"): // make sure both player directions work accordingly
-				if ((rowDiff == 1 && colDiff == 0) || (rowDiff == 0 && colDiff == 1) || (rowDiff == 1 && colDiff == 1 && moveRow < currentRow)){
+		switch (action.getPiece().getType()) {
+			case "King":
+				if ((rowDiff == 1 && colDiff == 1) || (rowDiff == 1 && colDiff == 0) || (rowDiff == 0 && colDiff == 1)) {
 					return true;
 				}
 				break;
-			case("SilverGeneral"): // make sure both player directions work accordingly
-
+			case "GoldGeneral": // make sure both player directions work accordingly
+				if ((rowDiff == 1 && colDiff == 0) || (rowDiff == 0 && colDiff == 1) || (rowDiff == 1 && colDiff == 1 && moveRow < currentRow)) {
+					return true;
+				}
 				break;
-			case("Knight"): // make sure both player directions work accordingly
-
+			case "SilverGeneral": // make sure both player directions work accordingly
 				break;
-			case("Lance"): // make sure both player directions work accordingly
-
+			case "Knight": // make sure both player directions work accordingly
 				break;
-			case("Bishop"):
+			case "Lance": // make sure both player directions work accordingly
+				break;
+			case "Bishop":
 				// check if path is blocked
 				if (pathBlocked(selectedPiece, moveRow, moveCol)) return false;
-
 				break;
-			case("Rook"):
+			case "Rook":
 				// check if path is blocked
 				if (pathBlocked(selectedPiece, moveRow, moveCol)) return false;
-
 				break;
-			case("Pawn"): // make sure both player directions work accordingly
-
+			case "Pawn": // make sure both player directions work accordingly
 				break;
 
 			// Implement promoted pieces
-
 		}
-			return false;
+		return false;
 	}
 
 	@Override
@@ -187,85 +190,109 @@ public class ShogiState extends GameState {
 		return sb.toString();
 	}
 
-	private boolean pathBlocked(ShogiPiece piece, int moveRow, int moveCol){
+	private boolean pathBlocked(ShogiPiece piece, int moveRow, int moveCol) {
 		int currentRow = piece.getRow();
 		int currentCol = piece.getCol();
 
-		if (piece.getType() == "Rook"){
-
-			if (moveRow == currentRow && moveCol < currentCol) {
-
-			}else if(moveRow ==  currentRow && moveCol > currentCol) {
-
-			}else if(moveRow < currentRow && moveCol == currentCol)	{
-
-			}else if(moveRow > currentRow && moveCol == currentCol)	{
-
+		if (piece.getType().equals("Rook")) {
+			// Check horizontal and vertical paths
+			if (moveRow == currentRow) {
+				// Moving horizontally (left or right)
+				int step = (moveCol > currentCol) ? 1 : -1;
+				for (int col = currentCol + step; col != moveCol; col += step) {
+					if (checkForPiece(currentRow, col)) {
+						return true; // Path is blocked
+					}
+				}
+			} else if (moveCol == currentCol) {
+				// Moving vertically (up or down)
+				int step = (moveRow > currentRow) ? 1 : -1;
+				for (int row = currentRow + step; row != moveRow; row += step) {
+					if (checkForPiece(row, currentCol)) {
+						return true; // Path is blocked
+					}
+				}
 			}
+		} else if (piece.getType().equals("Bishop")) {
+			// Check diagonal paths
+			int rowDiff = Math.abs(moveRow - currentRow);
+			int colDiff = Math.abs(moveCol - currentCol);
 
+			if (rowDiff == colDiff) {
+				// Moving diagonally
+				int rowStep = (moveRow > currentRow) ? 1 : -1;
+				int colStep = (moveCol > currentCol) ? 1 : -1;
 
+				int row = currentRow + rowStep;
+				int col = currentCol + colStep;
+				while (row != moveRow && col != moveCol) {
+					if (checkForPiece(row, col)) {
+						return true; // Path is blocked
+					}
+					row += rowStep;
+					col += colStep;
+				}
+			}
+		} else if (piece.getType().equals("Lance")) {
+			// Lance moves forward any number of squares
+			if (moveCol == currentCol) {
+				int step = (moveRow < currentRow) ? -1 : 1;
+				for (int row = currentRow + step; row != moveRow; row += step) {
+					if (checkForPiece(row, currentCol)) {
+						return true; // Path is blocked
+					}
+				}
+			}
+		} else if (piece.getType().equals("GoldGeneral")) {
+			// Gold General moves do not have long paths that need to be checked for blockage
+			// Only single steps, hence pathBlocked will always return false for Gold General
 			return false;
-		}else {
-
-			// 0 - left up, 1 - right up, 2 - left down, 3 - right down
-
-			if (moveRow < currentRow && moveCol < currentCol) {
-
-			}else if(moveRow > currentRow && moveCol < currentCol)	{
-
-			}else if(moveRow < currentRow && moveCol > currentCol)	{
-
-			}else if(moveRow > currentRow && moveCol > currentCol)	{
-
-			}
-
+		} else if (piece.getType().equals("SilverGeneral")) {
 			return false;
 		}
-
+		return false;
 	}
 
-	private boolean checkForPiece(int row, int col){
-		for(ShogiPiece piece : pieces){
-			if (piece.getRow() == row && piece.getCol() == col){
+	private boolean checkForPiece(int row, int col) {
+		for (ShogiPiece piece : pieces) {
+			// Check if the piece is on the board and if it matches the given row and column
+			if (piece.getRow() == row && piece.getCol() == col) {
 				return true;
 			}
 		}
 		return false;
 	}
 
-	private void initPieces(){
-
+	private void initPieces() {
 		// Player 1 pieces
 		pieces.add(new ShogiPiece("King", 1, 8, 4));
-		pieces.add(new ShogiPiece("GoldGeneral", 1, 8,3));
-		pieces.add(new ShogiPiece("GoldGeneral", 1, 8,5));
-		pieces.add(new ShogiPiece("SilverGeneral", 1, 8,2));
-		pieces.add(new ShogiPiece("SilverGeneral", 1, 8,6));
-		pieces.add(new ShogiPiece("Knight", 1, 8,1));
-		pieces.add(new ShogiPiece("Knight", 1, 8,7));
-		pieces.add(new ShogiPiece("Lance", 1, 8,0));
-		pieces.add(new ShogiPiece("Lance", 1, 8,8));
-		pieces.add(new ShogiPiece("Bishop", 1, 7,1));
-		pieces.add(new ShogiPiece("Rook", 1, 7,7));
-		for (int i = 0; i < 9; i++){
-			pieces.add(new ShogiPiece("Pawn", 1, 6,i));
+		pieces.add(new ShogiPiece("GoldGeneral", 1, 8, 3));
+		pieces.add(new ShogiPiece("GoldGeneral", 1, 8, 5));
+		pieces.add(new ShogiPiece("SilverGeneral", 1, 8, 2));
+		pieces.add(new ShogiPiece("SilverGeneral", 1, 8, 6));
+		pieces.add(new ShogiPiece("Knight", 1, 8, 1));
+		pieces.add(new ShogiPiece("Knight", 1, 8, 7));
+		pieces.add(new ShogiPiece("Lance", 1, 8, 0));
+		pieces.add(new ShogiPiece("Lance", 1, 8, 8));
+		pieces.add(new ShogiPiece("Bishop", 1, 7, 1));
+		pieces.add(new ShogiPiece("Rook", 1, 7, 7));
+		for (int i = 0; i < 9; i++) {
+			pieces.add(new ShogiPiece("Pawn", 1, 6, i));
 		}
 		// Player 2 pieces
 		pieces.add(new ShogiPiece("King", 2, 0, 4));
-		pieces.add(new ShogiPiece("GoldGeneral", 2, 0,3));
-		pieces.add(new ShogiPiece("GoldGeneral", 2, 0,5));
-		pieces.add(new ShogiPiece("SilverGeneral", 2, 0,2));
-		pieces.add(new ShogiPiece("SilverGeneral", 2, 0,6));
-		pieces.add(new ShogiPiece("Knight", 2, 0,1));
-		pieces.add(new ShogiPiece("Knight", 2, 0,7));
-		pieces.add(new ShogiPiece("Lance", 2, 0,0));
-		pieces.add(new ShogiPiece("Lance", 2, 0,8));
-		pieces.add(new ShogiPiece("Bishop", 2, 1,1));
-		pieces.add(new ShogiPiece("Rook", 2, 1,7));
-		for (int i = 0; i < 9; i++){
-			pieces.add(new ShogiPiece("Pawn", 2, 2,i));
+		pieces.add(new ShogiPiece("GoldGeneral", 2, 0, 3));
+		pieces.add(new ShogiPiece("GoldGeneral", 2, 0, 5));
+		pieces.add(new ShogiPiece("SilverGeneral", 2, 0, 2));
+		pieces.add(new ShogiPiece("SilverGeneral", 2, 0, 6));
+		pieces.add(new ShogiPiece("Knight", 2, 0, 1));
+		pieces.add(new ShogiPiece("Knight", 2, 0, 7));
+		pieces.add(new ShogiPiece("Lance", 2, 0, 0));
+		pieces.add(new ShogiPiece("Lance", 2, 0, 8));
+		pieces.add(new ShogiPiece("Bishop", 2, 1, 1));
+		pieces.add(new ShogiPiece("Rook", 2, 1, 7));
+		for (int i = 0; i < 9; i++) {
+			pieces.add(new ShogiPiece("Pawn", 2, 2, i));
 		}
-
-	}//initPieces
-
+	}
 }
