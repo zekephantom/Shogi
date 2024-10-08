@@ -128,6 +128,7 @@ public class ShogiState extends GameState {
 
 		// check if path is blocked
 
+		// change depending on player
 
 		// checking for each piece
 		switch (action.getPiece().getType()){
