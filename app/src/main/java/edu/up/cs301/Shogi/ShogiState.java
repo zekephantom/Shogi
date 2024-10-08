@@ -155,19 +155,19 @@ public class ShogiState extends GameState {
 			pieces.add(new ShogiPiece("Pawn", 1, 6,i));
 		}
 		// Player 2 pieces
-		pieces.add(new ShogiPiece("King", 2, 8, 4));
-		pieces.add(new ShogiPiece("GoldGeneral", 2, 8,3));
-		pieces.add(new ShogiPiece("GoldGeneral", 2, 8,5));
-		pieces.add(new ShogiPiece("SilverGeneral", 2, 8,2));
-		pieces.add(new ShogiPiece("SilverGeneral", 2, 8,6));
-		pieces.add(new ShogiPiece("Knight", 2, 8,1));
-		pieces.add(new ShogiPiece("Knight", 2, 8,7));
-		pieces.add(new ShogiPiece("Lance", 2, 8,0));
-		pieces.add(new ShogiPiece("Lance", 2, 8,8));
-		pieces.add(new ShogiPiece("Bishop", 2, 7,1));
-		pieces.add(new ShogiPiece("Rook", 2, 7,7));
+		pieces.add(new ShogiPiece("King", 2, 0, 4));
+		pieces.add(new ShogiPiece("GoldGeneral", 2, 0,3));
+		pieces.add(new ShogiPiece("GoldGeneral", 2, 0,5));
+		pieces.add(new ShogiPiece("SilverGeneral", 2, 0,2));
+		pieces.add(new ShogiPiece("SilverGeneral", 2, 0,6));
+		pieces.add(new ShogiPiece("Knight", 2, 0,1));
+		pieces.add(new ShogiPiece("Knight", 2, 0,7));
+		pieces.add(new ShogiPiece("Lance", 2, 0,0));
+		pieces.add(new ShogiPiece("Lance", 2, 0,8));
+		pieces.add(new ShogiPiece("Bishop", 2, 1,1));
+		pieces.add(new ShogiPiece("Rook", 2, 1,7));
 		for (int i = 0; i < 9; i++){
-			pieces.add(new ShogiPiece("Pawn", 2, 6,i));
+			pieces.add(new ShogiPiece("Pawn", 2, 2,i));
 		}
 
 	}//initPieces
