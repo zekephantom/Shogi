@@ -53,6 +53,6 @@ public class ShogiComputerPlayer1 extends GameComputerPlayer implements Tickable
 		boolean move = Math.random() >= 0.5;
 		
 		// send the move-action to the game
-		game.sendAction(new ShogiMoveAction(this, move, 1));
+
 	}
 }

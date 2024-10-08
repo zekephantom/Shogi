@@ -56,7 +56,6 @@ public class ShogiState extends GameState {
 		player2Score = 0;
 		gamePhase = "Setup";
 
-
 	}
 
 
@@ -114,7 +113,35 @@ public class ShogiState extends GameState {
 
 	public void setGamePhase(String gamePhase) {this.gamePhase = gamePhase;	}
 
+
+
 	public boolean moveAction(ShogiMoveAction action) {
+
+		ShogiPiece selectedPiece = action.getPiece();
+
+		int currentRow = selectedPiece.getRow();
+		int currentCol = selectedPiece.getCol();
+		int moveRow = action.getMoveRow();
+		int moveCol = action.getMoveCol();
+
+		// Check if target is occupied
+
+		// check if path is blocked
+
+		// change depending on player
+
+		// checking for each piece
+		switch (action.getPiece().getType()){
+			case("King"):
+				if ((Math.abs(currentRow-moveRow) == 1) &&  (Math.abs(currentCol-moveCol) == 1))
+					return true;
+				break;
+			case("GoldGeneral"):
+
+				break;
+		}
+
+			return false;
 
 	}
 
