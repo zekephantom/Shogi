@@ -1,7 +1,5 @@
 package edu.up.cs301.Shogi;
 
-import android.graphics.Bitmap;
-
 public class ShogiPiece {
 
     // Type of the piece (e.g., Pawn, Rook, King)
@@ -70,7 +68,10 @@ public class ShogiPiece {
     }
 
     public void setPromoted(boolean promoted) {
-        this.promoted = promoted;
+        if (type.equals("Pawn") || type.equals("Lance") || type.equals("Knight") ||
+                type.equals("SilverGeneral") || type.equals("Rook") || type.equals("Bishop")) {
+            this.promoted = promoted;
+        }
     }
 
     public boolean isOnBoard() { return onBoard; }
@@ -90,6 +91,12 @@ public class ShogiPiece {
     }
 
     public void setCol(int col) {
+        this.col = col;
+    }
+
+    // Method to update the position of the piece
+    public void setPosition(int row, int col) {
+        this.row = row;
         this.col = col;
     }
 }

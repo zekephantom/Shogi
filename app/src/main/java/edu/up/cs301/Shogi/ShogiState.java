@@ -124,6 +124,7 @@ public class ShogiState extends GameState {
 		this.gamePhase = gamePhase;
 	}
 
+
 	public boolean moveAction(ShogiMoveAction action) {
 		ShogiPiece selectedPiece = action.getPiece();
 
@@ -138,112 +139,130 @@ public class ShogiState extends GameState {
 		if (checkForPiece(moveRow, moveCol)) return false;
 
 		// checking for each piece if the move is allowed
-		switch (action.getPiece().getType()) {
+		switch (selectedPiece.getType()) {
 			case "King":
 				if ((rowDiff == 1 && colDiff == 1) || (rowDiff == 1 && colDiff == 0) || (rowDiff == 0 && colDiff == 1)) {
+					selectedPiece.setPosition(moveRow, moveCol); // Update piece position
 					return true;
 				}
 				break;
-			case "GoldGeneral": // make sure both player directions work accordingly
-				if ((rowDiff == 1 && colDiff == 0) || (rowDiff == 0 && colDiff == 1) || (rowDiff == 1 && colDiff == 1 && moveRow < currentRow)) {
+			case "GoldGeneral":
+				if ((rowDiff == 1 && colDiff == 0) || (rowDiff == 0 && colDiff == 1) ||
+						(rowDiff == 1 && colDiff == 1 && moveRow < currentRow)) {
+					selectedPiece.setPosition(moveRow, moveCol);
 					return true;
 				}
 				break;
 			case "SilverGeneral":
-				// Promoted Silver moves like Gold General
 				if (selectedPiece.isPromoted()) {
+					// Moves like Gold General when promoted
 					if ((rowDiff == 1 && colDiff == 0) || (rowDiff == 0 && colDiff == 1) ||
 							(rowDiff == 1 && colDiff == 1 && moveRow < currentRow)) {
+						selectedPiece.setPosition(moveRow, moveCol);
 						return true;
 					}
 				} else {
-					// Non-promoted Silver moves one square diagonally or forward
+					// Normal Silver General movement
 					if ((rowDiff == 1 && colDiff == 1) || (rowDiff == 1 && colDiff == 0 && moveRow < currentRow)) {
+						selectedPiece.setPosition(moveRow, moveCol);
 						return true;
 					}
 				}
 				break;
-
 			case "Knight":
-				// Promoted Knight moves like Gold General
 				if (selectedPiece.isPromoted()) {
+					// Moves like Gold General when promoted
 					if ((rowDiff == 1 && colDiff == 0) || (rowDiff == 0 && colDiff == 1) ||
 							(rowDiff == 1 && colDiff == 1 && moveRow < currentRow)) {
+						selectedPiece.setPosition(moveRow, moveCol);
 						return true;
 					}
 				} else {
-					// Non-promoted Knight jumps two squares forward and one sideways
+					// Normal Knight movement (2 forward, 1 sideways)
 					if (rowDiff == 2 && colDiff == 1 && moveRow < currentRow) {
+						selectedPiece.setPosition(moveRow, moveCol);
 						return true;
 					}
 				}
 				break;
-
 			case "Lance":
-				// Promoted Lance moves like Gold General
 				if (selectedPiece.isPromoted()) {
+					// Moves like Gold General when promoted
 					if ((rowDiff == 1 && colDiff == 0) || (rowDiff == 0 && colDiff == 1) ||
 							(rowDiff == 1 && colDiff == 1 && moveRow < currentRow)) {
+						selectedPiece.setPosition(moveRow, moveCol);
 						return true;
 					}
 				} else {
-					// Non-promoted Lance moves any distance forward in a straight line
+					// Normal Lance movement (forward any number of squares)
 					if (colDiff == 0 && moveRow < currentRow && !pathBlocked(selectedPiece, moveRow, moveCol)) {
+						selectedPiece.setPosition(moveRow, moveCol);
 						return true;
 					}
 				}
 				break;
-
 			case "Bishop":
-				// Promoted Bishop moves like Bishop + King
 				if (selectedPiece.isPromoted()) {
+					// Moves like Bishop + King when promoted
 					if ((rowDiff == colDiff && !pathBlocked(selectedPiece, moveRow, moveCol)) ||
-							(rowDiff <= 1 && colDiff <= 1)) { // King-like moves
+							(rowDiff <= 1 && colDiff <= 1)) {
+						selectedPiece.setPosition(moveRow, moveCol);
 						return true;
 					}
 				} else {
-					// Non-promoted Bishop moves any distance diagonally
+					// Normal Bishop movement (diagonally any distance)
 					if (rowDiff == colDiff && !pathBlocked(selectedPiece, moveRow, moveCol)) {
+						selectedPiece.setPosition(moveRow, moveCol);
 						return true;
 					}
 				}
 				break;
-
 			case "Rook":
-				// Promoted Rook moves like Rook + King
 				if (selectedPiece.isPromoted()) {
+					// Moves like Rook + King when promoted
 					if ((rowDiff == 0 || colDiff == 0) && !pathBlocked(selectedPiece, moveRow, moveCol)) {
+						selectedPiece.setPosition(moveRow, moveCol);
 						return true;
-					} else if (rowDiff <= 1 && colDiff <= 1) { // King-like moves
+					} else if (rowDiff <= 1 && colDiff <= 1) {
+						selectedPiece.setPosition(moveRow, moveCol);
 						return true;
 					}
 				} else {
-					// Non-promoted Rook moves any distance horizontally or vertically
+					// Normal Rook movement (horizontally or vertically any distance)
 					if ((rowDiff == 0 || colDiff == 0) && !pathBlocked(selectedPiece, moveRow, moveCol)) {
+						selectedPiece.setPosition(moveRow, moveCol);
 						return true;
 					}
 				}
 				break;
-
 			case "Pawn":
-				// Promoted Pawn moves like Gold General
 				if (selectedPiece.isPromoted()) {
+					// Moves like Gold General when promoted
 					if ((rowDiff == 1 && colDiff == 0) || (rowDiff == 0 && colDiff == 1) ||
 							(rowDiff == 1 && colDiff == 1 && moveRow < currentRow)) {
+						selectedPiece.setPosition(moveRow, moveCol);
 						return true;
 					}
 				} else {
-					// Non-promoted Pawn moves forward one square
+					// Normal Pawn movement (1 square forward)
 					if (rowDiff == 1 && colDiff == 0 && moveRow < currentRow) {
+						selectedPiece.setPosition(moveRow, moveCol);
 						return true;
 					}
 				}
 				break;
 		}
 
-		// Check for promotion eligibility after a successful move
+		// Check for mandatory promotion
 		if (isEligibleForPromotion(selectedPiece, moveRow)) {
-			selectedPiece.setPromoted(true); // Promote the piece if it enters the promotion zone
+			if (selectedPiece.getType().equals("Pawn") || selectedPiece.getType().equals("Lance") ||
+					selectedPiece.getType().equals("Knight")) {
+				// Force promotion if the piece reaches the last row and has no further legal moves
+				if ((selectedPiece.getOwner() == 0 && moveRow == 0) ||
+						(selectedPiece.getOwner() == 1 && moveRow == 8)) {
+					selectedPiece.setPromoted(true);
+				}
+			}
 		}
 
 		return false; // Return false if the move is invalid or blocked
