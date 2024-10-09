@@ -298,7 +298,14 @@ public class ShogiState extends GameState {
 		}
 		return sb.toString();
 	}
-
+	/*
+	  Method to check if there is a piece in the path of where the piece needs to move to
+	  especially for Rook, Bishop, Lance
+	   ShogiPiece piece
+	   int moveRow
+	   int moveCol
+	   returns true if the path is blocked
+	*/
 	private boolean pathBlocked(ShogiPiece piece, int moveRow, int moveCol) {
 		int currentRow = piece.getRow();
 		int currentCol = piece.getCol();
@@ -360,6 +367,12 @@ public class ShogiState extends GameState {
 		return false;
 	}
 
+	/*
+	 Simple helper method that checks if currently there is any piece on a specific field
+	 	int row
+	 	int col
+	 	returns true if there is a piece already
+	 */
 	private boolean checkForPiece(int row, int col) {
 		for (ShogiPiece piece : pieces) {
 			// Check if the piece is on the board and if it matches the given row and column
@@ -370,6 +383,10 @@ public class ShogiState extends GameState {
 		return false;
 	}
 
+	/*
+	  Method to initially create and place all the pieces
+	  at the correct locations on the board
+	 */
 	private void initPieces() {
 		// Player 1 pieces
 		pieces.add(new ShogiPiece("King", 1, 8, 4));
