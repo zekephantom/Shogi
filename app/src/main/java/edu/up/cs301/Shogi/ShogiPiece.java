@@ -67,6 +67,7 @@ public class ShogiPiece {
         return promoted;
     }
 
+    //method for promoting a piece
     public void setPromoted(boolean promoted) {
         if (type.equals("Pawn") || type.equals("Lance") || type.equals("Knight") ||
                 type.equals("SilverGeneral") || type.equals("Rook") || type.equals("Bishop")) {

@@ -181,7 +181,7 @@ public class DrawingThread extends Thread {
          * Solution: I used their example code. Used synchronized() block in order to ensure the smoothness of drawing the 9 x 9 board
          * */
 
-        // Draw all game pieces
+        // synchronized method draws all game pieces
         synchronized (shogiPieces) {
             for (int i = 0; i < shogiPieces.size(); i++) {
                 ShogiPiece piece = shogiPieces.get(i);

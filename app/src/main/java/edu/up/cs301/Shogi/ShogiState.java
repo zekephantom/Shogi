@@ -347,8 +347,6 @@ public class ShogiState extends GameState {
 				}
 			}
 		} else if (piece.getType().equals("GoldGeneral")) {
-			// Gold General moves do not have long paths that need to be checked for blockage
-			// Only single steps, hence pathBlocked will always return false for Gold General
 			return false;
 		} else if (piece.getType().equals("SilverGeneral")) {
 			return false;
