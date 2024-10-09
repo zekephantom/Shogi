@@ -227,15 +227,15 @@ public class DrawingThread extends Thread {
             scaledBitmaps.clear();
             synchronized (shogiPieces) {
                 for (ShogiPiece piece : shogiPieces) {
-                    Bitmap scaledBitmap = Bitmap.createScaledBitmap(piece.getBitmap(), (int) cellDimensions, (int) cellDimensions, true);
-                    scaledBitmaps.add(scaledBitmap);
+                   // Bitmap scaledBitmap = Bitmap.createScaledBitmap(piece.getBitmap(), (int) cellDimensions, (int) cellDimensions, true);
+                  //  scaledBitmaps.add(scaledBitmap);
                 }
             }
 
             synchronized (capturedPieces) {
                 for (ShogiPiece piece : capturedPieces) {
-                    Bitmap scaledBitmap = Bitmap.createScaledBitmap(piece.getBitmap(), (int) cellDimensions, (int) cellDimensions, true);
-                    scaledBitmaps.add(scaledBitmap);
+                  //  Bitmap scaledBitmap = Bitmap.createScaledBitmap(piece.getBitmap(), (int) cellDimensions, (int) cellDimensions, true);
+                  //  scaledBitmaps.add(scaledBitmap);
                 }
             }
         }

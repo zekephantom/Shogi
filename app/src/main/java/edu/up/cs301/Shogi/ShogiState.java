@@ -149,111 +149,27 @@ public class ShogiState extends GameState {
 					return true;
 				}
 				break;
-			case "SilverGeneral":
-				// Promoted Silver moves like Gold General
-				if (selectedPiece.isPromoted()) {
-					if ((rowDiff == 1 && colDiff == 0) || (rowDiff == 0 && colDiff == 1) ||
-							(rowDiff == 1 && colDiff == 1 && moveRow < currentRow)) {
-						return true;
-					}
-				} else {
-					// Non-promoted Silver moves one square diagonally or forward
-					if ((rowDiff == 1 && colDiff == 1) || (rowDiff == 1 && colDiff == 0 && moveRow < currentRow)) {
-						return true;
-					}
-				}
+			case "SilverGeneral": // make sure both player directions work accordingly
 				break;
-
-			case "Knight":
-				// Promoted Knight moves like Gold General
-				if (selectedPiece.isPromoted()) {
-					if ((rowDiff == 1 && colDiff == 0) || (rowDiff == 0 && colDiff == 1) ||
-							(rowDiff == 1 && colDiff == 1 && moveRow < currentRow)) {
-						return true;
-					}
-				} else {
-					// Non-promoted Knight jumps two squares forward and one sideways
-					if (rowDiff == 2 && colDiff == 1 && moveRow < currentRow) {
-						return true;
-					}
-				}
+			case "Knight": // make sure both player directions work accordingly
 				break;
-
-			case "Lance":
-				// Promoted Lance moves like Gold General
-				if (selectedPiece.isPromoted()) {
-					if ((rowDiff == 1 && colDiff == 0) || (rowDiff == 0 && colDiff == 1) ||
-							(rowDiff == 1 && colDiff == 1 && moveRow < currentRow)) {
-						return true;
-					}
-				} else {
-					// Non-promoted Lance moves any distance forward in a straight line
-					if (colDiff == 0 && moveRow < currentRow && !pathBlocked(selectedPiece, moveRow, moveCol)) {
-						return true;
-					}
-				}
+			case "Lance": // make sure both player directions work accordingly
 				break;
-
 			case "Bishop":
-				// Promoted Bishop moves like Bishop + King
-				if (selectedPiece.isPromoted()) {
-					if ((rowDiff == colDiff && !pathBlocked(selectedPiece, moveRow, moveCol)) ||
-							(rowDiff <= 1 && colDiff <= 1)) { // King-like moves
-						return true;
-					}
-				} else {
-					// Non-promoted Bishop moves any distance diagonally
-					if (rowDiff == colDiff && !pathBlocked(selectedPiece, moveRow, moveCol)) {
-						return true;
-					}
-				}
+				// check if path is blocked
+				if (pathBlocked(selectedPiece, moveRow, moveCol)) return false;
 				break;
-
 			case "Rook":
-				// Promoted Rook moves like Rook + King
-				if (selectedPiece.isPromoted()) {
-					if ((rowDiff == 0 || colDiff == 0) && !pathBlocked(selectedPiece, moveRow, moveCol)) {
-						return true;
-					} else if (rowDiff <= 1 && colDiff <= 1) { // King-like moves
-						return true;
-					}
-				} else {
-					// Non-promoted Rook moves any distance horizontally or vertically
-					if ((rowDiff == 0 || colDiff == 0) && !pathBlocked(selectedPiece, moveRow, moveCol)) {
-						return true;
-					}
-				}
+				// check if path is blocked
+				if (pathBlocked(selectedPiece, moveRow, moveCol)) return false;
+				break;
+			case "Pawn": // make sure both player directions work accordingly
 				break;
 
-			case "Pawn":
-				// Promoted Pawn moves like Gold General
-				if (selectedPiece.isPromoted()) {
-					if ((rowDiff == 1 && colDiff == 0) || (rowDiff == 0 && colDiff == 1) ||
-							(rowDiff == 1 && colDiff == 1 && moveRow < currentRow)) {
-						return true;
-					}
-				} else {
-					// Non-promoted Pawn moves forward one square
-					if (rowDiff == 1 && colDiff == 0 && moveRow < currentRow) {
-						return true;
-					}
-				}
-				break;
+			// Implement promoted pieces
 		}
-
-		// Check for promotion eligibility after a successful move
-		if (isEligibleForPromotion(selectedPiece, moveRow)) {
-			selectedPiece.setPromoted(true); // Promote the piece if it enters the promotion zone
-		}
-
-		return false; // Return false if the move is invalid or blocked
+		return false;
 	}
-
-	// Helper method to see if a piece can promote
-	private boolean isEligibleForPromotion(ShogiPiece piece, int row) {
-		return (piece.getOwner() == 0 && row <= 2) || (piece.getOwner() == 1 && row >= 6);
-	}
-
 
 	@Override
 	public String toString() {
