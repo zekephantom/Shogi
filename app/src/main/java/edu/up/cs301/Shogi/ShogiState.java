@@ -273,7 +273,13 @@ public class ShogiState extends GameState {
 		return (piece.getOwner() == 0 && row <= 2) || (piece.getOwner() == 1 && row >= 6);
 	}
 
-
+	/**
+	External Citation
+		Date: 7 October 2024
+	 	Problem: I do not know where to start with toString() method.
+	 	Resource: https://developer.android.com/reference/java/lang/StringBuilder, ChatGPT
+	 	Solution: ChatGPT recommended me to start with StringBuilder, so I read the documentation. Followed GPT's guidelines.
+	*/
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
