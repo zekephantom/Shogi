@@ -8,6 +8,7 @@ import edu.up.cs301.shogi.R;
 
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.view.View.OnClickListener;
 
@@ -29,7 +30,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements OnClickListener
 	/* instance variables */
 	
 	// The TextView the displays the current counter value
-	private TextView counterValueTextView;
+	private TextView testResultsTextView;
 	
 	// the most recent game state, as given to us by the CounterLocalGame
 	private ShogiState state;
@@ -76,8 +77,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements OnClickListener
 		if (game == null) return;
 
 		// Construct the action and send it to the game
-		GameAction action = null;
-		game.sendAction(action); // send action to the game
+
 	}// onClick
 	
 	/**
@@ -104,7 +104,9 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements OnClickListener
 	 * 		the activity under which we are running
 	 */
 	public void setAsGui(GameMainActivity activity) {
-		
+
+		// activity.setContentView();
+
 		// remember the activity
 		this.myActivity = activity;
 
