@@ -124,7 +124,45 @@ public class ShogiState extends GameState {
 		this.gamePhase = gamePhase;
 	}
 
+	public boolean dropAction(ShogiMoveAction action) {
+		ShogiPiece selectedPiece = action.getPiece();
+		if (selectedPiece.isOnBoard()){
+			return false;
+		}
+		int moveRow = action.getMoveRow();
+		int moveCol = action.getMoveCol();
 
+		if (checkForPiece(moveRow, moveCol)) return false;
+
+		switch (selectedPiece.getType()) {
+			case "Knight":
+				if (moveRow == 0 || moveRow == 1) {
+					return false;
+				}
+				break;
+			case "Lance":
+				if (moveRow == 0) {
+					return false;
+				}
+				break;
+			case "Pawn":
+				if (moveRow == 0) {
+					return false;
+				}
+				for (int col = 0; col <= 8; col++) {
+					if (getPiece(moveRow, col).getType().equals("Pawn")) {
+						return false;
+					}
+				}
+				// to:do check if dropped pawn results in checkmate and return false if so
+				break;
+		}
+
+		selectedPiece.setOnBoard(true);
+		selectedPiece.setRow(moveRow);
+		selectedPiece.setCol(moveCol);
+		return true;
+	}
 	public boolean moveAction(ShogiMoveAction action) {
 		ShogiPiece selectedPiece = action.getPiece();
 
@@ -367,6 +405,15 @@ public class ShogiState extends GameState {
 		return false;
 	}
 
+	private ShogiPiece getPiece(int row, int col) {
+		for (ShogiPiece piece : pieces) {
+			// Check if the piece is on the board and if it matches the given row and column
+			if (piece.getRow() == row && piece.getCol() == col) {
+				return piece;
+			}
+		}
+		return null;
+	}
 	/*
 	 Simple helper method that checks if currently there is any piece on a specific field
 	 	int row
