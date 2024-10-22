@@ -73,6 +73,7 @@ public class ShogiPiece {
                 type.equals("SilverGeneral") || type.equals("Rook") || type.equals("Bishop")) {
             this.promoted = promoted;
         }
+        // TODO add switch case for setting promoted bitmap
     }
 
     public boolean isOnBoard() { return onBoard; }
