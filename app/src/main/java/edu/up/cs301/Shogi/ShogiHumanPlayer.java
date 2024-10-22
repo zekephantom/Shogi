@@ -2,38 +2,36 @@ package edu.up.cs301.Shogi;
 
 import edu.up.cs301.GameFramework.players.GameHumanPlayer;
 import edu.up.cs301.GameFramework.GameMainActivity;
-import edu.up.cs301.GameFramework.actionMessage.GameAction;
 import edu.up.cs301.GameFramework.infoMessage.GameInfo;
 import edu.up.cs301.shogi.R;
 
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.view.View.OnClickListener;
 
 /**
- * A GUI of a counter-player. The GUI displays the current value of the counter,
- * and allows the human player to press the '+' and '-' buttons in order to
- * send moves to the game.
- * 
- * Just for fun, the GUI is implemented so that if the player presses either button
- * when the counter-value is zero, the screen flashes briefly, with the flash-color
- * being dependent on whether the player is player 0 or player 1.
+ * A GUI for the human player in the Shogi game. It displays the current game state
+ * and allows the player to interact with the game by making moves.
  * 
  * @author Steven R. Vegdahl
  * @author Andrew M. Nuxoll
+ * @author Ezekiel Rafanan
+ * @author Jona Bodirsky
+ * @author James Pham
+ * @author Arnaj Sandhu
+ * @author Makengo Lokombo
  * @version July 2013
  */
+
 public class ShogiHumanPlayer extends GameHumanPlayer implements OnClickListener {
 
 	/* instance variables */
-	
-	// The TextView the displays the current counter value
 
-	private TextView testResultsTextView;
-	
-	// the most recent game state, as given to us by the CounterLocalGame
+	// The EditText that displays test results or game state information
+	private EditText testResultsEditText;
+
+	// the most recent game state, as given to us by the ShogiLocalGame
 	private ShogiState state;
 	
 	// the android activity that we are running
@@ -54,42 +52,56 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements OnClickListener
 	 * @return
 	 * 		the top object in the GUI's view heirarchy
 	 */
+	@Override
 	public View getTopView() {
 		return myActivity.findViewById(R.id.topLevel);
 	}
-	
+
 	/**
-	 * sets the counter value in the text view
+	 * Updates the display based on the current game state.
 	 */
 	protected void updateDisplay() {
 		// set the text in the appropriate widget
-
+	if(state == null) return;
+	testResultsEditText.setText(state.toString());
 	}
 
+
 	/**
-	 * this method gets called when the user clicks the '+' or '-' button. It
-	 * creates a new CounterMoveAction to return to the parent activity.
-	 * 
+	 * This method gets called when the user clicks the 'Run Test' button.
+	 * It performs the following actions:
+	 * 1. Clears any text currently displayed in the EditText.
+	 * 2. Creates a new instance of the game state class.
+	 * 3. Creates a deep copy of the first instance.
+	 *
 	 * @param button
-	 * 		the button that was clicked
+	 *      the button that was clicked
 	 */
+	@Override
 	public void onClick(View button) {
 		// if we are not yet connected to a game, ignore
 		if (game == null) return;
 
-		// Construct the action and send it to the game
+		//Clears the text in the multi-line EditText
+		testResultsEditText.setText("");
+
+		// Create new instance of game state class
+		ShogiState firstInstance = new ShogiState();
+
+		//Create deep copy from player 1's perspective
+		ShogiState firstCopy = new ShogiState(firstInstance);
 
 	}// onClick
-	
+
 	/**
-	 * callback method when we get a message (e.g., from the game)
-	 * 
+	 * Callback method when we receive information from the game.
+	 *
 	 * @param info
-	 * 		the message
+	 *      the message received from the game
 	 */
 	@Override
 	public void receiveInfo(GameInfo info) {
-		// ignore the message if it's not a CounterState message
+		// ignore the message if it's not a ShogiState message
 		if (!(info instanceof ShogiState)) return;
 		
 		// update our state; then update the display
@@ -104,6 +116,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements OnClickListener
 	 * @param activity
 	 * 		the activity under which we are running
 	 */
+	@Override
 	public void setAsGui(GameMainActivity activity) {
 
 		// remember the activity
@@ -111,7 +124,8 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements OnClickListener
 
 		activity.setContentView(R.layout.game_state_test);
 
-		this.testResultsTextView = (TextView) activity.findViewById(R.id.tv_test_results);
+		this.testResultsEditText = (EditText) activity.findViewById(R.id.tv_test_results);
+
 
 		Button runTestButton = (Button) activity.findViewById(R.id.button_run_test);
 		runTestButton.setOnClickListener(this);
