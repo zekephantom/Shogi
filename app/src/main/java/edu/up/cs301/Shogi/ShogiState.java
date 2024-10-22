@@ -150,7 +150,7 @@ public class ShogiState extends GameState {
 					return false;
 				}
 				for (int col = 0; col <= 8; col++) {
-					if (getPiece(moveRow, col).getType().equals("Pawn")) {
+					if (getPiece(moveRow, col).getType().equals("Pawn") && (getPiece(moveRow, col).getOwner() != currentPlayer)) {
 						return false;
 					}
 				}
