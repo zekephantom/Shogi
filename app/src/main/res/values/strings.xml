@@ -1,5 +1,5 @@
 <resources>
 
     <string name="app_name">Shogi Game</string>
-
+    <string name="run_test">Run Test</string>
 </resources>

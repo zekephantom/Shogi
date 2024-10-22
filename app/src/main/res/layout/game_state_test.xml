@@ -20,6 +20,5 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="Run Test" />
-
+        android:text="@string/run_test" />
 </LinearLayout>
