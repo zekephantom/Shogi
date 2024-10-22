@@ -159,6 +159,7 @@ public class ShogiState extends GameState {
 		}
 
 		selectedPiece.setOnBoard(true);
+		selectedPiece.setOwner(currentPlayer);
 		selectedPiece.setRow(moveRow);
 		selectedPiece.setCol(moveCol);
 		return true;
