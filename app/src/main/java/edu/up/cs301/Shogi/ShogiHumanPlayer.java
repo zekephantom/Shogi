@@ -117,5 +117,5 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements OnClickListener
 		runTestButton.setOnClickListener(this);
 	}
 
-}// class CounterHumanPlayer
+}// class ShogiHumanPlayer
 

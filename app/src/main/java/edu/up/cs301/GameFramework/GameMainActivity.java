@@ -609,17 +609,18 @@ public abstract class GameMainActivity extends Activity implements
         //Start Game Button
         else if (button.getId() == R.id.playGameButton) {
             String msg = startGame();
-            if(msg == null){
-                setContentView(R.layout.game_interface);
-            }
-            ShogiBoard shogiBoard = findViewById(R.id.shogiBoard);
-            if(shogiBoard != null){
-                shogiBoard.initializeBoard();
-            }
-            if (msg != null) {
-                // we have an error message
+            if(msg != null){
                 MessageBox.popUpMessage(msg, this);
+                //setContentView(R.layout.game_state_test);
             }
+            //ShogiBoard shogiBoard = findViewById(R.id.shogiBoard);
+            //if(shogiBoard != null){
+                //shogiBoard.initializeBoard();
+            //}
+            //if (msg != null) {
+                // we have an error message
+               //MessageBox.popUpMessage(msg, this);
+            //}
 
         }
 
