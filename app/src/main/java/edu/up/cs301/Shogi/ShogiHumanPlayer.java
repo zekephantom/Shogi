@@ -30,6 +30,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements OnClickListener
 	/* instance variables */
 	
 	// The TextView the displays the current counter value
+
 	private TextView testResultsTextView;
 	
 	// the most recent game state, as given to us by the CounterLocalGame
@@ -54,7 +55,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements OnClickListener
 	 * 		the top object in the GUI's view heirarchy
 	 */
 	public View getTopView() {
-		return null;
+		return myActivity.findViewById(R.id.topLevel);
 	}
 	
 	/**
