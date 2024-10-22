@@ -6,7 +6,7 @@
     android:orientation="horizontal">
 
     <EditText
-        android:id="@+id/editText_test_results"
+        android:id="@+id/tv_test_results"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_weight="15"

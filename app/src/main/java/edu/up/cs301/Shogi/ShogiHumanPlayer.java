@@ -106,17 +106,15 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements OnClickListener
 	 */
 	public void setAsGui(GameMainActivity activity) {
 
-		// activity.setContentView();
-
 		// remember the activity
 		this.myActivity = activity;
 
-		
-		// if we have a game state, "simulate" that we have just received
-		// the state from the game so that the GUI values are updated
-		if (state != null) {
-			receiveInfo(state);
-		}
+		activity.setContentView(R.layout.game_state_test);
+
+		this.testResultsTextView = (TextView) activity.findViewById(R.id.tv_test_results);
+
+		Button runTestButton = (Button) activity.findViewById(R.id.button_run_test);
+		runTestButton.setOnClickListener(this);
 	}
 
 }// class CounterHumanPlayer
