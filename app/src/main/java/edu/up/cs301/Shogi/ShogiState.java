@@ -15,7 +15,6 @@ import edu.up.cs301.GameFramework.infoMessage.GameState;
  * @version October 2024
  */
 public class ShogiState extends GameState {
-
 	// to satisfy Serializable interface
 	private static final long serialVersionUID = 7737393762469851826L;
 	private static final String TAG = "ShogiState";
@@ -59,7 +58,6 @@ public class ShogiState extends GameState {
 		for (ShogiPiece piece : orig.pieces) {
 			this.pieces.add(new ShogiPiece(piece));
 		}
-
 		// Deep copy game board
 		this.gameBoard = new ShogiPiece[9][9];
 		for (int i = 0; i < 9; i++) {
@@ -87,39 +85,30 @@ public class ShogiState extends GameState {
 	public ArrayList<ShogiPiece> getPieces() {
 		return pieces;
 	}
-
 	public ShogiPiece[][] getGameBoard() {
 		return gameBoard;
 	}
-
 	public int getCurrentPlayer() {
 		return currentPlayer;
 	}
-
 	public void setCurrentPlayer(int currentPlayer) {
 		this.currentPlayer = currentPlayer;
 	}
-
 	public int getPlayer1Score() {
 		return player1Score;
 	}
-
 	public void setPlayer1Score(int player1Score) {
 		this.player1Score = player1Score;
 	}
-
 	public int getPlayer2Score() {
 		return player2Score;
 	}
-
 	public void setPlayer2Score(int player2Score) {
 		this.player2Score = player2Score;
 	}
-
 	public String getGamePhase() {
 		return gamePhase;
 	}
-
 	public void setGamePhase(String gamePhase) {
 		this.gamePhase = gamePhase;
 	}
@@ -234,7 +223,7 @@ public class ShogiState extends GameState {
 					}
 				} else {
 					// Normal Lance movement (forward any number of squares)
-					if (colDiff == 0 && moveRow < currentRow && !pathBlocked(selectedPiece, moveRow, moveCol)) {
+					if (colDiff == 0 && moveRow < currentRow && !isPathBlocked(selectedPiece, moveRow, moveCol)) {
 						selectedPiece.setPosition(moveRow, moveCol);
 						return true;
 					}
@@ -243,14 +232,14 @@ public class ShogiState extends GameState {
 			case "Bishop":
 				if (selectedPiece.isPromoted()) {
 					// Moves like Bishop + King when promoted
-					if ((rowDiff == colDiff && !pathBlocked(selectedPiece, moveRow, moveCol)) ||
+					if ((rowDiff == colDiff && !isPathBlocked(selectedPiece, moveRow, moveCol)) ||
 							(rowDiff <= 1 && colDiff <= 1)) {
 						selectedPiece.setPosition(moveRow, moveCol);
 						return true;
 					}
 				} else {
 					// Normal Bishop movement (diagonally any distance)
-					if (rowDiff == colDiff && !pathBlocked(selectedPiece, moveRow, moveCol)) {
+					if (rowDiff == colDiff && !isPathBlocked(selectedPiece, moveRow, moveCol)) {
 						selectedPiece.setPosition(moveRow, moveCol);
 						return true;
 					}
@@ -259,7 +248,7 @@ public class ShogiState extends GameState {
 			case "Rook":
 				if (selectedPiece.isPromoted()) {
 					// Moves like Rook + King when promoted
-					if ((rowDiff == 0 || colDiff == 0) && !pathBlocked(selectedPiece, moveRow, moveCol)) {
+					if ((rowDiff == 0 || colDiff == 0) && !isPathBlocked(selectedPiece, moveRow, moveCol)) {
 						selectedPiece.setPosition(moveRow, moveCol);
 						return true;
 					} else if (rowDiff <= 1 && colDiff <= 1) {
@@ -268,7 +257,7 @@ public class ShogiState extends GameState {
 					}
 				} else {
 					// Normal Rook movement (horizontally or vertically any distance)
-					if ((rowDiff == 0 || colDiff == 0) && !pathBlocked(selectedPiece, moveRow, moveCol)) {
+					if ((rowDiff == 0 || colDiff == 0) && !isPathBlocked(selectedPiece, moveRow, moveCol)) {
 						selectedPiece.setPosition(moveRow, moveCol);
 						return true;
 					}
@@ -337,6 +326,7 @@ public class ShogiState extends GameState {
 		}
 		return sb.toString();
 	}
+
 	/*
 	  Method to check if there is a piece in the path of where the piece needs to move to
 	  especially for Rook, Bishop, Lance
@@ -345,7 +335,7 @@ public class ShogiState extends GameState {
 	   int moveCol
 	   returns true if the path is blocked
 	*/
-	private boolean pathBlocked(ShogiPiece piece, int moveRow, int moveCol) {
+	private boolean isPathBlocked(ShogiPiece piece, int moveRow, int moveCol) {
 		int currentRow = piece.getRow();
 		int currentCol = piece.getCol();
 

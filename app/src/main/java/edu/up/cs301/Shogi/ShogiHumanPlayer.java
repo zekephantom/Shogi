@@ -27,7 +27,6 @@ import android.view.View.OnClickListener;
 public class ShogiHumanPlayer extends GameHumanPlayer implements OnClickListener {
 
 	/* instance variables */
-
 	// The EditText that displays test results or game state information
 	private EditText testResultsEditText;
 
@@ -121,9 +120,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements OnClickListener
 
 		// remember the activity
 		this.myActivity = activity;
-
 		activity.setContentView(R.layout.game_state_test);
-
 		this.testResultsEditText = (EditText) activity.findViewById(R.id.tv_test_results);
 
 
