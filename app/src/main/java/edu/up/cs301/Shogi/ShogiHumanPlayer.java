@@ -50,6 +50,12 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements OnClickListener
 	 * 
 	 * @return
 	 * 		the top object in the GUI's view heirarchy
+	 *
+	 * 	External Citation
+	 * 	Date: 21 October 2024
+	 * 	Problem: Unable to figure out what to return for getTopView()
+	 * 	Resource: Dr. Andrew Nuxoll
+	 * 	Solution: He gave us an idea on which id to return
 	 */
 	@Override
 	public View getTopView() {
@@ -86,7 +92,6 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements OnClickListener
 
 		// Create new instance of game state class
 		ShogiState firstInstance = new ShogiState();
-
 		//Create deep copy from player 1's perspective
 		ShogiState firstCopy = new ShogiState(firstInstance);
 
