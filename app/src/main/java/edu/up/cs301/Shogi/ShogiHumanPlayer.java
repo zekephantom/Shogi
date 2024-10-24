@@ -49,16 +49,17 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements OnClickListener
 	 * Returns the GUI's top view object
 	 * 
 	 * @return
-	 * 		the top object in the GUI's view heirarchy
-	 *
-	 * 	External Citation
-	 * 	Date: 21 October 2024
-	 * 	Problem: Unable to figure out what to return for getTopView()
-	 * 	Resource: Dr. Andrew Nuxoll
-	 * 	Solution: He gave us an idea on which id to return
+	 * 		the top object in the GUI's view hierarchy
 	 */
 	@Override
 	public View getTopView() {
+		/**
+		 * External Citation
+		 * Date: 21 October 2024
+		 * Problem: Unable to figure out what to return for getTopView()
+		 * Resource: Dr. Andrew Nuxoll
+		 * Solution: He gave us an idea on which id to return
+		 */
 		return myActivity.findViewById(R.id.topLevel);
 	}
 

@@ -16,8 +16,8 @@ import edu.up.cs301.GameFramework.infoMessage.GameState;
  */
 public class ShogiState extends GameState {
 	// to satisfy Serializable interface
-	private static final long serialVersionUID = 7737393762469851826L;
-	private static final String TAG = "ShogiState";
+	//private static final long serialVersionUID = 7737393762469851826L;
+	//private static final String TAG = "ShogiState";
 
 	/*
 	 * Instance Variables for Shogi State

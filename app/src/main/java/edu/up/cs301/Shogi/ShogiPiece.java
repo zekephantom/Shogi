@@ -1,7 +1,6 @@
 package edu.up.cs301.Shogi;
 
 public class ShogiPiece {
-
     // Type of the piece (e.g., Pawn, Rook, King)
     private String type;
 
@@ -19,19 +18,22 @@ public class ShogiPiece {
     private int col;
 
     // Constructor
+
     public ShogiPiece(String type, int owner, int row, int col) {
+        /**
+         * External Citation
+         * Date: 23 October 2024
+         * Problem: Professor Nux commented about a potential problem. Quote:
+         * "row/col in Shogi piece may actually create problems for you.  What if it
+         *      gets out of sync with the board?  Is is it really necessary?"
+         * Resource: ChatGPT
+         * Solution: I asked ChatGPT to look into the code along with the comment, and
+         *              advised to remove/comment out row and col from default and copy constructors
+         */
         this.type = type;
         this.owner = owner;
-        this.row = row;
-        this.col = col;
-        this.promoted = false; // Default to not promoted
-        this.onBoard = false; // Default to on the board
-    }
-
-    // Constructor to match ShogiBoard expectations
-    public ShogiPiece(int row, int col) {
-        this.row = row;
-        this.col = col;
+        //this.row = row;
+        //this.col = col;
         this.promoted = false; // Default to not promoted
         this.onBoard = false; // Default to on the board
     }
@@ -42,27 +44,23 @@ public class ShogiPiece {
         this.owner = original.owner;
         this.promoted = original.promoted;
         this.onBoard = original.onBoard;
-        this.row = original.row;
-        this.col = original.col;
+        //this.row = original.row;
+        //this.col = original.col;
     }
 
     // Getters and Setters
     public String getType() {
         return type;
     }
-
     public void setType(String type) {
         this.type = type;
     }
-
     public int getOwner() {
         return owner;
     }
-
     public void setOwner(int owner) {
         this.owner = owner;
     }
-
     public boolean isPromoted() {
         return promoted;
     }
