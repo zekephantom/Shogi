@@ -105,12 +105,9 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements OnClickListener
 		 *    ensuring that each method in ShogiState is called at least once
 		 *    during the simulation.
 		 */
-		ShogiPiece pawn = firstInstance.getPiece(6, 0); // Assume there is a pawn at this position
-		if (pawn != null) {
-			ShogiMoveAction movePawn = new ShogiMoveAction(this, pawn, 5, 0); // Move pawn forward
-			boolean moveSuccess = firstInstance.moveAction(movePawn);
-			testResultsEditText.append("Player 1 moves Pawn from (6, 0) to (5, 0): " + (moveSuccess ? "Success" : "Failed") + "\n");
-		}
+		ShogiMoveAction movePawn = new ShogiMoveAction(this, firstInstance.getPiece(6, 0), 5, 0); // Move pawn forward
+		boolean moveSuccess = firstInstance.moveAction(movePawn);
+		testResultsEditText.append("Player 1 moves Pawn from (6, 0) to (5, 0): " + (moveSuccess ? "Success" : "Failed") + "\n");
 		// Repeat the step to simulate full game making sure each method in ShogiState is called at least once
 
 
