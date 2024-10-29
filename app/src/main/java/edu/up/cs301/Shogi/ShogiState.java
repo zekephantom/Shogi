@@ -402,7 +402,7 @@ public class ShogiState extends GameState {
 	  int col
 	 returns piece/null
 	 */
-	private ShogiPiece getPiece(int row, int col) {
+    public ShogiPiece getPiece(int row, int col) {
 		for (ShogiPiece piece : pieces) {
 			// Check if the piece is on the board and if it matches the given row and column
 			if (piece.getRow() == row && piece.getCol() == col) {
