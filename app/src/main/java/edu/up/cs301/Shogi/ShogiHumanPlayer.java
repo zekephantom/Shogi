@@ -90,10 +90,10 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements OnClickListener
 		//Clears the text in the multi-line EditText
 		testResultsEditText.setText("");
 
-		// Create new instance of game state class
-		ShogiState firstInstance = new ShogiState();
-		//Create deep copy from player 1's perspective
-		ShogiState firstCopy = new ShogiState(firstInstance);
+		ShogiState firstInstance = new ShogiState(); // Create new instance of game state class
+
+		ShogiState firstCopy = new ShogiState(firstInstance); 	//Create deep copy from player 1's perspective
+
 
 		// Simulate gameplay by calling methods on firstInstance and append action descriptions to the EditText
 		ShogiPiece pawn = firstInstance.getPiece(6, 0); // Assume there is a pawn at this position
@@ -104,12 +104,15 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements OnClickListener
 		}
 		// Repeat the step to simulate full game making sure each method in ShogiState is called at least once
 
+
 		// Final message about the game's end or winner
 		testResultsEditText.append("Player X has won the game.\n");
+
 
 		// Create another instance of the game state and deep copy
 		ShogiState secondInstance = new ShogiState();
 		ShogiState secondCopy = new ShogiState(secondInstance);
+
 
 		// Compare firstCopy and secondCopy, print if identical
 		if (firstCopy.toString().equals(secondCopy.toString())) {
@@ -122,6 +125,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements OnClickListener
 		testResultsEditText.append("First Copy: \n" + firstCopy.toString() + "\n");
 		testResultsEditText.append("Second Copy:\n" + secondCopy.toString() + "\n");
 	}// onClick
+
 
 	/**
 	 * Callback method when we receive information from the game.
