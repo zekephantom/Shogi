@@ -113,7 +113,7 @@ public class ShogiState extends GameState {
 	}
 	public String getGamePhase() {
 		return gamePhase;
-	}
+    }
 	public void setGamePhase(String gamePhase) {
 		this.gamePhase = gamePhase;
 	}

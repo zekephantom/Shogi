@@ -44,8 +44,8 @@ public class ShogiPiece {
          */
         this.type = type;
         this.owner = owner;
-        //this.row = row;
-        //this.col = col;
+        this.row = row;
+        this.col = col;
         this.promoted = false; // Default to not promoted
         this.onBoard = false; // Default to on the board
     }
@@ -56,8 +56,8 @@ public class ShogiPiece {
         this.owner = original.owner;
         this.promoted = original.promoted;
         this.onBoard = original.onBoard;
-        //this.row = original.row;
-        //this.col = original.col;
+        this.row = original.row;
+        this.col = original.col;
     }
 
     // Getters and Setters
