@@ -1,5 +1,7 @@
 package edu.up.cs301.Shogi;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import edu.up.cs301.GameFramework.infoMessage.GameState;
 
@@ -179,8 +181,15 @@ public class ShogiState extends GameState {
 		int rowDiff = Math.abs(currentRow - moveRow);
 		int colDiff = Math.abs(currentCol - moveCol);
 
+		//Log.d("moveAction", "begin moveAcvtion");
+
+
 		// Check if target is occupied
-		if (checkForPiece(moveRow, moveCol)) return false;
+		if (checkForPiece(moveRow, moveCol)){
+			Log.d("moveAction", "targetOccupied");
+			return false;
+		}
+
 
 		// checking for each piece if the move is allowed
 		switch (selectedPiece.getType()) {
@@ -196,6 +205,7 @@ public class ShogiState extends GameState {
 					selectedPiece.setPosition(moveRow, moveCol);
 					return true;
 				}
+				Log.d("moveAction", "Gold G invalid move pattern");
 				break;
 			case "SilverGeneral":
 				if (selectedPiece.isPromoted()) {
@@ -327,7 +337,7 @@ public class ShogiState extends GameState {
 
 
 	@Override
-	public String toString() {
+	public String toString() { //TODO: gameBoard and pieces are not working properly
 		/**
 		 *External Citation
 		 *	Date: 7 October 2024
@@ -339,9 +349,10 @@ public class ShogiState extends GameState {
 		sb.append("Shogi State:\n");
 		sb.append("Current Player: ").append(currentPlayer == 0 ? "Player 1" : "Player 2").append("\n");
 		sb.append("Game Phase: ").append(gamePhase).append("\n");
-		sb.append("Player 1 Score: ").append(player1Score).append("\n");
-		sb.append("Player 2 Score: ").append(player2Score).append("\n");
-		sb.append("Pieces: ").append(pieces).append("\n");
+		// commented out as they are not currently used
+		//sb.append("Player 1 Score: ").append(player1Score).append("\n");
+		//sb.append("Player 2 Score: ").append(player2Score).append("\n");
+		//sb.append("Pieces: ").append(pieces).append("\n");
 		sb.append("Game Board:\n");
 		for (int i = 0; i < 9; i++) {
 			for (int j = 0; j < 9; j++) {

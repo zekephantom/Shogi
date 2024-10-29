@@ -132,7 +132,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements OnClickListener
 		//ShogiMoveAction dropGoldG = new ShogiMoveAction(this, firstInstance.getPiece(6, 2), 5, 2);
 
 		// Final message about the game's end or winner
-		testResultsEditText.append("Player 2 has won the game.\n");
+		testResultsEditText.append("Player 1 has won the game.\n");
 
 
 		// Create another instance of the game state and deep copy
