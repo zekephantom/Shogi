@@ -1,5 +1,17 @@
 package edu.up.cs301.Shogi;
 
+/**
+ * class ShogiPiece details the piece representation in the game.
+ * This class stores info about the piece's type, its owner, its promotion status, whether it exists on the board or not,
+ *  and its position relative to the board
+ *
+ * @author Ezekiel Rafanan
+ * @author Arnaj Sandhu
+ * @author Jona Bodirsky
+ * @author Makengo Lokombo
+ * @author James Pham
+ * @version 28 October 2024
+ */
 public class ShogiPiece {
     // Type of the piece (e.g., Pawn, Rook, King)
     private String type;
@@ -66,7 +78,7 @@ public class ShogiPiece {
     }
 
     //method for promoting a piece
-    public void setPromoted(boolean promoted) {
+    public void bePromoted(boolean promoted) {
         if (type.equals("Pawn") || type.equals("Lance") || type.equals("Knight") ||
                 type.equals("SilverGeneral") || type.equals("Rook") || type.equals("Bishop")) {
             this.promoted = promoted;

@@ -21,9 +21,8 @@ import android.view.View.OnClickListener;
  * @author James Pham
  * @author Arnaj Sandhu
  * @author Makengo Lokombo
- * @version July 2013
+ * @version July 2013 (original), 28 October 2024
  */
-
 public class ShogiHumanPlayer extends GameHumanPlayer implements OnClickListener {
 
 	/* instance variables */
@@ -103,7 +102,6 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements OnClickListener
 			boolean moveSuccess = firstInstance.moveAction(movePawn);
 			testResultsEditText.append("Player 1 moves Pawn from (6, 0) to (5, 0): " + (moveSuccess ? "Success" : "Failed") + "\n");
 		}
-
 		// Repeat the step to simulate full game making sure each method in ShogiState is called at least once
 
 		// Final message about the game's end or winner
@@ -113,7 +111,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements OnClickListener
 		ShogiState secondInstance = new ShogiState();
 		ShogiState secondCopy = new ShogiState(secondInstance);
 
-		// Compare firstCopy and secondCopy, print iof identical
+		// Compare firstCopy and secondCopy, print if identical
 		if (firstCopy.toString().equals(secondCopy.toString())) {
 			testResultsEditText.append("The two instances are identical.\n");
 		} else {
@@ -155,7 +153,6 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements OnClickListener
 		this.myActivity = activity;
 		activity.setContentView(R.layout.game_state_test);
 		this.testResultsEditText = (EditText) activity.findViewById(R.id.tv_test_results);
-
 
 		Button runTestButton = (Button) activity.findViewById(R.id.button_run_test);
 		runTestButton.setOnClickListener(this);

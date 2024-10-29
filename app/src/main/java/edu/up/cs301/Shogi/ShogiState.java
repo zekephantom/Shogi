@@ -15,13 +15,8 @@ import edu.up.cs301.GameFramework.infoMessage.GameState;
  * @version October 2024
  */
 public class ShogiState extends GameState {
-	// to satisfy Serializable interface
-	//private static final long serialVersionUID = 7737393762469851826L;
-	//private static final String TAG = "ShogiState";
 
-	/*
-	 * Instance Variables for Shogi State
-	 */
+	//Instance Variables for Shogi State
 	// Information about all the pieces
 	private ArrayList<ShogiPiece> pieces;
 
@@ -49,8 +44,10 @@ public class ShogiState extends GameState {
 		gamePhase = "Setup";
 	}
 
-	/*
-	 * Deep copy constructor
+	/**
+	 * This deep copy constructor ensures that the new ShogiState object is different from the original,
+	 * allowing changes to be made without affecting the original state.
+	 * @param orig original ShogiState object to be copied
 	 */
 	public ShogiState(ShogiState orig) {
 		// Deep copy player pieces
@@ -82,6 +79,14 @@ public class ShogiState extends GameState {
 	}
 
 	// Getters and Setters for various instance variables
+	/**
+	 * External Citation:
+	 * Date: 28 October 2024
+	 * Problem: Needed to implement standard getters and setters
+	 * Resource: Counter Game Source Code
+	 * Solution: Check the code to see how the getters and setters were implemented
+	 * 	and made new methods that are relevant to Shogi.
+	 */
 	public ArrayList<ShogiPiece> getPieces() {
 		return pieces;
 	}
@@ -113,6 +118,13 @@ public class ShogiState extends GameState {
 		this.gamePhase = gamePhase;
 	}
 
+	/**
+	 * Handles the drop action for a piece in Shogi.
+	 * This action is used when a player attempts to drop a captured piece onto the board.
+	 * Method checks is such drop is valid based on game rules.
+	 * @param action Details about the piece and the target position for the drop
+	 * @return true if drop action is valid and completed, otherwise false
+	 */
 	public boolean dropAction(ShogiMoveAction action) {
 		ShogiPiece selectedPiece = action.getPiece();
 		if (selectedPiece.isOnBoard()){
@@ -152,14 +164,18 @@ public class ShogiState extends GameState {
 		selectedPiece.setRow(moveRow);
 		selectedPiece.setCol(moveCol);
 		return true;
+
 	}
+
 	public boolean moveAction(ShogiMoveAction action) {
 		ShogiPiece selectedPiece = action.getPiece();
 
 		int currentRow = selectedPiece.getRow();
 		int currentCol = selectedPiece.getCol();
+
 		int moveRow = action.getMoveRow();
 		int moveCol = action.getMoveCol();
+
 		int rowDiff = Math.abs(currentRow - moveRow);
 		int colDiff = Math.abs(currentCol - moveCol);
 
@@ -288,7 +304,7 @@ public class ShogiState extends GameState {
 				// Force promotion if the piece reaches the last row and has no further legal moves
 				if ((selectedPiece.getOwner() == 0 && moveRow == 0) ||
 						(selectedPiece.getOwner() == 1 && moveRow == 8)) {
-					selectedPiece.setPromoted(true);
+					selectedPiece.bePromoted(true);
 				}
 			}
 		}
@@ -297,19 +313,28 @@ public class ShogiState extends GameState {
 	}
 
 	// Helper method to see if a piece can promote
+	/**
+	 * Determines if a given Shogi piece is eligible for promotion based on its
+	 * current row position and ownership.
+
+	 * @param piece The ShogiPiece being evaluated for promotion eligibility.
+	 * @param row The row position to which the piece has moved.
+	 * @return true if the piece is in the promotion zone, otherwise false
+	 */
 	private boolean isEligibleForPromotion(ShogiPiece piece, int row) {
 		return (piece.getOwner() == 0 && row <= 2) || (piece.getOwner() == 1 && row >= 6);
 	}
 
-	/**
-	External Citation
-		Date: 7 October 2024
-	 	Problem: I do not know where to start with toString() method.
-	 	Resource: https://developer.android.com/reference/java/lang/StringBuilder, ChatGPT
-	 	Solution: ChatGPT recommended me to start with StringBuilder, so I read the documentation. Followed GPT's guidelines.
-	*/
+
 	@Override
 	public String toString() {
+		/**
+		 *External Citation
+		 *	Date: 7 October 2024
+		 * 	Problem: I do not know where to start with toString() method.
+		 * 	Resource: https://developer.android.com/reference/java/lang/StringBuilder, ChatGPT
+		 *  Solution: ChatGPT recommended me to start with StringBuilder, so I read the documentation. Followed GPT's guidelines.
+		 */
 		StringBuilder sb = new StringBuilder();
 		sb.append("Shogi State:\n");
 		sb.append("Current Player: ").append(currentPlayer == 0 ? "Player 1" : "Player 2").append("\n");
@@ -327,14 +352,15 @@ public class ShogiState extends GameState {
 		return sb.toString();
 	}
 
-	/*
-	  Method to check if there is a piece in the path of where the piece needs to move to
-	  especially for Rook, Bishop, Lance
-	   ShogiPiece piece
-	   int moveRow
-	   int moveCol
-	   returns true if the path is blocked
-	*/
+	/**
+	 * isPathBlocked() method checks if there is a piece in the path of where the piece needs to move to
+	 * especially for Rook, Bishop, Lance
+	 *
+	 * @param piece The piece that is attempting to move
+	 * @param moveRow Target row for piece's move
+	 * @param moveCol The target column for the piece's move
+	 * @return true if path is blocked, otherwise false
+	 */
 	private boolean isPathBlocked(ShogiPiece piece, int moveRow, int moveCol) {
 		int currentRow = piece.getRow();
 		int currentCol = piece.getCol();
@@ -396,11 +422,11 @@ public class ShogiState extends GameState {
 		return false;
 	}
 
-	/*
-	 Returns the piece that is within a certain position
-	  int row
-	  int col
-	 returns piece/null
+	/**
+	 * Returns the piece that is within a certain position
+	 * @param row row position of the desired piece on the board.
+	 * @param col column position of the desired piece on the board.
+	 * @return The piece at the specified position, or null if no piece is found.
 	 */
     public ShogiPiece getPiece(int row, int col) {
 		for (ShogiPiece piece : pieces) {
@@ -411,11 +437,12 @@ public class ShogiState extends GameState {
 		}
 		return null;
 	}
-	/*
-	 Simple helper method that checks if currently there is any piece on a specific field
-	 	int row
-	 	int col
-	 	returns true if there is a piece already
+
+	/**
+	 * Simple helper method that checks if currently there is any piece on a specific field
+	 * @param row
+	 * @param col
+	 * @return false (default)
 	 */
 	private boolean checkForPiece(int row, int col) {
 		for (ShogiPiece piece : pieces) {
@@ -427,7 +454,7 @@ public class ShogiState extends GameState {
 		return false;
 	}
 
-	/*
+	/**
 	  Method to initially create and place all the pieces
 	  at the correct locations on the board
 	 */
