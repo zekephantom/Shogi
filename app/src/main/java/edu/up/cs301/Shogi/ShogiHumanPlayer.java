@@ -94,8 +94,17 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements OnClickListener
 
 		ShogiState firstCopy = new ShogiState(firstInstance); 	//Create deep copy from player 1's perspective
 
-
 		// Simulate gameplay by calling methods on firstInstance and append action descriptions to the EditText
+		/**
+		 * External Citation
+		 * Date: 28 October 2024
+		 * Problem: Required modifications to the onClick() method to simulate gameplay
+		 *          and ensure thorough testing of the ShogiState class.
+		 * Resource: ChatGPT
+		 * Solution: Consulted ChatGPT for guidance on how to implement the logic moves,
+		 *    ensuring that each method in ShogiState is called at least once
+		 *    during the simulation.
+		 */
 		ShogiPiece pawn = firstInstance.getPiece(6, 0); // Assume there is a pawn at this position
 		if (pawn != null) {
 			ShogiMoveAction movePawn = new ShogiMoveAction(this, pawn, 5, 0); // Move pawn forward
