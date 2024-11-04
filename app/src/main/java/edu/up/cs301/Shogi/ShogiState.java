@@ -200,8 +200,8 @@ public class ShogiState extends GameState {
 				}
 				break;
 			case "GoldGeneral":
-				if ((rowDiff == 1 && colDiff == 0) || (rowDiff == 0 && colDiff == 1) ||
-						(rowDiff == 1 && colDiff == 1 && moveRow < currentRow)) {
+				if ((rowDiff <= 1 && colDiff <= 1) && /*|| (rowDiff == 0 && colDiff == 1) ||*/
+						!(rowDiff == 1 && colDiff == 1 && moveRow < currentRow)) {
 					selectedPiece.setPosition(moveRow, moveCol);
 					return true;
 				}
