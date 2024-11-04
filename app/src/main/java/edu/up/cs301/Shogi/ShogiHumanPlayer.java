@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.view.View.OnClickListener;
 
+import java.util.ArrayList;
+
 /**
  * A GUI for the human player in the Shogi game. It displays the current game state
  * and allows the player to interact with the game by making moves.
@@ -128,8 +130,9 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements OnClickListener
 // Player 2 moves King from (0, 4) to (0, 3)
 		ShogiMoveAction moveKing = new ShogiMoveAction(this, firstInstance.getPiece(0, 4), 0, 3);
 		testResultsEditText.append("Player 2 moves King from (0, 4) to (0, 3): " + (firstInstance.moveAction(moveKing) ? "Success" : "Failed") + "\n");
-		// player1 drops Gold General (1,4)
-		//ShogiMoveAction dropGoldG = new ShogiMoveAction(this, firstInstance.getPiece(6, 2), 5, 2);
+// player1 drops Gold General (1,4)
+		firstInstance.getPieces().get(35).setOnBoard(true);
+		ShogiMoveAction dropGoldG = new ShogiMoveAction(this, firstInstance.getPieces().get(35), 5, 2);
 
 		// Final message about the game's end or winner
 		testResultsEditText.append("Player 1 has won the game.\n");
