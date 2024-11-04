@@ -184,10 +184,17 @@ public class ShogiState extends GameState {
 		//Log.d("moveAction", "begin moveAcvtion");
 
 
-		// Check if target is occupied
-		if (checkForPiece(moveRow, moveCol)){
-			Log.d("moveAction", "targetOccupied");
+		// Check if target is occupied by opponents king
+		if (pieces.get(4).getRow() == moveRow && pieces.get(4).getCol() == moveCol) {
+			Log.d("moveAction", "targetOccupiedByKing");
 			return false;
+		}
+		// Check if target is occupied by one of our pieces
+		for (int i = 0; i <= 20; i++) {
+			if (pieces.get(i).getRow() == moveRow && pieces.get(i).getCol() == moveCol && pieces.get(i).isOnBoard()) {
+				Log.d("moveAction", "targetOccupiedByOurPiece");
+				return false;
+			}
 		}
 
 
