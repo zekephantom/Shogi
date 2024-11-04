@@ -23,7 +23,7 @@ public class ShogiState extends GameState {
 	private ArrayList<ShogiPiece> pieces;
 
 	// State of the board
-	private ShogiPiece[][] gameBoard; // Represents the board with pieces
+	// private ShogiPiece[][] gameBoard; // Represents the board with pieces
 
 	// Whose turn is it?
 	private int currentPlayer; // 0 for Player 1, 1 for Player 2
@@ -39,7 +39,7 @@ public class ShogiState extends GameState {
 	public ShogiState() {
 		pieces = new ArrayList<>();
 		this.initPieces();
-		gameBoard = new ShogiPiece[9][9]; // Shogi board is 9x9
+		// gameBoard = new ShogiPiece[9][9]; // Shogi board is 9x9
 		currentPlayer = 0; // Start with Player 1
 		player1Score = 0;
 		player2Score = 0;
@@ -58,16 +58,16 @@ public class ShogiState extends GameState {
 			this.pieces.add(new ShogiPiece(piece));
 		}
 		// Deep copy game board
-		this.gameBoard = new ShogiPiece[9][9];
-		for (int i = 0; i < 9; i++) {
-			for (int j = 0; j < 9; j++) {
-				if (orig.gameBoard[i][j] != null) {
-					this.gameBoard[i][j] = new ShogiPiece(orig.gameBoard[i][j]);
-				} else {
-					this.gameBoard[i][j] = null;
-				}
-			}
-		}
+		//this.gameBoard = new ShogiPiece[9][9];
+		//for (int i = 0; i < 9; i++) {
+		//	for (int j = 0; j < 9; j++) {
+		//		if (orig.gameBoard[i][j] != null) {
+		//			this.gameBoard[i][j] = new ShogiPiece(orig.gameBoard[i][j]);
+		//		} else {
+		//			this.gameBoard[i][j] = null;
+		//		}
+		//	}
+		//}
 
 		// Copy current player
 		this.currentPlayer = orig.currentPlayer;
@@ -92,9 +92,9 @@ public class ShogiState extends GameState {
 	public ArrayList<ShogiPiece> getPieces() {
 		return pieces;
 	}
-	public ShogiPiece[][] getGameBoard() {
-		return gameBoard;
-	}
+	//public ShogiPiece[][] getGameBoard() {
+	//	return gameBoard;
+	//}
 	public int getCurrentPlayer() {
 		return currentPlayer;
 	}
@@ -337,7 +337,7 @@ public class ShogiState extends GameState {
 
 
 	@Override
-	public String toString() { //TODO: gameBoard and pieces are not working properly
+	public String toString() { //TODO: add 2d array for gameboard by iterating through pieces
 		/**
 		 *External Citation
 		 *	Date: 7 October 2024
@@ -353,13 +353,13 @@ public class ShogiState extends GameState {
 		//sb.append("Player 1 Score: ").append(player1Score).append("\n");
 		//sb.append("Player 2 Score: ").append(player2Score).append("\n");
 		//sb.append("Pieces: ").append(pieces).append("\n");
-		sb.append("Game Board:\n");
-		for (int i = 0; i < 9; i++) {
-			for (int j = 0; j < 9; j++) {
-				sb.append(gameBoard[i][j] == null ? "[ ]" : "[P]").append(" ");
-			}
-			sb.append("\n");
-		}
+		//sb.append("Game Board:\n");
+		//for (int i = 0; i < 9; i++) {
+		//	for (int j = 0; j < 9; j++) {
+		//		sb.append(gameBoard[i][j] == null ? "[ ]" : "[P]").append(" ");
+		//	}
+		//	sb.append("\n");
+		//}
 		return sb.toString();
 	}
 
