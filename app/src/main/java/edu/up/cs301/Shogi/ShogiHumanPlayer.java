@@ -132,7 +132,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements OnClickListener
 		testResultsEditText.append("Player 2 moves King from (0, 4) to (0, 3): " + (firstInstance.moveAction(moveKing) ? "Success" : "Failed") + "\n");
 // player1 drops Gold General (1,4)
 		firstInstance.getPieces().get(35).setOnBoard(true);
-		ShogiMoveAction dropGoldG = new ShogiMoveAction(this, firstInstance.getPieces().get(35), 5, 2);
+		ShogiMoveAction dropGoldG = new ShogiMoveAction(this, firstInstance.getPieces().get(35), 1, 4);
 		testResultsEditText.append("Player 2 drops Gold General to (1, 4): " + (firstInstance.moveAction(dropGoldG) ? "Success" : "Failed") + "\n");
 		// Final message about the game's end or winner
 		testResultsEditText.append("Player 1 has won the game.\n");

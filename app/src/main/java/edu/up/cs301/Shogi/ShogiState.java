@@ -212,7 +212,7 @@ public class ShogiState extends GameState {
 					selectedPiece.setPosition(moveRow, moveCol);
 					return true;
 				}
-				Log.d("moveAction", "Gold G invalid move pattern");
+
 				break;
 			case "SilverGeneral":
 				if (selectedPiece.isPromoted()) {
