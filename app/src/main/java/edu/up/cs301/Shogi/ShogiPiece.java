@@ -48,6 +48,7 @@ public class ShogiPiece {
         this.col = col;
         this.promoted = false; // Default to not promoted
         this.onBoard = false; // Default to on the board
+        // TODO Implement ArrayList for which squares this piece can move to
     }
 
     // Copy Constructor (for deep copy)
