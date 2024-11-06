@@ -1,5 +1,4 @@
-package edu.up.cs301shogi2024;
-
+package edu.up.cs301.Shogi;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -8,25 +7,21 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.graphics.Bitmap;
 import java.util.*;
-
-
+import edu.up.cs301.shogi.R;
 public class ShogiBoard extends SurfaceView implements SurfaceHolder.Callback {
+
     private DrawingThread drawingThread;
-    private List<GameFFPiece> gamePieces;
-    private List<GamePiece> capturedPieces;
-
-
+    private List<ShogiPiece> shogiPieces;
+    private List<ShogiPiece> capturedPieces;
     public ShogiBoard(Context context, AttributeSet attrs) {
         super(context, attrs);
         getHolder().addCallback(this);
-
         // Initialize the list of game pieces
-        gamePieces = new ArrayList<>();
+        shogiPieces = new ArrayList<>();
         capturedPieces = new ArrayList<>();
-        loadGamePieces(context);
+        loadShogiPieces(context);
     }
-
-    private void loadGamePieces(Context context) {
+    private void loadShogiPieces(Context context) {
         // Load Bitmaps for different pieces
         Bitmap kingLower = BitmapFactory.decodeResource(getResources(), R.drawable.kinglower);
         Bitmap rook = BitmapFactory.decodeResource(getResources(), R.drawable.rook);
@@ -42,65 +37,60 @@ public class ShogiBoard extends SurfaceView implements SurfaceHolder.Callback {
         Bitmap prom_lance = BitmapFactory.decodeResource(getResources(), R.drawable.prom_lance);
         Bitmap pawn = BitmapFactory.decodeResource(getResources(), R.drawable.pawn);
         Bitmap prom_pawn = BitmapFactory.decodeResource(getResources(), R.drawable.prom_pawn);
-
-
+/*
         // bottom side players pieces
-        gamePieces.add(new GamePiece(pawn, 6, 0));
-        gamePieces.add(new GamePiece(pawn, 6, 1));
-        gamePieces.add(new GamePiece(pawn, 5, 2));
-        gamePieces.add(new GamePiece(pawn, 6, 3));
-        gamePieces.add(new GamePiece(pawn, 6, 4));
-        gamePieces.add(new GamePiece(pawn, 6, 5));
-        gamePieces.add(new GamePiece(pawn, 5, 6));
-        gamePieces.add(new GamePiece(pawn, 6, 7));
-        gamePieces.add(new GamePiece(pawn, 6, 8));
-        gamePieces.add(new GamePiece(lance, 8, 0));
-        gamePieces.add(new GamePiece(lance, 8, 8));
-        gamePieces.add(new GamePiece(prom_knight, 2, 2));
-        gamePieces.add(new GamePiece(knight, 8, 7));
-        gamePieces.add(new GamePiece(silverGen, 8, 2));
-        gamePieces.add(new GamePiece(silverGen, 8, 6));
-        gamePieces.add(new GamePiece(goldGen, 8, 3));
-        gamePieces.add(new GamePiece(goldGen, 8, 5));
-        gamePieces.add(new GamePiece(kingLower, 8, 4));
-        gamePieces.add(new GamePiece(bishop, 5, 3));
-        gamePieces.add(new GamePiece(rook, 7, 7));
-
+        shogiPieces.add(new ShogiPiece(pawn, 6, 0));
+        shogiPieces.add(new ShogiPiece(pawn, 6, 1));
+        shogiPieces.add(new ShogiPiece(pawn, 5, 2));
+        shogiPieces.add(new ShogiPiece(pawn, 6, 3));
+        shogiPieces.add(new ShogiPiece(pawn, 6, 4));
+        shogiPieces.add(new ShogiPiece(pawn, 6, 5));
+        shogiPieces.add(new ShogiPiece(pawn, 5, 6));
+        shogiPieces.add(new ShogiPiece(pawn, 6, 7));
+        shogiPieces.add(new ShogiPiece(pawn, 6, 8));
+        shogiPieces.add(new ShogiPiece(lance, 8, 0));
+        shogiPieces.add(new ShogiPiece(lance, 8, 8));
+        shogiPieces.add(new ShogiPiece(prom_knight, 2, 2));
+        shogiPieces.add(new ShogiPiece(knight, 8, 7));
+        shogiPieces.add(new ShogiPiece(silverGen, 8, 2));
+        shogiPieces.add(new ShogiPiece(silverGen, 8, 6));
+        shogiPieces.add(new ShogiPiece(goldGen, 8, 3));
+        shogiPieces.add(new ShogiPiece(goldGen, 8, 5));
+        shogiPieces.add(new ShogiPiece(kingLower, 8, 4));
+        shogiPieces.add(new ShogiPiece(bishop, 5, 3));
+        shogiPieces.add(new ShogiPiece(rook, 7, 7));
         // top side players pieces
-        gamePieces.add(new GamePiece(enemy(pawn), 2, 0));
-        gamePieces.add(new GamePiece(enemy(pawn), 2, 1));
-        gamePieces.add(new GamePiece(enemy(pawn), 2, 3));
-        gamePieces.add(new GamePiece(enemy(pawn), 3, 4));
-        gamePieces.add(new GamePiece(enemy(pawn), 2, 5));
-        gamePieces.add(new GamePiece(enemy(pawn), 2, 6));
-        gamePieces.add(new GamePiece(enemy(pawn), 2, 7));
-        gamePieces.add(new GamePiece(enemy(pawn), 2, 8));
-        gamePieces.add(new GamePiece(enemy(lance), 0, 0));
-        gamePieces.add(new GamePiece(enemy(lance), 0, 8));
-        gamePieces.add(new GamePiece(enemy(knight), 0, 1));
-        gamePieces.add(new GamePiece(enemy(knight), 0, 7));
-        gamePieces.add(new GamePiece(enemy(silverGen), 1, 2));
-        gamePieces.add(new GamePiece(enemy(silverGen), 1, 6));
-        gamePieces.add(new GamePiece(enemy(goldGen), 1, 4));
-        gamePieces.add(new GamePiece(enemy(goldGen), 1, 5));
-        gamePieces.add(new GamePiece(enemy(kingLower), 0, 4));
-        gamePieces.add(new GamePiece(enemy(bishop), 1, 7));
-        gamePieces.add(new GamePiece(enemy(rook), 1, 3));
-
+        shogiPieces.add(new ShogiPiece(enemy(pawn), 2, 0));
+        shogiPieces.add(new ShogiPiece(enemy(pawn), 2, 1));
+        shogiPieces.add(new ShogiPiece(enemy(pawn), 2, 3));
+        shogiPieces.add(new ShogiPiece(enemy(pawn), 3, 4));
+        shogiPieces.add(new ShogiPiece(enemy(pawn), 2, 5));
+        shogiPieces.add(new ShogiPiece(enemy(pawn), 2, 6));
+        shogiPieces.add(new ShogiPiece(enemy(pawn), 2, 7));
+        shogiPieces.add(new ShogiPiece(enemy(pawn), 2, 8));
+        shogiPieces.add(new ShogiPiece(enemy(lance), 0, 0));
+        shogiPieces.add(new ShogiPiece(enemy(lance), 0, 8));
+        shogiPieces.add(new ShogiPiece(enemy(knight), 0, 1));
+        shogiPieces.add(new ShogiPiece(enemy(knight), 0, 7));
+        shogiPieces.add(new ShogiPiece(enemy(silverGen), 1, 2));
+        shogiPieces.add(new ShogiPiece(enemy(silverGen), 1, 6));
+        shogiPieces.add(new ShogiPiece(enemy(goldGen), 1, 4));
+        shogiPieces.add(new ShogiPiece(enemy(goldGen), 1, 5));
+        shogiPieces.add(new ShogiPiece(enemy(kingLower), 0, 4));
+        shogiPieces.add(new ShogiPiece(enemy(bishop), 1, 7));
+        shogiPieces.add(new ShogiPiece(enemy(rook), 1, 3));
         // captured pieces (row: maybe 0 for left/upper pieces and 1 for right/lower pieces
         // future automate that specific piece automatically has location specified
-        capturedPieces.add(new GamePiece(pawn, 8, 1));
+        capturedPieces.add(new ShogiPiece(pawn, 8, 1));*/
     }
-
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         // Start the drawing thread and pass the list of game pieces
-        drawingThread = new DrawingThread(getHolder(), gamePieces, capturedPieces);
+        drawingThread = new DrawingThread(getHolder(), shogiPieces, capturedPieces);
         drawingThread.setRunning(true);
         drawingThread.start();
         drawingThread.requestRedraw(); // Initial draw
     }
-
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
         if (drawingThread != null) {
@@ -118,12 +108,10 @@ public class ShogiBoard extends SurfaceView implements SurfaceHolder.Callback {
             drawingThread = null;
         }
     }
-
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
         // Handle surface changes if necessary
     }
-
     /**
      *External Citation
      *Date: 19 September 2024
@@ -137,5 +125,16 @@ public class ShogiBoard extends SurfaceView implements SurfaceHolder.Callback {
         Matrix matrix = new Matrix();
         matrix.postRotate(180);
         return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
+    }
+    public void initializeBoard() {
+        // Set up game pieces in their initial positions.
+        shogiPieces.clear(); // Clear any existing pieces.
+        // Add initial pieces for Player 1 and Player 2.
+        // (This code can be similar to the `loadGamePieces()` method but more tailored to setting up the board at the start of a game.)
+        loadShogiPieces(getContext()); // Load initial pieces.
+        // Request an initial draw to display the board.
+        if (drawingThread != null) {
+            drawingThread.requestRedraw();
+        }
     }
 }

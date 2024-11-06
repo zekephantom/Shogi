@@ -184,7 +184,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements OnClickListener
 
 		// remember the activity
 		this.myActivity = activity;
-		activity.setContentView(R.layout.game_state_test);
+		activity.setContentView(R.layout.game_interface);
 		this.testResultsEditText = (EditText) activity.findViewById(R.id.tv_test_results);
 
 		Button runTestButton = (Button) activity.findViewById(R.id.button_run_test);
