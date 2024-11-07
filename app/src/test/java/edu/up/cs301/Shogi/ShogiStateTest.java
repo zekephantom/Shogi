@@ -10,27 +10,30 @@ public class ShogiStateTest {
 
     @Before
     public void setUp() throws Exception {
-        ShogiState firstInstance = new ShogiState(); // Create new instance of game state class
 
-        ShogiMoveAction moveGoldG1= new ShogiMoveAction(this, firstInstance.getPiece(0, 3), 1, 2);
 
     }
 
     @After
     public void tearDown() throws Exception {
+
+
     }
 
-    @Test
-    public void getPieces() {
-    }
 
     @Test
     public void moveAction() {
-        firstInstance.moveAction(moveGoldG1);
+        ShogiState firstInstance = new ShogiState(); // Create new instance of game state class
+        //ShogiState firstCopy = new ShogiState(firstInstance); 	//Create deep copy from player 1's perspective
+        ShogiHumanPlayer player = new ShogiHumanPlayer("player1");
+
+        ShogiMoveAction movePawn1 = new ShogiMoveAction(player, firstInstance.getPiece(6, 2), 5, 2);
+        assertTrue(firstInstance.moveAction(movePawn1));
+
+        ShogiMoveAction movePawn2 = new ShogiMoveAction(player, firstInstance.getPiece(2, 2), 5, 2);
+        assertFalse(firstInstance.moveAction(movePawn2));
+
 
     }
 
-    @Test
-    public void getPiece() {
-    }
 }

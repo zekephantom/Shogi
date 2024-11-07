@@ -187,8 +187,12 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements OnClickListener
 		activity.setContentView(R.layout.game_interface);
 		this.testResultsEditText = (EditText) activity.findViewById(R.id.tv_test_results);
 
+		// TODO: on touch to flip
+
 		Button runTestButton = (Button) activity.findViewById(R.id.button_run_test);
 		runTestButton.setOnClickListener(this);
+
+
 	}
 
 }// class ShogiHumanPlayer
