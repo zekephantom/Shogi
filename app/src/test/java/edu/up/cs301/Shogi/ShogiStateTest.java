@@ -32,7 +32,15 @@ public class ShogiStateTest {
 
         ShogiMoveAction movePawn2 = new ShogiMoveAction(player, firstInstance.getPiece(2, 2), 5, 2);
         assertFalse(firstInstance.moveAction(movePawn2));
+    }
 
+    @Test
+    public void dropAction() {
+
+    }
+
+    @Test
+    public void promoteAction() {
 
     }
 
