@@ -57,6 +57,7 @@ public class ShogiState extends GameState {
 		for (ShogiPiece piece : orig.pieces) {
 			this.pieces.add(new ShogiPiece(piece));
 		}
+
 		// Deep copy game board
 		//this.gameBoard = new ShogiPiece[9][9];
 		//for (int i = 0; i < 9; i++) {
@@ -352,10 +353,78 @@ public class ShogiState extends GameState {
 		 * 	Resource: https://developer.android.com/reference/java/lang/StringBuilder, ChatGPT
 		 *  Solution: ChatGPT recommended me to start with StringBuilder, so I read the documentation. Followed GPT's guidelines.
 		 */
+		String[][] board = new String[9][9];
+		for (int i = 0; i < 9; i++) {
+			for (int j = 0; j < 9; j++) {
+				board[i][j] = "[ ]"; // empty cell
+			}
+		}
+
+		for (ShogiPiece piece : pieces) {
+			if (piece.isOnBoard()) {
+				int row = piece.getRow();
+				int col = piece.getCol();
+				String symbol;
+
+				// Map piece types to symbols
+				switch (piece.getType()) {
+					case "King":
+						symbol = "K";
+						break;
+					case "GoldGeneral":
+						symbol = "G";
+						break;
+					case "SilverGeneral":
+						symbol = "S";
+						break;
+					case "Knight":
+						symbol = "N";
+						break;
+					case "Lance":
+						symbol = "L";
+						break;
+					case "Bishop":
+						symbol = "B";
+						break;
+					case "Rook":
+						symbol = "R";
+						break;
+					case "Pawn":
+						symbol = "P";
+						break;
+					default:
+						symbol = " ";
+						break;
+				}
+
+				// Indicate promotion
+				if (piece.isPromoted()) {
+					symbol = "+" + symbol;
+				}
+
+				// Indicate owner (optional)
+				symbol += piece.getOwner(); // e.g., "K0" for Player 1's King
+
+				board[row][col] = "[" + symbol + "]";
+			}
+		}
+
 		StringBuilder sb = new StringBuilder();
 		sb.append("Shogi State:\n");
 		sb.append("Current Player: ").append(currentPlayer == 0 ? "Player 1" : "Player 2").append("\n");
 		sb.append("Game Phase: ").append(gamePhase).append("\n");
+		sb.append("Game Board:\n");
+
+		// Print the board from top to bottom
+		for (int i = 8; i >= 0; i--) {
+			for (int j = 0; j < 9; j++) {
+				sb.append(board[i][j]).append(" ");
+			}
+			sb.append("\n");
+		}
+
+		return sb.toString();
+
 		// commented out as they are not currently used
 		//sb.append("Player 1 Score: ").append(player1Score).append("\n");
 		//sb.append("Player 2 Score: ").append(player2Score).append("\n");
@@ -366,8 +435,6 @@ public class ShogiState extends GameState {
 		//		sb.append(gameBoard[i][j] == null ? "[ ]" : "[P]").append(" ");
 		//	}
 		//	sb.append("\n");
-		//}
-		return sb.toString();
 	}
 
 	/**

@@ -51,9 +51,8 @@ public class ShogiLocalGame extends LocalGame {
 		
 		if (action instanceof ShogiMoveAction) {
 
-			ShogiMoveAction cma = (ShogiMoveAction)action;
+			ShogiMoveAction sma = (ShogiMoveAction)action;
 
-			
 			// denote that this was a legal/successful move
 			return true;
 		}

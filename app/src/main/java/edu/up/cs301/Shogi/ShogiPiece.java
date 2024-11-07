@@ -29,29 +29,27 @@ public class ShogiPiece {
     private int row;
     private int col;
 
-    // Constructor
-
+    /**
+     *
+     * @param type The type of the Shogi Piece
+     * @param owner The owner of the piece
+     * @param row intended row position
+     * @param col intended column position
+     */
     public ShogiPiece(String type, int owner, int row, int col) {
-        /**
-         * External Citation
-         * Date: 23 October 2024
-         * Problem: Professor Nux commented about a potential problem. Quote:
-         * "row/col in Shogi piece may actually create problems for you.  What if it
-         *      gets out of sync with the board?  Is is it really necessary?"
-         * Resource: ChatGPT
-         * Solution: I asked ChatGPT to look into the code along with the comment, and
-         *              advised to remove/comment out row and col from default and copy constructors
-         */
         this.type = type;
         this.owner = owner;
         this.row = row;
         this.col = col;
         this.promoted = false; // Default to not promoted
-        this.onBoard = false; // Default to on the board
+        this.onBoard = true; // Default to on the board
         // TODO Implement ArrayList for which squares this piece can move to
     }
 
-    // Copy Constructor (for deep copy)
+    /**
+     * Shogi Piece Deep Copy Constructor
+     * @param original
+     */
     public ShogiPiece(ShogiPiece original) {
         this.type = original.type;
         this.owner = original.owner;
@@ -88,24 +86,11 @@ public class ShogiPiece {
     }
 
     public boolean isOnBoard() { return onBoard; }
-
-    public void setOnBoard(boolean onBoard) { this.onBoard = onBoard; }
-
-    public int getRow() {
-        return row;
-    }
-
-    public void setRow(int row) {
-        this.row = row;
-    }
-
-    public int getCol() {
-        return col;
-    }
-
-    public void setCol(int col) {
-        this.col = col;
-    }
+    public void setOnBoard(boolean onBoard) { this.onBoard = onBoard;}
+    public int getRow() {return row;}
+    public void setRow(int row) {this.row = row;}
+    public int getCol() {return col;}
+    public void setCol(int col) {this.col = col;}
 
     // Method to update the position of the piece
     public void setPosition(int row, int col) {
