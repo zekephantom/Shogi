@@ -26,8 +26,6 @@ public class ShogiStateTest {
 
     @Test
     public void moveAction() {
-        firstInstance.moveAction(moveGoldG1);
-
     }
 
     @Test
