@@ -45,7 +45,7 @@ public class ShogiStateTest {
 
     @Test
     public void dropAction() {
-        assertTrue(firstInstance.moveAction(dropGoldG);
+        assertTrue(firstInstance.moveAction(dropGoldG));
     }
 
     @Test
