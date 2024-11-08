@@ -22,10 +22,11 @@ public class ShogiState extends GameState {
 	// Instance variables
 	// List of all active pieces on the board
 	private ArrayList<ShogiPiece> pieces;
+	private static final int Player0Lance1  = 0;
 
-	// Captured pieces for each player
-	private ArrayList<ShogiPiece> capturedPiecesPlayer0; // Player 0's captured pieces
-	private ArrayList<ShogiPiece> capturedPiecesPlayer1; // Player 1's captured pieces
+	//// Captured pieces for each player
+	//private ArrayList<ShogiPiece> capturedPiecesPlayer0; // Player 0's captured pieces
+	//private ArrayList<ShogiPiece> capturedPiecesPlayer1; // Player 1's captured pieces
 
 	// Current player (0 for Player 0, 1 for Player 1)
 	private int currentPlayer;
@@ -36,8 +37,8 @@ public class ShogiState extends GameState {
 	// Constructor
 	public ShogiState() {
 		pieces = new ArrayList<>();
-		capturedPiecesPlayer0 = new ArrayList<>();
-		capturedPiecesPlayer1 = new ArrayList<>();
+		//capturedPiecesPlayer0 = new ArrayList<>();
+		//capturedPiecesPlayer1 = new ArrayList<>();
 		initPieces();
 		currentPlayer = 0; // Player 0 starts
 		gamePhase = "Main Play";
@@ -51,7 +52,7 @@ public class ShogiState extends GameState {
 		}
 
 		/**
-		 * External Citation
+		 * External Citation//
 		 * 	Date: 8 November 2024
 		 * 	Problem: Needed a way to perform deep copies of captured pieces lists to avoid references to the original objects.
 		 * 	Resource: https://www.geeksforgeeks.org/deep-shallow-lazy-copy-java-examples/, ChatGPT
@@ -60,14 +61,14 @@ public class ShogiState extends GameState {
 		 *		ensuring each piece is independently copied without linking to the original.
 		 */
 
-		this.capturedPiecesPlayer0 = new ArrayList<>();
-		for (ShogiPiece piece : original.capturedPiecesPlayer0) {
-			this.capturedPiecesPlayer0.add(new ShogiPiece(piece));
-		}
-		this.capturedPiecesPlayer1 = new ArrayList<>();
-		for (ShogiPiece piece : original.capturedPiecesPlayer1) {
-			this.capturedPiecesPlayer1.add(new ShogiPiece(piece));
-		}
+		//this.capturedPiecesPlayer0 = new ArrayList<>();
+		//for (ShogiPiece piece : original.capturedPiecesPlayer0) {
+		//	this.capturedPiecesPlayer0.add(new ShogiPiece(piece));
+		//}
+		//this.capturedPiecesPlayer1 = new ArrayList<>();
+		//for (ShogiPiece piece : original.capturedPiecesPlayer1) {
+		//	this.capturedPiecesPlayer1.add(new ShogiPiece(piece));
+		//}
 
 		this.currentPlayer = original.currentPlayer;
 		this.gamePhase = original.gamePhase;
@@ -155,11 +156,11 @@ public class ShogiState extends GameState {
 		piece.setOnBoard(false);
 		piece.setPromoted(false);
 		pieces.remove(piece);
-		if (currentPlayer == 0) {
-			capturedPiecesPlayer0.add(piece);
-		} else {
-			capturedPiecesPlayer1.add(piece);
-		}
+		//if (currentPlayer == 0) {
+		//	capturedPiecesPlayer0.add(piece);
+		//} else {
+		//	capturedPiecesPlayer1.add(piece);
+		//}
 	}
 
 	/**
@@ -781,8 +782,12 @@ public class ShogiState extends GameState {
 		ShogiPiece piece = action.getPieceToDrop();
 
 		// Verify that the current player owns the piece to drop
-		ArrayList<ShogiPiece> capturedPieces = currentPlayer == 0 ? capturedPiecesPlayer0 : capturedPiecesPlayer1;
-		if (!capturedPieces.contains(piece)) {
+		//ArrayList<ShogiPiece> capturedPieces = currentPlayer == 0 ? capturedPiecesPlayer0 : capturedPiecesPlayer1;
+		//if (!capturedPieces.contains(piece)) {
+		//	return false;
+		//}
+
+		if (action.getPieceToDrop().isOnBoard() || action.getPieceToDrop().getOwner() != currentPlayer) {
 			return false;
 		}
 
@@ -802,10 +807,6 @@ public class ShogiState extends GameState {
 		// Place the piece on the board
 		piece.setOnBoard(true);
 		piece.setPosition(targetRow, targetCol);
-		pieces.add(piece); // Add back to active pieces
-
-		// Remove the piece from the captured list
-		capturedPieces.remove(piece);
 
 		// Switch turn
 		switchTurn();
@@ -894,14 +895,24 @@ public class ShogiState extends GameState {
 
 		// Display captured pieces for each player
 		sb.append("Captured Pieces Player 1: ");
-		for (ShogiPiece piece : capturedPiecesPlayer0) {
-			sb.append(getPieceSymbol(piece)).append(" ");
+		for (ShogiPiece piece : pieces) {
+			if (!piece.isOnBoard() && piece.getOwner() == 1) {
+				int row = piece.getRow();
+				int col = piece.getCol();
+				String symbol = getPieceSymbol(piece);
+				sb.append(getPieceSymbol(piece)).append(" ");
+			}
 		}
 		sb.append("\n");
 
 		sb.append("Captured Pieces Player 2: ");
-		for (ShogiPiece piece : capturedPiecesPlayer1) {
-			sb.append(getPieceSymbol(piece)).append(" ");
+		for (ShogiPiece piece : pieces) {
+			if (!piece.isOnBoard() && piece.getOwner() == 0) {
+				int row = piece.getRow();
+				int col = piece.getCol();
+				String symbol = getPieceSymbol(piece);
+				sb.append(getPieceSymbol(piece)).append(" ");
+			}
 		}
 		sb.append("\n");
 
