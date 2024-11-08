@@ -1,22 +1,39 @@
 package edu.up.cs301.Shogi;
 
 /**
- * class ShogiPiece details the piece representation in the game.
- * This class stores info about the piece's type, its owner, its promotion status, whether it exists on the board or not,
- *  and its position relative to the board
+ * Class ShogiPiece represents a piece in the game of Shogi.
+ * It stores information about the piece's type, owner, promotion status, whether it's on the board,
+ * and its position on the board.
  *
- * @author Ezekiel Rafanan
- * @author Arnaj Sandhu
- * @author Jona Bodirsky
- * @author Makengo Lokombo
- * @author James Pham
- * @version 28 October 2024
+ * @author
+ * @version November 2023
  */
 public class ShogiPiece {
-    // Type of the piece (e.g., Pawn, Rook, King)
-    private String type;
+    // Enum for the type of the piece
+    /**
+     * External Citation:
+     * Date: 8 November 2024
+     * Problem: Needed to implement and understand Java enums for piece types in Shogi.
+     * Resource: https://docs.oracle.com/javase/tutorial/java/javaOO/enum.html
+     * Solution: Referenced Java's official documentation to understand the syntax,
+     *           usage, and benefits of enums, allowing for a clear representation
+     *           of piece types as constants in ShogiPiece.
+     */
+    public enum PieceType {
+        King,
+        Rook,
+        Bishop,
+        GoldGeneral,
+        SilverGeneral,
+        Knight,
+        Lance,
+        Pawn
+    }
 
-    // Owner of the piece (0 for Player 1, 1 for Player 2)
+    // Type of the piece (e.g., Pawn, Rook, King)
+    private PieceType type;
+
+    // Owner of the piece (0 for Player 0, 1 for Player 1)
     private int owner;
 
     // Promotion status
@@ -30,25 +47,26 @@ public class ShogiPiece {
     private int col;
 
     /**
+     * Constructor for ShogiPiece
      *
-     * @param type The type of the Shogi Piece
+     * @param type  The type of the Shogi Piece
      * @param owner The owner of the piece
-     * @param row intended row position
-     * @param col intended column position
+     * @param row   Intended row position
+     * @param col   Intended column position
      */
-    public ShogiPiece(String type, int owner, int row, int col) {
+    public ShogiPiece(PieceType type, int owner, int row, int col) {
         this.type = type;
         this.owner = owner;
         this.row = row;
         this.col = col;
         this.promoted = false; // Default to not promoted
         this.onBoard = true; // Default to on the board
-        // TODO Implement ArrayList for which squares this piece can move to
     }
 
     /**
-     * Shogi Piece Deep Copy Constructor
-     * @param original
+     * Copy Constructor for ShogiPiece
+     *
+     * @param original The original ShogiPiece to copy
      */
     public ShogiPiece(ShogiPiece original) {
         this.type = original.type;
@@ -60,37 +78,62 @@ public class ShogiPiece {
     }
 
     // Getters and Setters
-    public String getType() {
+    public PieceType getType() {
         return type;
     }
-    public void setType(String type) {
+
+    public void setType(PieceType type) {
         this.type = type;
     }
+
     public int getOwner() {
         return owner;
     }
+
     public void setOwner(int owner) {
         this.owner = owner;
     }
+
     public boolean isPromoted() {
         return promoted;
     }
 
-    //method for promoting a piece
+    // Method for promoting a piece
     public void bePromoted(boolean promoted) {
-        if (type.equals("Pawn") || type.equals("Lance") || type.equals("Knight") ||
-                type.equals("SilverGeneral") || type.equals("Rook") || type.equals("Bishop")) {
+        // Only certain pieces can be promoted
+        if (type == PieceType.Pawn || type == PieceType.Lance || type == PieceType.Knight ||
+                type == PieceType.SilverGeneral || type == PieceType.Rook || type == PieceType.Bishop) {
             this.promoted = promoted;
         }
-        // TODO add switch case for setting promoted bitmap
     }
 
-    public boolean isOnBoard() { return onBoard; }
-    public void setOnBoard(boolean onBoard) { this.onBoard = onBoard;}
-    public int getRow() {return row;}
-    public void setRow(int row) {this.row = row;}
-    public int getCol() {return col;}
-    public void setCol(int col) {this.col = col;}
+    public void setPromoted(boolean promoted) {
+        this.promoted = promoted;
+    }
+
+    public boolean isOnBoard() {
+        return onBoard;
+    }
+
+    public void setOnBoard(boolean onBoard) {
+        this.onBoard = onBoard;
+    }
+
+    public int getRow() {
+        return row;
+    }
+
+    public void setRow(int row) {
+        this.row = row;
+    }
+
+    public int getCol() {
+        return col;
+    }
+
+    public void setCol(int col) {
+        this.col = col;
+    }
 
     // Method to update the position of the piece
     public void setPosition(int row, int col) {

@@ -8,15 +8,14 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.View;
 
-import java.util.List;
-
 import edu.up.cs301.shogi.R;
 
 /**
  * ShogiRenderer renders the board and pieces based on the state of ShogiBoard.
  */
 public class ShogiRenderer extends View {
-    private ShogiBoard shogiBoard;
+    private ShogiState shogiState;
+
     private Paint paint;
 
     private Bitmap kingLower;
@@ -34,16 +33,24 @@ public class ShogiRenderer extends View {
     private Bitmap pawn;
     private Bitmap prom_pawn;
 
-    public ShogiRenderer(Context context, ShogiBoard board) {
+    public ShogiRenderer(Context context, ShogiState state) {
         super(context);
-        this.shogiBoard = board;
+        this.shogiState = state;
         this.paint = new Paint();
-        loadBitmaps(context); // Load bitmaps during initialization
+        loadBitmaps(context);
     }
 
     public void loadBitmaps(Context context) {
+        /**
+         * External Citation
+         *  Date: 8 November 2024
+         *  Problem: Could not remember how to load up the .png files of Shogi pieces from src\main\res\drawable
+         *  Resource: From Course Moodle website, file titled "PaintingImagesOnASurfaceView.pdf"
+         *  Solution: Used the code format from number 3.
+         */
+
         kingLower = BitmapFactory.decodeResource(context.getResources(), R.drawable.kinglower);
-        // kingUpper = BitmapFactory.decodeResource(context.getResources(), R.drawable.kingupper); // If needed
+        // kingUpper = BitmapFactory.decodeResource(context.getResources(), R.drawable.kingupper); // optional line of code
         rook = BitmapFactory.decodeResource(context.getResources(), R.drawable.rook);
         prom_rook = BitmapFactory.decodeResource(context.getResources(), R.drawable.prom_rook);
         bishop = BitmapFactory.decodeResource(context.getResources(), R.drawable.bishop);
@@ -83,71 +90,6 @@ public class ShogiRenderer extends View {
     }
 
     private void drawPieces(Canvas canvas) {
-        List<ShogiPiece> pieces = shogiBoard.getShogiPieces();
-        int cellSize = canvas.getWidth() / 9;
-
-        for (ShogiPiece piece : pieces) {
-            Bitmap bitmapToDraw = null;
-
-            // Determine the bitmap to draw based on piece type and promotion status
-            switch (piece.getType()) {
-                case KING:
-                    bitmapToDraw = kingLower; // Adjust if you have different kings for each player
-                    break;
-                case ROOK:
-                    bitmapToDraw = piece.isPromoted() ? prom_rook : rook;
-                    break;
-                case BISHOP:
-                    bitmapToDraw = piece.isPromoted() ? prom_bishop : bishop;
-                    break;
-                case GOLD_GENERAL:
-                    bitmapToDraw = goldGen;
-                    break;
-                case SILVER_GENERAL:
-                    bitmapToDraw = piece.isPromoted() ? prom_silver : silverGen;
-                    break;
-                case KNIGHT:
-                    bitmapToDraw = piece.isPromoted() ? prom_knight : knight;
-                    break;
-                case LANCE:
-                    bitmapToDraw = piece.isPromoted() ? prom_lance : lance;
-                    break;
-                case PAWN:
-                    bitmapToDraw = piece.isPromoted() ? prom_pawn : pawn;
-                    break;
-                default:
-                    // Handle any unknown piece types
-                    break;
-            }
-
-            if (bitmapToDraw != null) {
-                // Calculate the position to draw the bitmap
-                int col = piece.getCol();
-                int row = piece.getRow();
-
-                // Convert board coordinates to pixel coordinates
-                float x = col * cellSize;
-                float y = row * cellSize;
-
-                // Rotate pieces for Player 2
-                if (piece.getOwner() == PlayerType.PLAYER2) {
-                    canvas.save(); // Save the current canvas state
-
-                    /**
-                     External Citation
-                     Date: 2024-11-07
-                     Problem: Needed to rotate Player 2's pieces to face the opposite direction.
-                     Resource: https://developer.android.com/reference/android/graphics/Canvas#rotate(float,%20float,%20float)
-                     Solution: Used Canvas.rotate() to rotate the canvas around the center of the piece.
-                     */
-                    canvas.rotate(180, x + cellSize / 2, y + cellSize / 2);
-                    canvas.drawBitmap(bitmapToDraw, x, y, paint);
-                    canvas.restore(); // Restore the canvas state
-                } else {
-                    // Draw the bitmap without rotation
-                    canvas.drawBitmap(bitmapToDraw, x, y, paint);
-                }
-            }
-        }
     }
 }
+
