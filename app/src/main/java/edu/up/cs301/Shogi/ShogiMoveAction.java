@@ -14,19 +14,12 @@ import edu.up.cs301.GameFramework.actionMessage.GameAction;
  * @version October 2024
  */
 public class ShogiMoveAction extends GameAction {
+	private static final long serialVersionUID = 1L;
 
-	private ShogiPiece piece;   // The piece being moved
-	private int moveRow;        // The row to which the piece is moved
-	private int moveCol;        // The column to which the piece is moved
+	private ShogiPiece piece;
+	private int moveRow;
+	private int moveCol;
 
-	/**
-	 * Constructor for the ShogiMoveAction class.
-	 *
-	 * @param player The player making the move.
-	 * @param piece The piece to be moved.
-	 * @param moveRow The row to which the piece will be moved.
-	 * @param moveCol The column to which the piece will be moved.
-	 */
 	public ShogiMoveAction(GamePlayer player, ShogiPiece piece, int moveRow, int moveCol) {
 		super(player);
 		this.piece = piece;
@@ -34,7 +27,6 @@ public class ShogiMoveAction extends GameAction {
 		this.moveCol = moveCol;
 	}
 
-	// Getter methods
 	public ShogiPiece getPiece() {
 		return piece;
 	}
@@ -45,17 +37,5 @@ public class ShogiMoveAction extends GameAction {
 
 	public int getMoveCol() {
 		return moveCol;
-	}
-
-	// Setter methods
-	public void setPiece(ShogiPiece piece) {
-		this.piece = piece;
-	}
-	public void setMoveRow(int moveRow) {
-		this.moveRow = moveRow;
-	}
-
-	public void setMoveCol(int moveCol) {
-		this.moveCol = moveCol;
 	}
 }

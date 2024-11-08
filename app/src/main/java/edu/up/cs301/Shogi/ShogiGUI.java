@@ -13,9 +13,9 @@ import edu.up.cs301.shogi.R;
 /**
  * ShogiRenderer renders the board and pieces based on the state of ShogiBoard.
  */
-public class ShogiRenderer extends View {
+public class ShogiGUI extends View {
+    // TODO: check if private is the right access modifier for the Bitmap
     private ShogiState shogiState;
-
     private Paint paint;
 
     private Bitmap kingLower;
@@ -33,7 +33,7 @@ public class ShogiRenderer extends View {
     private Bitmap pawn;
     private Bitmap prom_pawn;
 
-    public ShogiRenderer(Context context, ShogiState state) {
+    public ShogiGUI(Context context, ShogiState state) {
         super(context);
         this.shogiState = state;
         this.paint = new Paint();
@@ -50,7 +50,7 @@ public class ShogiRenderer extends View {
          */
 
         kingLower = BitmapFactory.decodeResource(context.getResources(), R.drawable.kinglower);
-        // kingUpper = BitmapFactory.decodeResource(context.getResources(), R.drawable.kingupper); // optional line of code
+
         rook = BitmapFactory.decodeResource(context.getResources(), R.drawable.rook);
         prom_rook = BitmapFactory.decodeResource(context.getResources(), R.drawable.prom_rook);
         bishop = BitmapFactory.decodeResource(context.getResources(), R.drawable.bishop);
@@ -64,6 +64,7 @@ public class ShogiRenderer extends View {
         prom_lance = BitmapFactory.decodeResource(context.getResources(), R.drawable.prom_lance);
         pawn = BitmapFactory.decodeResource(context.getResources(), R.drawable.pawn);
         prom_pawn = BitmapFactory.decodeResource(context.getResources(), R.drawable.prom_pawn);
+        // kingUpper = BitmapFactory.decodeResource(context.getResources(), R.drawable.kingupper); // optional line of code
     }
 
     @Override
@@ -74,6 +75,7 @@ public class ShogiRenderer extends View {
     }
 
     private void drawBoard(Canvas canvas) {
+        // TODO: Recheck if drawBoard is complete
         paint.setColor(Color.BLACK);
         paint.setStrokeWidth(4);
         int cellSize = canvas.getWidth() / 9;
@@ -90,6 +92,7 @@ public class ShogiRenderer extends View {
     }
 
     private void drawPieces(Canvas canvas) {
+        // TODO: We must check if we need this method
     }
 }
 

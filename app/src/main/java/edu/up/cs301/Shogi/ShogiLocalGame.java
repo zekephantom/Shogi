@@ -20,15 +20,13 @@ public class ShogiLocalGame extends LocalGame {
 	
 	/**
 	 * can this player move
-	 * 
-	 * @return
-	 * 		true, because all player are always allowed to move at all times,
-	 * 		as this is a fully asynchronous game
+	 *
 	 */
 	@Override
 	protected boolean canMove(int playerIdx) {
-		return true;
+		return playerIdx == gameState.getCurrentPlayer();
 	}
+
 
 	/**
 	 *
@@ -47,20 +45,28 @@ public class ShogiLocalGame extends LocalGame {
 	 */
 	@Override
 	protected boolean makeMove(GameAction action) {
-		Log.i("action", action.getClass().toString());
-		
-		if (action instanceof ShogiMoveAction) {
+		// Get the player who initiated the action
+		GamePlayer actionPlayer = action.getPlayer();
 
-			ShogiMoveAction sma = (ShogiMoveAction)action;
+		// Get the index of the player (0 or 1)
+		int playerIdx = getPlayerIdx(actionPlayer);
 
-			// denote that this was a legal/successful move
-			return true;
+		// Check if it's the player's turn
+		if (!canMove(playerIdx)) {
+			return false; // Not the player's turn
 		}
-		else {
-			// denote that this was an illegal move
-			return false;
+
+		// Process the action based on its type
+		if (action instanceof ShogiMoveAction || action instanceof ShogiDropAction) {
+			// Delegate to gameState to handle the move or drop
+			boolean success = gameState.moveAction(action);
+			return success;
 		}
-	}//makeMove
+
+		// Action type not recognized
+		return false;
+	}
+
 	
 	/**
 	 * send the updated state to a given player

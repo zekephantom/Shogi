@@ -1,18 +1,25 @@
 package edu.up.cs301.Shogi;
 
 import java.util.ArrayList;
+
+import edu.up.cs301.GameFramework.actionMessage.GameAction;
 import edu.up.cs301.GameFramework.infoMessage.GameState;
+import edu.up.cs301.GameFramework.players.GamePlayer;
 
 /**
  * This class represents the state of the Shogi game.
  *
- * @author
- * @version November 2023
+ * @author Ezekiel Rafanan
+ * @author Jona Bodirsky
+ * @author Arnaj Sandhu
+ * @author Makengo Lokombo
+ * @author James Pham
+ *
+ * @version November 2024
  */
 public class ShogiState extends GameState {
 
 	// Instance variables
-
 	// List of all active pieces on the board
 	private ArrayList<ShogiPiece> pieces;
 
@@ -43,13 +50,14 @@ public class ShogiState extends GameState {
 			this.pieces.add(new ShogiPiece(piece));
 		}
 
-		// TODO: Need to complete external citation here
 		/**
 		 * External Citation
-		 * 	Date:
-		 * 	Problem:
-		 * 	Resource:
+		 * 	Date: 8 November 2024
+		 * 	Problem: Needed a way to perform deep copies of captured pieces lists to avoid references to the original objects.
+		 * 	Resource: https://www.geeksforgeeks.org/deep-shallow-lazy-copy-java-examples/, ChatGPT
 		 * 	Solution:
+		 * 		Implemented a loop to create new ShogiPiece objects for each item in the original lists,
+		 *		ensuring each piece is independently copied without linking to the original.
 		 */
 
 		this.capturedPiecesPlayer0 = new ArrayList<>();
@@ -60,6 +68,7 @@ public class ShogiState extends GameState {
 		for (ShogiPiece piece : original.capturedPiecesPlayer1) {
 			this.capturedPiecesPlayer1.add(new ShogiPiece(piece));
 		}
+
 		this.currentPlayer = original.currentPlayer;
 		this.gamePhase = original.gamePhase;
 	}
@@ -127,6 +136,13 @@ public class ShogiState extends GameState {
 	 * Switches the current player.
 	 */
 	private void switchTurn() {
+		/**
+		 * External Citation
+		 * Date: 8 November 2024
+		 * Problem: Needed a simple way to alternate between players after each turn.
+		 * Resource: ChatGPT 4o
+		 * Solution: Used a common toggle pattern (currentPlayer = 1 - currentPlayer) to switch between player 0 and player 1 each turn.
+		 */
 		currentPlayer = 1 - currentPlayer;
 	}
 
@@ -175,6 +191,7 @@ public class ShogiState extends GameState {
 
 	/**
 	 * Finalizes a move by updating the piece's position and handling captures and promotions.
+	 * Capture piece logic
 	 *
 	 * @param piece     The piece to move.
 	 * @param targetRow The target row.
@@ -182,6 +199,16 @@ public class ShogiState extends GameState {
 	 * @return True if the move is successful, false otherwise.
 	 */
 	private boolean finalizeMove(ShogiPiece piece, int targetRow, int targetCol) {
+		/**
+		 * External Citation
+		 * Date: 8 November 2024
+		 * Problem: Needed a method to streamline finalizing each piece move in Shogi, handling tasks like
+		 *          position updates, capture checks, and turn switching in one location.
+		 * Resource: ChatGPT 4o
+		 * Solution: Developed `finalizeMove()` to perform consistent end-of-move operations, consolidating
+		 *           these processes to simplify individual piece movement methods.
+		 */
+
 		// Check bounds
 		if (!isWithinBounds(targetRow, targetCol)) {
 			return false;
@@ -382,52 +409,104 @@ public class ShogiState extends GameState {
 		if (piece.getOwner() == 0) {
 			// Player 0 (moving upwards)
 			validMoves = new int[][]{
-					{-1, 0}, {-1, -1}, {-1, 1}, {0, -1}, {0, 1}, {1, 0}
-			};
+					{-1, 0}, {-1, -1}, {-1, 1}, {0, -1}, {0, 1}, {1, 0}};
 		} else {
 			// Player 1 (moving downwards)
 			validMoves = new int[][]{
-					{1, 0}, {1, -1}, {1, 1}, {0, -1}, {0, 1}, {-1, 0}
-			};
+					{1, 0}, {1, -1}, {1, 1}, {0, -1}, {0, 1}, {-1, 0}};
 		}
 
 		for (int[] move : validMoves) {
-			if (rowDiff == move[0] && colDiff == move[1]) {
-				return true;
-			}
+			if (rowDiff == move[0] && colDiff == move[1]) {return true;}
 		}
 		return false;
 	}
 
 	/**
-	 * Handles a move action by delegating to the appropriate piece movement method.
+	 * Handles a move or drop action by delegating to the appropriate method.
 	 *
-	 * @param action The move action to handle.
-	 * @return True if the move is successful, false otherwise.
+	 * @param action The action to handle (either a move or a drop).
+	 * @return True if the action is successful, false otherwise.
 	 */
-	public boolean moveAction(ShogiMoveAction action) {
-		ShogiPiece piece = action.getPiece();
-		switch (piece.getType()) {
-			case King:
-				return moveKing(action);
-			case Rook:
-				return moveRook(action);
-			case Bishop:
-				return moveBishop(action);
-			case GoldGeneral:
-				return moveGoldGeneral(action);
-			case SilverGeneral:
-				return moveSilverGeneral(action);
-			case Knight:
-				return moveKnight(action);
-			case Lance:
-				return moveLance(action);
-			case Pawn:
-				return movePawn(action);
-			default:
-				return false;
+	public boolean moveAction(GameAction action) {
+		// Verify that the action comes from the current player
+		if (!isActionFromCurrentPlayer(action)) {
+			return false;
 		}
+
+		if (action instanceof ShogiMoveAction) {
+			// Handle move actions
+			ShogiMoveAction moveAction = (ShogiMoveAction) action;
+			ShogiPiece piece = moveAction.getPiece();
+
+			// Ensure the piece belongs to the current player
+			if (piece.getOwner() != currentPlayer) {
+				return false;
+			}
+
+			// Delegate to the specific move method based on piece type
+			switch (piece.getType()) {
+				case King:
+					return moveKing(moveAction);
+				case Rook:
+					return moveRook(moveAction);
+				case Bishop:
+					return moveBishop(moveAction);
+				case GoldGeneral:
+					return moveGoldGeneral(moveAction);
+				case SilverGeneral:
+					return moveSilverGeneral(moveAction);
+				case Knight:
+					return moveKnight(moveAction);
+				case Lance:
+					return moveLance(moveAction);
+				case Pawn:
+					return movePawn(moveAction);
+				default:
+					return false;
+			}
+		} else if (action instanceof ShogiDropAction) {
+			// Handle drop actions
+			ShogiDropAction dropAction = (ShogiDropAction) action;
+
+			// Delegate to the dropPiece method
+			return dropPiece(dropAction);
+		}
+
+		// If action is neither a move nor a drop, return false
+		return false;
 	}
+
+	/**
+	 * Checks if the given action was initiated by the current player.
+	 *
+	 * @param action The action to check, which contains information about the player who initiated it.
+	 * @return true if the action was initiated by the player whose turn it currently is, false otherwise.
+	 *
+	 * External Citation
+	 * Date: 8 November 2024
+	 * Problem: Needed a way to verify that an action aligns with the current player's turn to ensure valid moves.
+	 * Resource: ChatGPT 4o
+	 * Solution: Structured the method to return true if the action matches the current player; added a TODO to refine the actual check.
+	 */
+	public boolean isActionFromCurrentPlayer(GameAction action) {
+		return true; // TODO: finish implementing this block of code, should not return true
+	}
+
+
+	// TODO: Decide whether or not to use this block of code; commented for now
+//	/**
+//	 * Retrieves the player number associated with a GamePlayer instance.
+//	 *
+//	 * @param player The GamePlayer instance.
+//	 * @return The player number (0 or 1).
+//	 */
+//	private int getPlayerNum(GamePlayer player) {
+//		// Implement logic to determine player number from GamePlayer instance
+//		// This could be based on a mapping or an attribute within GamePlayer
+//		// For this example, we'll assume there's a method getPlayerNum()
+//		return player.getPlayerNum();
+//	}
 
 
 	/**
@@ -537,6 +616,7 @@ public class ShogiState extends GameState {
 			// If promoted, move like a Gold General
 			return moveAsGoldGeneral(piece, targetRow, targetCol);
 		} else {
+
 			// Unpromoted Silver General move directions
 			int[][] validMoves;
 			if (piece.getOwner() == 0) {
@@ -581,6 +661,7 @@ public class ShogiState extends GameState {
 			// If promoted, move like a Gold General
 			return moveAsGoldGeneral(piece, targetRow, targetCol);
 		} else {
+
 			// Unpromoted Knight move directions
 			int[][] validMoves;
 			if (piece.getOwner() == 0) {
@@ -651,12 +732,18 @@ public class ShogiState extends GameState {
 
 	/**
 	 * Helper method to handle movement as a Gold General.
+	 * This method is private because it is a helper method used internally within this class
+	 * 	to support the movement rules of pieces like a Gold General (e.g., promoted Knight, Lance,
+	 * 	or Silver General).
+	 * Also, it is only meant to be called within other movement methods - like moveKnight() or moveSilverGeneral() -
+	 * 	that determine whether or not a piece should move as a Gold General based on its type and promotion status.
 	 *
 	 * @param piece The Silver General piece.
 	 * @param targetRow Target row for the move.
 	 * @param targetCol Target column for the move.
 	 * @return True if the move is successful, false otherwise.
 	 */
+
 	private boolean moveAsGoldGeneral(ShogiPiece piece, int targetRow, int targetCol) {
 		int currentRow = piece.getRow();
 		int currentCol = piece.getCol();
@@ -684,8 +771,218 @@ public class ShogiState extends GameState {
 	}
 
 
+	/**
+	 * Handles a drop action by placing a captured piece onto the board.
+	 *
+	 * @param action The drop action to handle.
+	 * @return True if the drop is successful, false otherwise.
+	 */
+	public boolean dropPiece(ShogiDropAction action) {
+		ShogiPiece piece = action.getPieceToDrop();
 
-	// Additional helper methods as needed
+		// Verify that the current player owns the piece to drop
+		ArrayList<ShogiPiece> capturedPieces = currentPlayer == 0 ? capturedPiecesPlayer0 : capturedPiecesPlayer1;
+		if (!capturedPieces.contains(piece)) {
+			return false;
+		}
+
+		int targetRow = action.getTargetRow();
+		int targetCol = action.getTargetCol();
+
+		// Check if the target position is within bounds and empty
+		if (!isWithinBounds(targetRow, targetCol) || getPiece(targetRow, targetCol) != null) {
+			return false;
+		}
+
+		// Additional Shogi drop rules
+		if (!isValidDrop(piece, targetRow, targetCol)) {
+			return false;
+		}
+
+		// Place the piece on the board
+		piece.setOnBoard(true);
+		piece.setPosition(targetRow, targetCol);
+		pieces.add(piece); // Add back to active pieces
+
+		// Remove the piece from the captured list
+		capturedPieces.remove(piece);
+
+		// Switch turn
+		switchTurn();
+
+		return true;
+	}
+
+	/**
+	 * Checks if the drop is valid according to Shogi rules.
+	 *
+	 * @param piece The piece to drop.
+	 * @param targetRow The target row.
+	 * @param targetCol The target column.
+	 * @return True if the drop is valid, false otherwise.
+	 */
+	private boolean isValidDrop(ShogiPiece piece, int targetRow, int targetCol) {
+		// Pawns cannot be dropped on the last row for the player
+		if (piece.getType() == ShogiPiece.PieceType.Pawn) {
+			if ((currentPlayer == 0 && targetRow == 0) || (currentPlayer == 1 && targetRow == 8)) {
+				return false;
+			}
+			// Additional rule: No dropping pawn in a column that already has an unpromoted pawn (Nifu)
+			if (isPawnInColumn(currentPlayer, targetCol)) {
+				return false;
+			}
+
+			// Additional rule: Pawn cannot be dropped to give immediate checkmate (Uchifuzume)
+			// This requires checking for immediate checkmate after the drop
+			// Implementing this requires more complex game state analysis
+		}
+
+		// Knights cannot be dropped on the last two rows
+		if (piece.getType() == ShogiPiece.PieceType.Knight) {
+			if ((currentPlayer == 0 && targetRow <= 1) || (currentPlayer == 1 && targetRow >= 7)) {
+				return false;
+			}
+		}
+
+		// Lances cannot be dropped on the last row
+		if (piece.getType() == ShogiPiece.PieceType.Lance) {
+			if ((currentPlayer == 0 && targetRow == 0) || (currentPlayer == 1 && targetRow == 8)) {
+				return false;
+			}
+		}
+
+		// Cannot drop a piece on a square that would result in no legal moves
+		// Implement additional rules as needed
+
+		return true;
+	}
+
+
+	/**
+	 * Checks if the player already has an unpromoted pawn in the specified column.
+	 *
+	 * @param player The player number (0 or 1).
+	 * @param col The column to check.
+	 * @return True if there is an unpromoted pawn, false otherwise.
+	 */
+	private boolean isPawnInColumn(int player, int col) {
+		for (ShogiPiece piece : pieces) {
+			if (piece.getType() == ShogiPiece.PieceType.Pawn &&
+					piece.getOwner() == player &&
+					piece.getCol() == col &&
+					piece.isOnBoard() &&
+					!piece.isPromoted()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+
+	@Override
+	public String toString() {
+		/**
+		 * External Citation
+		 * Date: 8 November 2024
+		 * Problem: Needed an efficient way to concatenate multiple strings in the toString() method.
+		 * Resource: https://developer.android.com/reference/java/lang/StringBuilder
+		 * Solution: Used StringBuilder to build the game state as a single string, which improves performance over string concatenation in loops.
+		 */
+		StringBuilder sb = new StringBuilder();
+		sb.append("Current Player: ").append(currentPlayer == 0 ? "Player 1" : "Player 2").append("\n");
+		sb.append("Game Phase: ").append(gamePhase).append("\n");
+
+		// Display captured pieces for each player
+		sb.append("Captured Pieces Player 1: ");
+		for (ShogiPiece piece : capturedPiecesPlayer0) {
+			sb.append(getPieceSymbol(piece)).append(" ");
+		}
+		sb.append("\n");
+
+		sb.append("Captured Pieces Player 2: ");
+		for (ShogiPiece piece : capturedPiecesPlayer1) {
+			sb.append(getPieceSymbol(piece)).append(" ");
+		}
+		sb.append("\n");
+
+		sb.append("Board:\n");
+
+		// Initialize a blank 9x9 board representation
+		String[][] board = new String[9][9];
+		for (int row = 0; row < 9; row++) {
+			for (int col = 0; col < 9; col++) {
+				board[row][col] = "[ ]"; // empty cell
+			}
+		}
+
+		// Place each piece on the board based on its row and column
+		for (ShogiPiece piece : pieces) {
+			if (piece.isOnBoard()) {
+				int row = piece.getRow();
+				int col = piece.getCol();
+				String symbol = getPieceSymbol(piece);
+				board[row][col] = "[" + symbol + "]";
+			}
+		}
+
+		// Append board rows to the StringBuilder, top to bottom (Shogi orientation)
+		for (int row = 8; row >= 0; row--) {
+			for (int col = 0; col < 9; col++) {
+				sb.append(board[row][col]).append(" ");
+			}
+			sb.append("\n");
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * Helper method to get the symbol representation of a piece.
+	 * External Citation:
+	 * 	Date: 8 November 2024
+	 * 	Problem: Needed a standardized way to represent each piece type as a unique symbol in the `toString()` method.
+	 * 	Resource: ChatGPT 4o
+	 * 	Solution: Recommended creating a `getPieceSymbol()` method to map each piece type to a distinct symbol, which improved readability and modularity in `toString()`.
+	 *
+	 * @param piece The ShogiPiece object.
+	 * @return A string representing the piece.
+	 */
+	private String getPieceSymbol(ShogiPiece piece) {
+		String symbol;
+		switch (piece.getType()) {
+			case King:
+				symbol = "K";
+				break;
+			case Rook:
+				symbol = "R";
+				break;
+			case Bishop:
+				symbol = "B";
+				break;
+			case GoldGeneral:
+				symbol = "G";
+				break;
+			case SilverGeneral:
+				symbol = "S";
+				break;
+			case Knight:
+				symbol = "N";
+				break;
+			case Lance:
+				symbol = "L";
+				break;
+			case Pawn:
+				symbol = "P";
+				break;
+			default:
+				symbol = " ";
+				break;
+		}
+		if (piece.isPromoted()) {
+			symbol = "+" + symbol;
+		}
+		symbol += piece.getOwner(); // e.g., "K0" for Player 1's King
+		return symbol;
+	}
 
 
 }

@@ -14,11 +14,11 @@ public class ShogiPiece {
      * External Citation:
      * Date: 8 November 2024
      * Problem: Needed to implement and understand Java enums for piece types in Shogi.
-     * Resource: https://docs.oracle.com/javase/tutorial/java/javaOO/enum.html
-     * Solution: Referenced Java's official documentation to understand the syntax,
-     *           usage, and benefits of enums, allowing for a clear representation
-     *           of piece types as constants in ShogiPiece.
+     * Resource: https://docs.oracle.com/javase/tutorial/java/javaOO/enum.html, https://stackoverflow.com/questions/9246934/working-with-enums-in-android
+     * Solution: Referenced Java's official documentation to understand the syntax, also looked into StackOverflow about enums
+     *
      */
+    // Watch this for later: https://www.youtube.com/watch?v=Hzs6OBcvNQE, about enums and performance issues
     public enum PieceType {
         King,
         Rook,
