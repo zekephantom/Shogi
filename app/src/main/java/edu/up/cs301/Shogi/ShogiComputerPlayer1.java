@@ -4,55 +4,75 @@ import edu.up.cs301.GameFramework.players.GameComputerPlayer;
 import edu.up.cs301.GameFramework.infoMessage.GameInfo;
 import edu.up.cs301.GameFramework.utilities.Tickable;
 
+import java.util.ArrayList;
+
 /**
- * A computer-version of a counter-player.  Since this is such a simple game,
- * it just sends "+" and "-" commands with equal probability, at an average
- * rate of one per second. 
- * 
- * @author Steven R. Vegdahl
- * @author Andrew M. Nuxoll
- * @version September 2013
+ * A computer version of a player in the game. This AI will randomly select valid moves.
+ *
+ * @author Your Name
+ * @version October 2024
  */
 public class ShogiComputerPlayer1 extends GameComputerPlayer implements Tickable {
-	
-    /**
-     * Constructor for objects of class CounterComputerPlayer1
-     * 
-     * @param name
-     * 		the player's name
-     */
-    public ShogiComputerPlayer1(String name) {
-        // invoke superclass constructor
-        super(name);
-        
-        // start the timer, ticking 20 times per second
-        getTimer().setInterval(50);
-        getTimer().start();
-    }
-    
-    /**
-     * callback method--game's state has changed
-     * 
-     * @param info
-     * 		the information (presumably containing the game's state)
-     */
+
+	/**
+	 * Constructor for objects of class ShogiComputerPlayer1
+	 *
+	 * @param name The player's name
+	 */
+	public ShogiComputerPlayer1(String name) {
+		// Invoke superclass constructor
+		super(name);
+
+		// Start the timer, ticking every second
+		getTimer().setInterval(1000);
+		getTimer().start();
+	}
+
+	/**
+	 * Callback method -- the game's state has changed
+	 *
+	 * @param info The information received from the game state
+	 */
 	@Override
 	protected void receiveInfo(GameInfo info) {
-		// Do nothing, as we ignore all state in deciding our next move. It
-		// depends totally on the timer and random numbers.
+		// Currently not processing game state changes
 	}
-	
+
 	/**
-	 * callback method: the timer ticked
+	 * Callback method: the timer ticked
 	 */
 	protected void timerTicked() {
-		// 5% of the time, increment or decrement the counter
-		if (Math.random() >= 0.05) return; // do nothing 95% of the time
+		// Check if it's the AI's turn
+		ShogiState gameState = (ShogiState) game.getState();
+		if (gameState.getCurrentPlayer() != 1) return; // AI is Player 1
 
-		// "flip a coin" to determine whether to increment or decrement
-		boolean move = Math.random() >= 0.5;
-		
-		// send the move-action to the game
+		// Get all pieces that belong to the AI and are on the board
+		ArrayList<ShogiPiece> playerPieces = new ArrayList<>();
+		for (ShogiPiece piece : gameState.getPieces()) {
+			if (piece.getOwner() == 1 && piece.isOnBoard()) {
+				playerPieces.add(piece);
+			}
+		}
 
+		// If there are no pieces to move, return
+		if (playerPieces.isEmpty()) return;
+
+		// Choose a random piece from the player's pieces
+		ShogiPiece selectedPiece = playerPieces.get((int)(Math.random() * playerPieces.size()));
+
+		// Get all possible moves for the selected piece
+		ArrayList<int[]> possibleMoves = selectedPiece.getPossibleMoves(gameState);
+
+		// If there are no possible moves, return
+		if (possibleMoves.isEmpty()) return;
+
+		// Choose a random move from the available moves
+		int[] selectedMove = possibleMoves.get((int)(Math.random() * possibleMoves.size()));
+		int targetRow = selectedMove[0];
+		int targetCol = selectedMove[1];
+
+		// Create a move action and send it to the game
+		ShogiMoveAction moveAction = new ShogiMoveAction(this, selectedPiece, targetRow, targetCol);
+		game.sendAction(moveAction);
 	}
 }
