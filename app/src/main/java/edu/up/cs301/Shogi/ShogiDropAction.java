@@ -17,25 +17,19 @@ public class ShogiDropAction extends GameAction {
     //private static final long serialVersionUID = 1L;
 
     private ShogiPiece pieceToDrop;
-    private int targetRow;
-    private int targetCol;
+    private ShogiSquare targetPosition;
 
-    public ShogiDropAction(GamePlayer player, ShogiPiece pieceToDrop, int targetRow, int targetCol) {
+    public ShogiDropAction(GamePlayer player, ShogiPiece pieceToDrop, ShogiSquare targetPosition) {
         super(player);
         this.pieceToDrop = pieceToDrop;
-        this.targetRow = targetRow;
-        this.targetCol = targetCol;
+        this.targetPosition = targetPosition;
     }
 
     public ShogiPiece getPieceToDrop() {
         return pieceToDrop;
     }
 
-    public int getTargetRow() {
-        return targetRow;
-    }
-
-    public int getTargetCol() {
-        return targetCol;
+    public ShogiSquare getTargetPosition() {
+        return targetPosition;
     }
 }
