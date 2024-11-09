@@ -17,25 +17,17 @@ public class ShogiMoveAction extends GameAction {
 	private static final long serialVersionUID = 1L;
 
 	private ShogiPiece piece;
-	private int moveRow;
-	private int moveCol;
+	private ShogiSquare targetPosition;
 
-	public ShogiMoveAction(GamePlayer player, ShogiPiece piece, int moveRow, int moveCol) {
+	public ShogiMoveAction(GamePlayer player, ShogiPiece piece, ShogiSquare targetPosition) {
 		super(player);
 		this.piece = piece;
-		this.moveRow = moveRow;
-		this.moveCol = moveCol;
+		this.targetPosition = targetPosition;
 	}
 
 	public ShogiPiece getPiece() {
 		return piece;
 	}
 
-	public int getMoveRow() {
-		return moveRow;
-	}
-
-	public int getMoveCol() {
-		return moveCol;
-	}
+	public ShogiSquare getTargetPosition() { return targetPosition; }
 }

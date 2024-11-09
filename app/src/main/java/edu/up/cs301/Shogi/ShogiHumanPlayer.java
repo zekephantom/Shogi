@@ -108,31 +108,31 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements OnClickListener
 		 *    during the simulation.
 		 */
 		// Player 1 moves Pawn from (6, 2) to (5, 2) (MovePawn)
-		ShogiMoveAction movePawn1 = new ShogiMoveAction(this, firstInstance.getPiece(6, 2), 5, 2);
+		ShogiMoveAction movePawn1 = new ShogiMoveAction(this, firstInstance.getPiece(new ShogiSquare(6, 2)), new ShogiSquare(5, 2));
 		testResultsEditText.append("Player 1 moves Pawn from (6, 2) to (5, 2): " + (firstInstance.moveAction(movePawn1) ? "Success" : "Failed") + "\n");
 
 // Player 2 moves Pawn from (0, 3) to (1, 2)
-		ShogiMoveAction moveGoldG1= new ShogiMoveAction(this, firstInstance.getPiece(0, 3), 1, 2);
+		ShogiMoveAction moveGoldG1= new ShogiMoveAction(this, firstInstance.getPiece(new ShogiSquare(0, 3)), new ShogiSquare(1, 2));
 		testResultsEditText.append("Player 2 moves GoldG from (0, 3) to (1, 2): " + (firstInstance.moveAction(moveGoldG1) ? "Success" : "Failed") + "\n");
 
 // Player 1 moves moveBishop1 from (7, 1) to (2, 6)
-		ShogiMoveAction moveBishop1 = new ShogiMoveAction(this, firstInstance.getPiece(7, 1), 2, 6);
+		ShogiMoveAction moveBishop1 = new ShogiMoveAction(this, firstInstance.getPiece(new ShogiSquare(7, 1)), new ShogiSquare(2, 6));
 		testResultsEditText.append("Player 1 moves Bishop from (7, 1) to (2, 6): " + (firstInstance.moveAction(moveBishop1) ? "Success" : "Failed") + "\n");
-		firstInstance.getPiece(2,6).bePromoted(true); // bishop promotion
+		firstInstance.getPiece(new ShogiSquare(2, 6)).bePromoted(true); // bishop promotion
 // Player 2 moves moveGoldG2 from (0, 5) to (1, 5)
-		ShogiMoveAction moveGoldG2 = new ShogiMoveAction(this, firstInstance.getPiece(0, 5), 1, 5);
+		ShogiMoveAction moveGoldG2 = new ShogiMoveAction(this, firstInstance.getPiece(new ShogiSquare(0, 5)), new ShogiSquare(1, 5));
 		testResultsEditText.append("Player 2 moves GoldG from (0, 5) to (1, 5): " + (firstInstance.moveAction(moveGoldG2) ? "Success" : "Failed") + "\n");
 
 // Player 1 moves moveBishop2 from (2, 6) to (1, 5)
-		ShogiMoveAction moveBishop2= new ShogiMoveAction(this, firstInstance.getPiece(2, 6), 1, 5);
+		ShogiMoveAction moveBishop2= new ShogiMoveAction(this, firstInstance.getPiece(new ShogiSquare(2, 6)), new ShogiSquare(1, 5));
 		testResultsEditText.append("Player 1 moves Bishop from (2, 6) to (1, 5): " + (firstInstance.moveAction( moveBishop2) ? "Success" : "Failed") + "\n");
 
 // Player 2 moves King from (0, 4) to (0, 3)
-		ShogiMoveAction moveKing = new ShogiMoveAction(this, firstInstance.getPiece(0, 4), 0, 3);
+		ShogiMoveAction moveKing = new ShogiMoveAction(this, firstInstance.getPiece(new ShogiSquare(0, 4)), new ShogiSquare(0, 3));
 		testResultsEditText.append("Player 2 moves King from (0, 4) to (0, 3): " + (firstInstance.moveAction(moveKing) ? "Success" : "Failed") + "\n");
 // player1 drops Gold General (1,4)
 		firstInstance.getPieces().get(35).setOnBoard(true);
-		ShogiMoveAction dropGoldG = new ShogiMoveAction(this, firstInstance.getPieces().get(35), 1, 4);
+		ShogiMoveAction dropGoldG = new ShogiMoveAction(this, firstInstance.getPieces().get(35), new ShogiSquare(1, 4));
 		testResultsEditText.append("Player 2 drops Gold General to (1, 4): " + (firstInstance.moveAction(dropGoldG) ? "Success" : "Failed") + "\n");
 		// Final message about the game's end or winner
 		testResultsEditText.append("Player 1 has won the game.\n");

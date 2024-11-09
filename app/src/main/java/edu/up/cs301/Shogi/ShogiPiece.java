@@ -1,5 +1,7 @@
 package edu.up.cs301.Shogi;
 
+import java.util.ArrayList;
+
 /**
  * Class ShogiPiece represents a piece in the game of Shogi.
  * It stores information about the piece's type, owner, promotion status, whether it's on the board,
@@ -43,22 +45,22 @@ public class ShogiPiece {
     private boolean onBoard;
 
     // Position on the board
-    private int row;
-    private int col;
+    private ShogiSquare position;
+
+    // ArrayList of all possible moves
+    private ArrayList<ShogiSquare> possibleMoves;
 
     /**
      * Constructor for ShogiPiece
      *
      * @param type  The type of the Shogi Piece
      * @param owner The owner of the piece
-     * @param row   Intended row position
-     * @param col   Intended column position
+     * @param position  Intended position
      */
-    public ShogiPiece(PieceType type, int owner, int row, int col) {
+    public ShogiPiece(PieceType type, int owner, ShogiSquare position) {
         this.type = type;
         this.owner = owner;
-        this.row = row;
-        this.col = col;
+        this.position = position;
         this.promoted = false; // Default to not promoted
         this.onBoard = true; // Default to on the board
     }
@@ -73,8 +75,8 @@ public class ShogiPiece {
         this.owner = original.owner;
         this.promoted = original.promoted;
         this.onBoard = original.onBoard;
-        this.row = original.row;
-        this.col = original.col;
+        this.position.setRow(original.position.getRow());
+        this.position.setCol(original.position.getCol());
     }
 
     // Getters and Setters
@@ -119,25 +121,10 @@ public class ShogiPiece {
         this.onBoard = onBoard;
     }
 
-    public int getRow() {
-        return row;
-    }
-
-    public void setRow(int row) {
-        this.row = row;
-    }
-
-    public int getCol() {
-        return col;
-    }
-
-    public void setCol(int col) {
-        this.col = col;
-    }
+    public ShogiSquare getPosition() { return position; }
 
     // Method to update the position of the piece
-    public void setPosition(int row, int col) {
-        this.row = row;
-        this.col = col;
+    public void setPosition(ShogiSquare position) {
+        this.position = position;
     }
 }
