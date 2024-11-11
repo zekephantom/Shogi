@@ -2,6 +2,8 @@ package edu.up.cs301.Shogi;
 
 import java.util.ArrayList;
 
+import edu.up.cs301.GameFramework.infoMessage.GameState;
+
 /**
  * Class ShogiPiece represents a piece in the game of Shogi.
  * It stores information about the piece's type, owner, promotion status, whether it's on the board,
@@ -48,7 +50,7 @@ public class ShogiPiece {
     private ShogiSquare position;
 
     // ArrayList of all possible moves
-    private ArrayList<ShogiSquare> possibleMoves;
+    private ArrayList<ShogiSquare[]> possibleMoves;
 
     /**
      * Constructor for ShogiPiece
@@ -75,8 +77,16 @@ public class ShogiPiece {
         this.owner = original.owner;
         this.promoted = original.promoted;
         this.onBoard = original.onBoard;
-        this.position.setRow(original.position.getRow());
-        this.position.setCol(original.position.getCol());
+
+        // quick fix as there was a null pointer exception
+        // Initialize position to a new ShogiSquare to avoid null reference
+        if (original.position != null) {
+            this.position = new ShogiSquare(original.position.getRow(), original.position.getCol());
+        } else {
+            this.position = null; // Or handle the case where position is null in a way that fits your logic
+        }
+        //this.position.setRow(original.position.getRow());
+        //this.position.setCol(original.position.getCol());
     }
 
     // Getters and Setters
@@ -98,6 +108,13 @@ public class ShogiPiece {
 
     public boolean isPromoted() {
         return promoted;
+    }
+
+    // added to temporarily fix the error in dumb AI - Jona
+
+    public ArrayList<ShogiSquare[]> getPossibleMoves(GameState gameState){
+
+        return possibleMoves;
     }
 
     // Method for promoting a piece

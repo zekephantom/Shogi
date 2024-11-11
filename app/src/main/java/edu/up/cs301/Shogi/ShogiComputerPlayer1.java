@@ -43,7 +43,7 @@ public class ShogiComputerPlayer1 extends GameComputerPlayer implements Tickable
 	 */
 	protected void timerTicked() {
 		// Check if it's the AI's turn
-		ShogiState gameState = (ShogiState) game.getState();
+		ShogiState gameState = (ShogiState) game.getGameState();
 		if (gameState.getCurrentPlayer() != 1) return; // AI is Player 1
 
 		// Get all pieces that belong to the AI and are on the board
@@ -61,12 +61,13 @@ public class ShogiComputerPlayer1 extends GameComputerPlayer implements Tickable
 		ShogiPiece selectedPiece = playerPieces.get((int)(Math.random() * playerPieces.size()));
 
 		// Get all possible moves for the selected piece
-		ArrayList<int[]> possibleMoves = selectedPiece.getPossibleMoves(gameState);
+		ArrayList<ShogiSquare[]> possibleMoves = selectedPiece.getPossibleMoves(gameState);
 
 		// If there are no possible moves, return
 		if (possibleMoves.isEmpty()) return;
 
 		// Choose a random move from the available moves
+	/*
 		int[] selectedMove = possibleMoves.get((int)(Math.random() * possibleMoves.size()));
 		int targetRow = selectedMove[0];
 		int targetCol = selectedMove[1];
@@ -74,5 +75,6 @@ public class ShogiComputerPlayer1 extends GameComputerPlayer implements Tickable
 		// Create a move action and send it to the game
 		ShogiMoveAction moveAction = new ShogiMoveAction(this, selectedPiece, targetRow, targetCol);
 		game.sendAction(moveAction);
+		*/
 	}
 }

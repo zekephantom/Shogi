@@ -3,8 +3,12 @@ package edu.up.cs301.Shogi;
 import edu.up.cs301.GameFramework.players.GameHumanPlayer;
 import edu.up.cs301.GameFramework.GameMainActivity;
 import edu.up.cs301.GameFramework.infoMessage.GameInfo;
+import edu.up.cs301.GameFramework.utilities.Logger;
 import edu.up.cs301.shogi.R;
 
+import android.graphics.Color;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,18 +29,22 @@ import java.util.ArrayList;
  * @author Makengo Lokombo
  * @version July 2013 (original), 28 October 2024
  */
-public class ShogiHumanPlayer extends GameHumanPlayer implements OnClickListener {
+public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchListener {
 
 	/* instance variables */
 	// The EditText that displays test results or game state information
 	private EditText testResultsEditText;
+
+	// the surface view of the board
+	private ShogiGUI shogiBoard;
 
 	// the most recent game state, as given to us by the ShogiLocalGame
 	private ShogiState state;
 	
 	// the android activity that we are running
 	private GameMainActivity myActivity;
-	
+
+
 	/**
 	 * constructor
 	 * @param name
@@ -70,7 +78,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements OnClickListener
 	protected void updateDisplay() {
 		// set the text in the appropriate widget
 	if(state == null) return;
-	testResultsEditText.setText(state.toString());
+	Log.d("toString", state.toString());
 	}
 
 
@@ -84,10 +92,90 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements OnClickListener
 	 * @param button
 	 *      the button that was clicked
 	 */
+/*
 	@Override
 	public void onClick(View button) {
 		// if we are not yet connected to a game, ignore
 		if (game == null) return;
+
+		// ShogiStateTest
+		// shogiStateTest();
+
+
+	}// onClick*/
+
+
+	/**
+	 * Callback method when we receive information from the game.
+	 *
+	 * @param info
+	 *      the message received from the game
+	 */
+	@Override
+	public void receiveInfo(GameInfo info) {
+		// ignore the message if it's not a ShogiState message
+		if (!(info instanceof ShogiState)) return;
+		
+		// update our state; then update the display
+		this.state = (ShogiState)info;
+		updateDisplay();
+	}
+	
+	/**
+	 * callback method--our game has been chosen/rechosen to be the GUI,
+	 * called from the GUI thread
+	 * 
+	 * @param activity
+	 * 		the activity under which we are running
+	 */
+	@Override
+	public void setAsGui(GameMainActivity activity) {
+
+		// remember the activity
+		this.myActivity = activity;
+
+		//  set the right content view
+		activity.setContentView(R.layout.game_interface);
+
+		// uncomment when running game state test
+		/*
+		this.testResultsEditText = (EditText) activity.findViewById(R.id.tv_test_results);
+		Button runTestButton = (Button) activity.findViewById(R.id.button_run_test);
+		runTestButton.setOnClickListener(this);
+		*/
+
+		shogiBoard = (ShogiGUI)myActivity.findViewById(R.id.shogiBoard);
+		shogiBoard.setShogiState(state);
+		Logger.log("set listener","OnTouch");
+		shogiBoard.setOnTouchListener(this);
+		// add switchListeners for englisch/japanes
+		// TODO: on touch to flip
+		// TODO: add switchListeners for englisch/japanes
+/*
+		Button quit = findViewById(R.id.butQuit);
+		quit.setOnClickListener(new View.OnClickListener(){
+			@Override
+			public void onClick(View v){
+				confirmExit();
+			}
+		});*/
+	}
+
+	@Override
+	public boolean onTouch(View view, MotionEvent motionEvent) {
+
+		int x = (int) motionEvent.getX();
+		int y = (int) motionEvent.getY();
+
+		//shogiBoard.flash(Color.RED, 50);
+
+		return true;
+	}
+
+	/**
+	 * code from shogi test that gets called in onClick
+	 */
+	public void shogiStateTest(){
 
 		//Clears the text in the multi-line EditText
 		testResultsEditText.setText("");
@@ -153,46 +241,6 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements OnClickListener
 		//Print string representations for both copies
 		testResultsEditText.append("First Copy: \n" + firstCopy.toString() + "\n");
 		testResultsEditText.append("Second Copy:\n" + secondCopy.toString() + "\n");
-	}// onClick
-
-
-	/**
-	 * Callback method when we receive information from the game.
-	 *
-	 * @param info
-	 *      the message received from the game
-	 */
-	@Override
-	public void receiveInfo(GameInfo info) {
-		// ignore the message if it's not a ShogiState message
-		if (!(info instanceof ShogiState)) return;
-		
-		// update our state; then update the display
-		this.state = (ShogiState)info;
-		updateDisplay();
-	}
-	
-	/**
-	 * callback method--our game has been chosen/rechosen to be the GUI,
-	 * called from the GUI thread
-	 * 
-	 * @param activity
-	 * 		the activity under which we are running
-	 */
-	@Override
-	public void setAsGui(GameMainActivity activity) {
-
-		// remember the activity
-		this.myActivity = activity;
-		activity.setContentView(R.layout.game_interface);
-		this.testResultsEditText = (EditText) activity.findViewById(R.id.tv_test_results);
-
-		// TODO: on touch to flip
-
-		Button runTestButton = (Button) activity.findViewById(R.id.button_run_test);
-		runTestButton.setOnClickListener(this);
-
-
 	}
 
 }// class ShogiHumanPlayer

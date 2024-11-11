@@ -61,7 +61,7 @@
     </LinearLayout>
 
 
-    <edu.up.cs301.Shogi.ShogiBoard
+    <edu.up.cs301.Shogi.ShogiGUI
         android:id="@+id/shogiBoard"
         android:layout_width="0dp"
         android:layout_height="match_parent"
