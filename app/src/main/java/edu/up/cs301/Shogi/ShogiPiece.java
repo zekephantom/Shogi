@@ -130,6 +130,34 @@ public class ShogiPiece {
 
     public void setOnBoard(boolean onBoard) {
         this.onBoard = onBoard;
+        if (!onBoard) {
+            position.setCol((this.getOwner() == 0)? 10 : 9);
+            switch (type) {
+                case Rook:
+                    position.setRow((this.getOwner() == 0)? 2 : 6);
+                    break;
+                case Bishop:
+                    position.setRow((this.getOwner() == 0)? 3 : 5);
+                    break;
+                case GoldGeneral:
+                    position.setRow(4);
+                    break;
+                case SilverGeneral:
+                    position.setRow((this.getOwner() == 0)? 5 : 3);
+                    break;
+                case Knight:
+                    position.setRow((this.getOwner() == 0)? 6 : 2);
+                    break;
+                case Lance:
+                    position.setRow((this.getOwner() == 0)? 7 : 1);
+                    break;
+                case Pawn:
+                    position.setRow((this.getOwner() == 0)? 8 : 0);
+                    break;
+                default:
+
+            }
+        }
     }
 
     public ShogiSquare getPosition() { return position; }
