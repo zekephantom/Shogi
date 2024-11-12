@@ -25,7 +25,7 @@ public class ShogiGUI extends View {
     // TODO: check if private is the right access modifier for the Bitmap
     private ShogiState shogiState;
     private Paint paint;
-    private List<Bitmap> scaledBitmaps;
+    private List<Bitmap> scaledBitmaps = new ArrayList<>();
 
     private Bitmap kingLower;
     private Bitmap rook;
@@ -103,7 +103,6 @@ public class ShogiGUI extends View {
     }
 
     private void drawBoard(Canvas canvas) {
-        // TODO: Recheck if drawBoard is complete
         canvas.drawColor(Color.WHITE);
 
         int width = canvas.getWidth();
@@ -166,16 +165,39 @@ public class ShogiGUI extends View {
             canvas.drawCircle(x,y,capturedFieldRadius, paintCapturedField);
         }
 
-    drawPieces(canvas);
+        drawPieces(canvas);
     }
 
     /**
      function that returns what square has been touched
      */
-    public ShogiSquare gridSelection(int x, int y){
+     public ShogiSquare gridSelection(float x, float y){
 
-        return null;
+        // Set pos outside of possible answer
+        ShogiSquare squareReturn = new ShogiSquare(9,11);
+
+        // Find row
+        for(int i = 0; i < 9; i++){
+            float leftB = cellDimensions*i;
+            if ((leftB < y) && ((leftB+cellDimensions)>y)){
+                squareReturn.setRow(i);
+                break;
+            }
+        }
+        // Find col
+        for(int i = 0; i < 11; i++){
+            float topB = cellDimensions*i;
+            if ((topB < x) && ((topB+cellDimensions) > x)){
+                squareReturn.setCol(i);
+                break;
+            }
+        }
+        if (squareReturn.getRow() == 9 || squareReturn.getCol() == 11){
+            Log.d("GUI", "Touch outside of legal fields");
+        }
+        return squareReturn;
     }
+
 
     private void drawPieces(Canvas canvas) {
         // Test on drawing a piece after scaling it
@@ -201,7 +223,7 @@ public class ShogiGUI extends View {
            }else{
                 // Set column according to owner (10 for player 0, 0 for player 1)
                 col = (pieces.get(i).getOwner() == 0)? 10 : 0;
-// TODO: add a number to the captured piece depending how many pieces are on the field
+// TODO: add a number onScreen to the captured piece depending how many pieces are on the field
                 switch (pieces.get(i).getType()) {
                     case Rook:
                         row = (pieces.get(i).getOwner() == 0)? 2 : 6;

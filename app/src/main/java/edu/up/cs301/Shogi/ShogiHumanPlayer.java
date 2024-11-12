@@ -1,5 +1,6 @@
 package edu.up.cs301.Shogi;
 
+
 import edu.up.cs301.GameFramework.players.GameHumanPlayer;
 import edu.up.cs301.GameFramework.GameMainActivity;
 import edu.up.cs301.GameFramework.infoMessage.GameInfo;
@@ -164,8 +165,10 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 	@Override
 	public boolean onTouch(View view, MotionEvent motionEvent) {
 
-		int x = (int) motionEvent.getX();
-		int y = (int) motionEvent.getY();
+		float x = motionEvent.getX();
+		float y = motionEvent.getY();
+
+		//ShogiSquare gridTouched = gridSelection(x, y);
 
 		//shogiBoard.flash(Color.RED, 50);
 
