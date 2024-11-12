@@ -154,7 +154,7 @@ public class ShogiState extends GameState {
 	private void capturePiece(ShogiPiece piece) {
 		piece.setOnBoard(false);
 		piece.setPromoted(false);
-		pieces.remove(piece);
+		//pieces.remove(piece);//TODO change the field on where the capt piece goes
 		//if (currentPlayer == 0) {
 		//	capturedPiecesPlayer0.add(piece);
 		//} else {
@@ -912,7 +912,7 @@ public class ShogiState extends GameState {
 		}
 
 		// Place each piece on the board based on its row and column
-		for (ShogiPiece piece : pieces) {
+		/*for (ShogiPiece piece : pieces) {
 			if (piece.isOnBoard()) {
 				int row = piece.getPosition().getRow();
 				int col = piece.getPosition().getCol();
@@ -927,7 +927,7 @@ public class ShogiState extends GameState {
 				sb.append(board[row][col]).append(" ");
 			}
 			sb.append("\n");
-		}
+		}*/
 		return sb.toString();
 	}
 

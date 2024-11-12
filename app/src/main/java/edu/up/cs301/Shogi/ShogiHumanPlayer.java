@@ -40,7 +40,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 	private ShogiGUI shogiBoard;
 
 	// the most recent game state, as given to us by the ShogiLocalGame
-	private ShogiState state;
+	private ShogiState state = new ShogiState();
 	
 	// the android activity that we are running
 	private GameMainActivity myActivity;
@@ -119,6 +119,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 		
 		// update our state; then update the display
 		this.state = (ShogiState)info;
+		//shogiBoard.setShogiState(state);
 		updateDisplay();
 	}
 	
@@ -147,11 +148,15 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 
 		shogiBoard = (ShogiGUI)myActivity.findViewById(R.id.shogiBoard);
 		shogiBoard.setShogiState(state);
-		Logger.log("set listener","OnTouch");
+
+		//Logger.log("set listener","OnTouch");
 		shogiBoard.setOnTouchListener(this);
-		// add switchListeners for englisch/japanes
+
+		// add switchListeners for englisch/japanese
 		// TODO: on touch to flip
-		// TODO: add switchListeners for englisch/japanes
+		// TODO: add switchListeners for englisch/japanese
+
+
 /*
 		Button quit = findViewById(R.id.butQuit);
 		quit.setOnClickListener(new View.OnClickListener(){
@@ -168,7 +173,9 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 		float x = motionEvent.getX();
 		float y = motionEvent.getY();
 
-		//ShogiSquare gridTouched = gridSelection(x, y);
+		// ShogiGUI shogiGUI = new ShogiGUI();
+
+		// ShogiSquare gridTouched = shogiGUI.gridSelection(x, y);
 
 		//shogiBoard.flash(Color.RED, 50);
 

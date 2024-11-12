@@ -77,9 +77,12 @@ public class ShogiPiece {
         this.owner = original.owner;
         this.promoted = original.promoted;
         this.onBoard = original.onBoard;
-        for(ShogiSquare sq : original.possibleMoves) {
-            this.possibleMoves.add(sq.clone());
+        if (!(original.possibleMoves == null)){
+            for(ShogiSquare sq : original.possibleMoves) {
+                this.possibleMoves.add(sq.clone());
+            }
         }
+
         //this.position.setRow(original.position.getRow());
         //this.position.setCol(original.position.getCol());
     }

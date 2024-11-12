@@ -54,7 +54,6 @@ public class ShogiGUI extends View {
         super(context, attrs);
         this.paint = new Paint();
         loadBitmaps(context);
-        init();
     }
 
     // setter method for the shogi state
@@ -89,10 +88,6 @@ public class ShogiGUI extends View {
         prom_pawn = BitmapFactory.decodeResource(context.getResources(), R.drawable.prom_pawn);
         // kingUpper = BitmapFactory.decodeResource(context.getResources(), R.drawable.kingupper); // optional line of code
         initBitmap();
-    }
-
-    public void init(){
-        setBackgroundColor(Color.WHITE);
     }
 
     @Override
@@ -171,7 +166,7 @@ public class ShogiGUI extends View {
     /**
      function that returns what square has been touched
      */
-     public ShogiSquare gridSelection(float x, float y){
+     public  ShogiSquare gridSelection(float x, float y){
 
         // Set pos outside of possible answer
         ShogiSquare squareReturn = new ShogiSquare(9,11);
@@ -203,9 +198,11 @@ public class ShogiGUI extends View {
         // Test on drawing a piece after scaling it
         //Bitmap scaledBitmap = Bitmap.createScaledBitmap(kingLower, (int) cellDimensions, (int) cellDimensions, true);
         //canvas.drawBitmap(scaledBitmap, cellDimensions*5, cellDimensions*8, null);
+
         int row, col;
 
         ArrayList<ShogiPiece> pieces = shogiState.getPieces();
+        scaleBitmaps();
 
         for(int i = 0; i < scaledBitmaps.size(); i++){
 
@@ -213,38 +210,39 @@ public class ShogiGUI extends View {
             ShogiSquare piecePosition  = piece.getPosition();
 
             checkPromoteBitmap(piece.isPromoted(), piece, i);
-            scaleBitmaps();
 
-            if (pieces.get(i).isOnBoard()){
+            if (piece.isOnBoard()){
                 // Ensure the position is within bounds
                 row = Math.max(0, Math.min(piecePosition.getRow(), 8));
                 col = Math.max(0, Math.min(piecePosition.getCol(), 8)) + 1; // col 0 -> captured Pieces
 
            }else{
                 // Set column according to owner (10 for player 0, 0 for player 1)
-                col = (pieces.get(i).getOwner() == 0)? 10 : 0;
-// TODO: add a number onScreen to the captured piece depending how many pieces are on the field
-                switch (pieces.get(i).getType()) {
+                col = (piece.getOwner() == 0)? 10 : 0;
+
+                // TODO: add a number onScreen to the captured piece depending how many pieces are on the field
+
+                switch (piece.getType()) {
                     case Rook:
-                        row = (pieces.get(i).getOwner() == 0)? 2 : 6;
+                        row = (piece.getOwner() == 0)? 2 : 6;
                         break;
                     case Bishop:
-                        row = (pieces.get(i).getOwner() == 0)? 3 : 5;
+                        row = (piece.getOwner() == 0)? 3 : 5;
                         break;
                     case GoldGeneral:
-                        row = (pieces.get(i).getOwner() == 0)? 4 : 4;
+                        row = (piece.getOwner() == 0)? 4 : 4;
                         break;
                     case SilverGeneral:
-                        row = (pieces.get(i).getOwner() == 0)? 5 : 3;
+                        row = (piece.getOwner() == 0)? 5 : 3;
                         break;
                     case Knight:
-                        row = (pieces.get(i).getOwner() == 0)? 6 : 2;
+                        row = (piece.getOwner() == 0)? 6 : 2;
                         break;
                     case Lance:
-                        row = (pieces.get(i).getOwner() == 0)? 7 : 1;
+                        row = (piece.getOwner() == 0)? 7 : 1;
                         break;
                     case Pawn:
-                        row = (pieces.get(i).getOwner() == 0)? 8 : 0;
+                        row = (piece.getOwner() == 0)? 8 : 0;
                         break;
                     default:
                         row = 0;
@@ -311,7 +309,8 @@ public class ShogiGUI extends View {
     {
         Matrix matrix = new Matrix();
         matrix.postRotate(180);
-        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
+        Bitmap flipped = Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
+        return flipped;
     }
 
     private void checkPromoteBitmap(Boolean prom, ShogiPiece piece, int arrayPosition){
@@ -340,17 +339,13 @@ public class ShogiGUI extends View {
             default:
                 Log.d("GUI", "No type for promotion");
         }
+        scaleBitmaps();
     }
 
-
     private void scaleBitmaps() {
-        //if (scaledBitmaps.isEmpty() || scaledBitmaps.get(0).getWidth() != (int) cellDimensions) {
-                for (int i = 0; i < scaledBitmaps.size(); i++) {
-                    scaledBitmaps.set(i, Bitmap.createScaledBitmap(kingLower, (int) cellDimensions, (int) cellDimensions, true));
-                    //piece = Bitmap.createScaledBitmap(kingLower, (int) cellDimensions, (int) cellDimensions, true);
-                }
-
-       // }
+        for (int i = 0; i < scaledBitmaps.size(); i++) {
+            scaledBitmaps.set(i, Bitmap.createScaledBitmap(scaledBitmaps.get(i), (int) cellDimensions, (int) cellDimensions, true));
+        }
     }
 }
 
