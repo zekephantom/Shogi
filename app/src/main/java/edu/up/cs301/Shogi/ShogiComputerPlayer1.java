@@ -61,7 +61,7 @@ public class ShogiComputerPlayer1 extends GameComputerPlayer implements Tickable
 		ShogiPiece selectedPiece = playerPieces.get((int)(Math.random() * playerPieces.size()));
 
 		// Get all possible moves for the selected piece
-		ArrayList<ShogiSquare[]> possibleMoves = selectedPiece.getPossibleMoves(gameState);
+		ArrayList<ShogiSquare> possibleMoves = selectedPiece.getPossibleMoves(gameState);
 
 		// If there are no possible moves, return
 		if (possibleMoves.isEmpty()) return;

@@ -50,7 +50,7 @@ public class ShogiPiece {
     private ShogiSquare position;
 
     // ArrayList of all possible moves
-    private ArrayList<ShogiSquare[]> possibleMoves;
+    private ArrayList<ShogiSquare> possibleMoves;
 
     /**
      * Constructor for ShogiPiece
@@ -77,13 +77,8 @@ public class ShogiPiece {
         this.owner = original.owner;
         this.promoted = original.promoted;
         this.onBoard = original.onBoard;
-
-        // quick fix as there was a null pointer exception
-        // Initialize position to a new ShogiSquare to avoid null reference
-        if (original.position != null) {
-            this.position = new ShogiSquare(original.position.getRow(), original.position.getCol());
-        } else {
-            this.position = null; // Or handle the case where position is null in a way that fits your logic
+        for(ShogiSquare sq : original.possibleMoves) {
+            this.possibleMoves.add(sq.clone());
         }
         //this.position.setRow(original.position.getRow());
         //this.position.setCol(original.position.getCol());
@@ -112,8 +107,7 @@ public class ShogiPiece {
 
     // added to temporarily fix the error in dumb AI - Jona
 
-    public ArrayList<ShogiSquare[]> getPossibleMoves(GameState gameState){
-
+    public ArrayList<ShogiSquare> getPossibleMoves(GameState gameState){
         return possibleMoves;
     }
 

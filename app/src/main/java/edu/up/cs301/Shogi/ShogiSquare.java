@@ -29,6 +29,11 @@ public class ShogiSquare {
 		this.col = copy.getCol();
 	}
 
+	@Override
+	public ShogiSquare clone () {
+		return new ShogiSquare(this.row, this.col);
+	}
+
 	/**
 	 * Adds the position of another ShogiSquare to this one
 	 *
