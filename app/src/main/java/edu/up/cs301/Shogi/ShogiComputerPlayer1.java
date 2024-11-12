@@ -67,14 +67,16 @@ public class ShogiComputerPlayer1 extends GameComputerPlayer implements Tickable
 		if (possibleMoves.isEmpty()) return;
 
 		// Choose a random move from the available moves
-	/*
-		int[] selectedMove = possibleMoves.get((int)(Math.random() * possibleMoves.size()));
-		int targetRow = selectedMove[0];
-		int targetCol = selectedMove[1];
+
+		ShogiSquare[] selectedMove = new ShogiSquare[]{
+				possibleMoves.get((int) (Math.random() * possibleMoves.size()))
+		};
+		ShogiSquare targetRow = selectedMove[0];
+		ShogiSquare targetCol = selectedMove[1];
 
 		// Create a move action and send it to the game
 		ShogiMoveAction moveAction = new ShogiMoveAction(this, selectedPiece, targetRow, targetCol);
 		game.sendAction(moveAction);
-		*/
+
 	}
 }

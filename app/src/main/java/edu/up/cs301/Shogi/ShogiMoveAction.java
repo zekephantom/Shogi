@@ -25,6 +25,13 @@ public class ShogiMoveAction extends GameAction {
 		this.targetPosition = targetPosition;
 	}
 
+	public ShogiMoveAction(ShogiComputerPlayer1 player, ShogiPiece selectedPiece, int targetRow, int targetCol) {
+		super();
+	}
+
+	public ShogiMoveAction(ShogiComputerPlayer1 player, ShogiPiece selectedPiece, ShogiSquare targetRow, ShogiSquare targetCol) {
+	}
+
 	public ShogiPiece getPiece() {
 		return piece;
 	}
