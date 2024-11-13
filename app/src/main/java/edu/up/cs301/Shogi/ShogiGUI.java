@@ -1,6 +1,7 @@
 package edu.up.cs301.Shogi;
 
 
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,13 +10,18 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.RadialGradient;
+import android.graphics.Shader;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 
+import androidx.core.content.ContextCompat;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.up.cs301.GameFramework.utilities.FlashSurfaceView;
 import edu.up.cs301.shogi.R;
 
 /**
@@ -42,8 +48,12 @@ public class ShogiGUI extends View {
     private Bitmap pawn;
     private Bitmap prom_pawn;
 
+    private ShogiSquare selectedSquare;
+    private ArrayList<ShogiSquare> possibleMoves;
+
 
     // Helpful variables for drawing
+    // private Canvas savedCanvas;
     private float cellWidth;
     private float cellHeight;
     private float cellDimensions;
@@ -61,6 +71,14 @@ public class ShogiGUI extends View {
         this.shogiState = state;
         invalidate();
     }
+
+    // setter method for selected piece and possible moves
+    public void setSelected(ShogiSquare selected/*, ArrayList<ShogiSquare> possible*/){
+        this.selectedSquare = selected;
+        //this.possibleMoves = possible;
+        invalidate();
+    }
+
 
     public void loadBitmaps(Context context) {
         /**
@@ -94,6 +112,7 @@ public class ShogiGUI extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         drawBoard(canvas);
+        drawSelected(canvas);
         drawPieces(canvas);
     }
 
@@ -159,8 +178,52 @@ public class ShogiGUI extends View {
             float y = (float) 0.5 * cellDimensions + i * cellDimensions;
             canvas.drawCircle(x,y,capturedFieldRadius, paintCapturedField);
         }
+    }
 
-        drawPieces(canvas);
+    /**
+     *
+     * draws the pieces in right location with the right bitmap
+     * according to (position, owner, promotion, captured)
+     * @param canvas
+     */
+    private void drawPieces(Canvas canvas) {
+        // Test on drawing a piece after scaling it
+        //Bitmap scaledBitmap = Bitmap.createScaledBitmap(kingLower, (int) cellDimensions, (int) cellDimensions, true);
+        //canvas.drawBitmap(scaledBitmap, cellDimensions*5, cellDimensions*8, null);
+
+        int row, col;
+
+        ArrayList<ShogiPiece> pieces = shogiState.getPieces();
+        scaleBitmaps();
+
+        for(int i = 0; i < scaledBitmaps.size(); i++){
+
+            ShogiPiece piece = pieces.get(i);
+            ShogiSquare piecePosition  = piece.getPosition();
+
+            checkPromoteBitmap(piece.isPromoted(), piece, i);
+
+            checkOwnerBitmap(piece.getOwner(), i);
+
+            if (piece.isOnBoard()){
+                // Ensure the position is within bounds
+                row = Math.max(0, Math.min(piecePosition.getRow(), 8));
+                col = Math.max(0, Math.min(piecePosition.getCol(), 8)) + 1; // col 0 -> captured Pieces
+
+            }else{
+                // Set column according to owner (10 for player 0, 0 for player 1)
+                col = (piece.getOwner() == 0)? 10 : 0;
+                // Set row according to piece type and owner
+                row = drawCaptured(piece); // hides switch statement in method
+            }
+
+            // Calculate the position to draw the Bitmap
+            float left = col * cellDimensions;
+            float top = row * cellDimensions;
+
+            // Draw the Bitmap on the canvas
+            canvas.drawBitmap(scaledBitmaps.get(i), left, top, null);
+        }
     }
 
     /**
@@ -187,75 +250,50 @@ public class ShogiGUI extends View {
                 break;
             }
         }
-        if (squareReturn.getRow() == 9 || squareReturn.getCol() == 11){
+        if (squareReturn.getRow() == 9 || squareReturn.getCol() == 11
+        || squareReturn.getRow() == 0 && squareReturn.getCol() == 10
+        || squareReturn.getRow() == 1 && squareReturn.getCol() == 10
+        || squareReturn.getRow() == 7 && squareReturn.getCol() == 0
+        || squareReturn.getRow() == 8 && squareReturn.getCol() == 0){
             Log.d("GUI", "Touch outside of legal fields");
+            return null;
         }
         return squareReturn;
     }
 
 
-    private void drawPieces(Canvas canvas) {
-        // Test on drawing a piece after scaling it
-        //Bitmap scaledBitmap = Bitmap.createScaledBitmap(kingLower, (int) cellDimensions, (int) cellDimensions, true);
-        //canvas.drawBitmap(scaledBitmap, cellDimensions*5, cellDimensions*8, null);
 
-        int row, col;
 
-        ArrayList<ShogiPiece> pieces = shogiState.getPieces();
-        scaleBitmaps();
+    public void drawSelected(Canvas canvas){
 
-        for(int i = 0; i < scaledBitmaps.size(); i++){
+        if (selectedSquare == null) return;
 
-            ShogiPiece piece = pieces.get(i);
-            ShogiSquare piecePosition  = piece.getPosition();
+        Paint paintSelected = new Paint();
+        Paint paintPossible = new Paint();
+        Paint paintCheck = new Paint();
+        //paintSelected.setColor(0xA0FFFFFF);
+        //paintSelected.setAntiAlias(true);
 
-            checkPromoteBitmap(piece.isPromoted(), piece, i);
+        float left = (selectedSquare.getCol() + (float)0.5) * cellDimensions;
+        float top = (selectedSquare.getRow() + (float)0.5) * cellDimensions;
+        float radius = cellDimensions / (float)1.5;
 
-            if (piece.isOnBoard()){
-                // Ensure the position is within bounds
-                row = Math.max(0, Math.min(piecePosition.getRow(), 8));
-                col = Math.max(0, Math.min(piecePosition.getCol(), 8)) + 1; // col 0 -> captured Pieces
+        /*
+         External Citation:
+         ChatGPT: find how to create a gradual gradient
+         November 12th
+         */
+        RadialGradient gradientSelected = new RadialGradient(
+                left, top, radius,
+                0xFF00FFFF,  // Cyan color at the outer edge (opaque)
+                0x0000FFFF,  // Transparent cyan at the center
+                Shader.TileMode.CLAMP
+        );
 
-           }else{
-                // Set column according to owner (10 for player 0, 0 for player 1)
-                col = (piece.getOwner() == 0)? 10 : 0;
+        // Apply the gradient to the paint
+        paintSelected.setShader(gradientSelected);
 
-                // TODO: add a number onScreen to the captured piece depending how many pieces are on the field
-
-                switch (piece.getType()) {
-                    case Rook:
-                        row = (piece.getOwner() == 0)? 2 : 6;
-                        break;
-                    case Bishop:
-                        row = (piece.getOwner() == 0)? 3 : 5;
-                        break;
-                    case GoldGeneral:
-                        row = (piece.getOwner() == 0)? 4 : 4;
-                        break;
-                    case SilverGeneral:
-                        row = (piece.getOwner() == 0)? 5 : 3;
-                        break;
-                    case Knight:
-                        row = (piece.getOwner() == 0)? 6 : 2;
-                        break;
-                    case Lance:
-                        row = (piece.getOwner() == 0)? 7 : 1;
-                        break;
-                    case Pawn:
-                        row = (piece.getOwner() == 0)? 8 : 0;
-                        break;
-                    default:
-                        row = 0;
-                }
-           }
-
-            // Calculate the position to draw the Bitmap
-            float left = col * cellDimensions;
-            float top = row * cellDimensions;
-
-            // Draw the Bitmap on the canvas
-            canvas.drawBitmap(scaledBitmaps.get(i), left, top, null);
-        }
+        canvas.drawCircle(left, top, radius, paintSelected);
 
     }
 
@@ -313,19 +351,50 @@ public class ShogiGUI extends View {
         return flipped;
     }
 
+    private int drawCaptured(ShogiPiece piece){
+        // TODO: add a number onScreen to the captured piece depending how many pieces are on the field
+        int row;
+        switch (piece.getType()) {
+            case Rook:
+                row = (piece.getOwner() == 0)? 2 : 6;
+                break;
+            case Bishop:
+                row = (piece.getOwner() == 0)? 3 : 5;
+                break;
+            case GoldGeneral:
+                row = (piece.getOwner() == 0)? 4 : 4;
+                break;
+            case SilverGeneral:
+                row = (piece.getOwner() == 0)? 5 : 3;
+                break;
+            case Knight:
+                row = (piece.getOwner() == 0)? 6 : 2;
+                break;
+            case Lance:
+                row = (piece.getOwner() == 0)? 7 : 1;
+                break;
+            case Pawn:
+                row = (piece.getOwner() == 0)? 8 : 0;
+                break;
+            default:
+                row = 0;
+        }
+        return row;
+    }
+
     private void checkPromoteBitmap(Boolean prom, ShogiPiece piece, int arrayPosition){
         switch (piece.getType()) {
             case Rook:
                 scaledBitmaps.set(arrayPosition, (prom)? prom_rook : rook);
                 break;
             case Bishop:
-                scaledBitmaps.set(arrayPosition, (prom)? bishop : prom_bishop);
+                scaledBitmaps.set(arrayPosition, (prom)? prom_bishop : bishop);
                 break;
             case GoldGeneral: // no promotion possible
                 scaledBitmaps.set(arrayPosition, (prom)? goldGen : goldGen);
                 break;
             case SilverGeneral:
-                scaledBitmaps.set(arrayPosition, (prom)? silverGen : prom_silver);
+                scaledBitmaps.set(arrayPosition, (prom)? prom_silver : silverGen);
                 break;
             case Knight:
                 scaledBitmaps.set(arrayPosition, (prom)? prom_knight : knight);
@@ -336,10 +405,19 @@ public class ShogiGUI extends View {
             case Pawn:
                 scaledBitmaps.set(arrayPosition, (prom)? prom_pawn : pawn);
                 break;
+            case King:
+                scaledBitmaps.set(arrayPosition, kingLower);
             default:
                 Log.d("GUI", "No type for promotion");
         }
+
         scaleBitmaps();
+    }
+
+    private void checkOwnerBitmap(int owner, int arrayPosition){
+        if(owner == 1){
+            scaledBitmaps.set(arrayPosition, flippedBitmap(scaledBitmaps.get(arrayPosition)));
+        }
     }
 
     private void scaleBitmaps() {

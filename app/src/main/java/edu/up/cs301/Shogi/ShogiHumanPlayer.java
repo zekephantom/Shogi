@@ -149,6 +149,22 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 		shogiBoard = (ShogiGUI)myActivity.findViewById(R.id.shogiBoard);
 		shogiBoard.setShogiState(state);
 
+		ArrayList<ShogiPiece> pieces = state.getPieces();
+
+		// testing of the GUI functionality
+/*
+		// captured
+		state.getPieces().get(15).setOnBoard(false);
+		shogiBoard.setShogiState(state);
+
+		// promoted
+		state.getPieces().get(35).setPromoted(true);
+		shogiBoard.setShogiState(state);
+
+		// owner
+		state.getPieces().get(35).setOwner(1-state.getPieces().get(35).getOwner());
+		shogiBoard.setShogiState(state);
+*/
 		//Logger.log("set listener","OnTouch");
 		shogiBoard.setOnTouchListener(this);
 
@@ -173,11 +189,10 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 		float x = motionEvent.getX();
 		float y = motionEvent.getY();
 
-		// ShogiGUI shogiGUI = new ShogiGUI();
-
-		// ShogiSquare gridTouched = shogiGUI.gridSelection(x, y);
-
-		//shogiBoard.flash(Color.RED, 50);
+		ShogiSquare gridTouched = shogiBoard.gridSelection(x, y);
+		if(gridTouched != null) Log.d("Touch", "field touched: \n row: "+gridTouched.getRow()+" col: "+gridTouched.getCol());
+		//(gridTouched != null)? shogiBoard.drawSelected(gridTouched) : shogiBoard.flash(Color.RED, 50);
+		shogiBoard.setSelected(gridTouched);
 
 		return true;
 	}

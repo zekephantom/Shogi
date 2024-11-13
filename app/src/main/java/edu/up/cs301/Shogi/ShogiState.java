@@ -115,19 +115,19 @@ public class ShogiState extends GameState {
 		}
 
 		// Initialize pieces for Player 1 (top side)
-		pieces.add(new ShogiPiece(ShogiPiece.PieceType.Lance, 1, new ShogiSquare(8, 0)));
-		pieces.add(new ShogiPiece(ShogiPiece.PieceType.Knight, 1, new ShogiSquare(8, 1)));
-		pieces.add(new ShogiPiece(ShogiPiece.PieceType.SilverGeneral, 1, new ShogiSquare(8, 2)));
-		pieces.add(new ShogiPiece(ShogiPiece.PieceType.GoldGeneral, 1, new ShogiSquare(8, 3)));
-		pieces.add(new ShogiPiece(ShogiPiece.PieceType.King, 1, new ShogiSquare(8, 4)));
-		pieces.add(new ShogiPiece(ShogiPiece.PieceType.GoldGeneral, 1, new ShogiSquare(8, 5)));
-		pieces.add(new ShogiPiece(ShogiPiece.PieceType.SilverGeneral, 1, new ShogiSquare(8, 6)));
-		pieces.add(new ShogiPiece(ShogiPiece.PieceType.Knight, 1, new ShogiSquare(8, 7)));
-		pieces.add(new ShogiPiece(ShogiPiece.PieceType.Lance, 1, new ShogiSquare(8, 8)));
-		pieces.add(new ShogiPiece(ShogiPiece.PieceType.Bishop, 1, new ShogiSquare(7, 1)));
-		pieces.add(new ShogiPiece(ShogiPiece.PieceType.Rook, 1, new ShogiSquare(7, 7)));
+		pieces.add(new ShogiPiece(ShogiPiece.PieceType.Lance, 1, new ShogiSquare(0, 0)));
+		pieces.add(new ShogiPiece(ShogiPiece.PieceType.Knight, 1, new ShogiSquare(0, 1)));
+		pieces.add(new ShogiPiece(ShogiPiece.PieceType.SilverGeneral, 1, new ShogiSquare(0, 2)));
+		pieces.add(new ShogiPiece(ShogiPiece.PieceType.GoldGeneral, 1, new ShogiSquare(0, 3)));
+		pieces.add(new ShogiPiece(ShogiPiece.PieceType.King, 1, new ShogiSquare(0, 4)));
+		pieces.add(new ShogiPiece(ShogiPiece.PieceType.GoldGeneral, 1, new ShogiSquare(0, 5)));
+		pieces.add(new ShogiPiece(ShogiPiece.PieceType.SilverGeneral, 1, new ShogiSquare(0, 6)));
+		pieces.add(new ShogiPiece(ShogiPiece.PieceType.Knight, 1, new ShogiSquare(0, 7)));
+		pieces.add(new ShogiPiece(ShogiPiece.PieceType.Lance, 1, new ShogiSquare(0, 8)));
+		pieces.add(new ShogiPiece(ShogiPiece.PieceType.Bishop, 1, new ShogiSquare(1, 7)));
+		pieces.add(new ShogiPiece(ShogiPiece.PieceType.Rook, 1, new ShogiSquare(1, 1)));
 		for (int i = 0; i < 9; i++) {
-			pieces.add(new ShogiPiece(ShogiPiece.PieceType.Pawn, 1, new ShogiSquare(6, i)));
+			pieces.add(new ShogiPiece(ShogiPiece.PieceType.Pawn, 1, new ShogiSquare(2, i)));
 		}
 	}
 
