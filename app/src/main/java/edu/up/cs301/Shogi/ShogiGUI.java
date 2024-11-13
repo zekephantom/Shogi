@@ -30,7 +30,7 @@ import edu.up.cs301.shogi.R;
 public class ShogiGUI extends View {
     // TODO: check if private is the right access modifier for the Bitmap
     private ShogiState shogiState;
-    private Paint paint;
+    private Context contextLocal;
     private List<Bitmap> scaledBitmaps = new ArrayList<>();
 
     private Bitmap kingLower;
@@ -54,6 +54,8 @@ public class ShogiGUI extends View {
 
     // Helpful variables for drawing
     // private Canvas savedCanvas;
+    private float width;
+    private float height;
     private float cellWidth;
     private float cellHeight;
     private float cellDimensions;
@@ -62,9 +64,11 @@ public class ShogiGUI extends View {
 
     public ShogiGUI(Context context, AttributeSet attrs) {
         super(context, attrs);
-        this.paint = new Paint();
-        loadBitmaps(context);
+        contextLocal = context; // needed to call the loadBitmaps method outside of the ctr
+
     }
+
+// ------------------------ Setter methods ----------------
 
     // setter method for the shogi state
     public void setShogiState(ShogiState state){
@@ -72,13 +76,18 @@ public class ShogiGUI extends View {
         invalidate();
     }
 
-    // setter method for selected piece and possible moves
-    public void setSelected(ShogiSquare selected/*, ArrayList<ShogiSquare> possible*/){
+    // setter method for selected piece
+    public void setSelected(ShogiSquare selected){
         this.selectedSquare = selected;
-        //this.possibleMoves = possible;
         invalidate();
     }
+    // setter method for possible moves
+    public void setPossibleMoves(ArrayList<ShogiSquare> possible){
+        this.possibleMoves = possible;
+       // invalidate(); // TODO once possible moves is working
+    }
 
+// ------------------------- INIT methods -----------------------------
 
     public void loadBitmaps(Context context) {
         /**
@@ -89,48 +98,46 @@ public class ShogiGUI extends View {
          *  Solution: Used the code format from number 3.
          */
 
-        kingLower = BitmapFactory.decodeResource(context.getResources(), R.drawable.kinglower);
+        kingLower = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.kinglower));
 
-        rook = BitmapFactory.decodeResource(context.getResources(), R.drawable.rook);
-        prom_rook = BitmapFactory.decodeResource(context.getResources(), R.drawable.prom_rook);
-        bishop = BitmapFactory.decodeResource(context.getResources(), R.drawable.bishop);
-        prom_bishop = BitmapFactory.decodeResource(context.getResources(), R.drawable.prom_bishop);
-        goldGen = BitmapFactory.decodeResource(context.getResources(), R.drawable.goldgen);
-        silverGen = BitmapFactory.decodeResource(context.getResources(), R.drawable.silvergen);
-        prom_silver = BitmapFactory.decodeResource(context.getResources(), R.drawable.prom_silver);
-        knight = BitmapFactory.decodeResource(context.getResources(), R.drawable.knight);
-        prom_knight = BitmapFactory.decodeResource(context.getResources(), R.drawable.prom_knight);
-        lance = BitmapFactory.decodeResource(context.getResources(), R.drawable.lance);
-        prom_lance = BitmapFactory.decodeResource(context.getResources(), R.drawable.prom_lance);
-        pawn = BitmapFactory.decodeResource(context.getResources(), R.drawable.pawn);
-        prom_pawn = BitmapFactory.decodeResource(context.getResources(), R.drawable.prom_pawn);
+        rook = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.rook));
+        prom_rook = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.prom_rook));
+        bishop = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.bishop));
+        prom_bishop = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.prom_bishop));
+        goldGen = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.goldgen));
+        silverGen = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.silvergen));
+        prom_silver = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.prom_silver));
+        knight = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.knight));
+        prom_knight = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.prom_knight));
+        lance = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.lance));
+        prom_lance = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.prom_lance));
+        pawn = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.pawn));
+        prom_pawn = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.prom_pawn));
         // kingUpper = BitmapFactory.decodeResource(context.getResources(), R.drawable.kingupper); // optional line of code
+
+        // Creates arrayList in the same order to the arrayList holding all the pieces
         initBitmap();
     }
 
+
+    // Initializes variables and cellDimensions so that it has only to be done once
     @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-        drawBoard(canvas);
-        drawSelected(canvas);
-        drawPieces(canvas);
-    }
-
-    private void drawBoard(Canvas canvas) {
-        canvas.drawColor(Color.WHITE);
-
-        int width = canvas.getWidth();
-        int height = canvas.getHeight();
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        width = w;
+        height = h;
 
         // Calculate cell size
-        cellWidth = width / 11f;
-        cellHeight = height / 9f;
-
+        cellWidth = w / 11f;
+        cellHeight = h / 9f;
 
         // uses the value that will make the chess board fit proper while still being squared
         cellDimensions = Math.min(cellWidth, cellHeight);
         capturedFieldRadius = (float) (0.4*cellDimensions);
         fieldDimensions = cellDimensions*9;
+
+        // load bitmaps in here to make sure all dimensions are available
+        loadBitmaps(contextLocal);
 
         // debugging
         /*
@@ -138,6 +145,23 @@ public class ShogiGUI extends View {
         Log.i("cellSize", "Cellheight: "+cellHeight);
         Log.i("cellSize", "Celldim: "+cellDimensions);
         */
+    }
+
+// ----------------------- Drawing is happening here -------------------
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        drawBoard(canvas);
+        drawPreviousMove(canvas);
+        drawSelected(canvas);
+        drawPossibleMoves(canvas);
+        drawCheck(canvas);
+        drawPieces(canvas);
+    }
+
+    private void drawBoard(Canvas canvas) {
+        canvas.drawColor(Color.WHITE);
 
         // Initializing colors used
         Paint paintBlack = new Paint();
@@ -166,13 +190,13 @@ public class ShogiGUI extends View {
         }
 
         // draw fields for captured pieces
-        // Player 2
+        // Player 1
         for (int i = 0; i < 7; i++){
             float x = (float) 0.5 * cellDimensions;
             float y = (float) 0.5 * cellDimensions + i * cellDimensions;
             canvas.drawCircle(x,y,capturedFieldRadius, paintCapturedField);
         }
-        // Player 1
+        // Player 0
         for (int i = 2; i < 9; i++){
             float x = (float) 10.5 * cellDimensions;
             float y = (float) 0.5 * cellDimensions + i * cellDimensions;
@@ -194,7 +218,6 @@ public class ShogiGUI extends View {
         int row, col;
 
         ArrayList<ShogiPiece> pieces = shogiState.getPieces();
-        scaleBitmaps();
 
         for(int i = 0; i < scaledBitmaps.size(); i++){
 
@@ -225,6 +248,54 @@ public class ShogiGUI extends View {
             canvas.drawBitmap(scaledBitmaps.get(i), left, top, null);
         }
     }
+
+
+    public void drawSelected(Canvas canvas){
+        // TODO: only highlight when a field with an actual piece is selected
+        if (selectedSquare == null) return;
+
+        Paint paintSelected = new Paint();
+        Paint paintPossible = new Paint();
+        Paint paintCheck = new Paint();
+        //paintSelected.setColor(0xA0FFFFFF);
+        //paintSelected.setAntiAlias(true);
+
+        float left = (selectedSquare.getCol() + (float)0.5) * cellDimensions;
+        float top = (selectedSquare.getRow() + (float)0.5) * cellDimensions;
+        float radius = cellDimensions / (float)1.5;
+
+        /*
+         External Citation:
+         ChatGPT: find how to create a gradual gradient
+         November 12th
+         */
+        RadialGradient gradientSelected = new RadialGradient(
+                left, top, radius,
+                0xFF00FFFF,  // Cyan color at the outer edge (opaque)
+                0x0000FFFF,  // Transparent cyan at the center
+                Shader.TileMode.CLAMP
+        );
+
+        // Apply the gradient to the paint
+        paintSelected.setShader(gradientSelected);
+
+        canvas.drawCircle(left, top, radius, paintSelected);
+
+    }
+
+    public void drawPreviousMove(Canvas canvas){
+
+    }
+
+    public void drawPossibleMoves(Canvas canvas){
+
+    }
+
+    public void drawCheck(Canvas caanvaas){
+
+    }
+
+// -------------------------- Helper functions and initialiazation -----------------
 
     /**
      function that returns what square has been touched
@@ -259,42 +330,6 @@ public class ShogiGUI extends View {
             return null;
         }
         return squareReturn;
-    }
-
-
-
-
-    public void drawSelected(Canvas canvas){
-
-        if (selectedSquare == null) return;
-
-        Paint paintSelected = new Paint();
-        Paint paintPossible = new Paint();
-        Paint paintCheck = new Paint();
-        //paintSelected.setColor(0xA0FFFFFF);
-        //paintSelected.setAntiAlias(true);
-
-        float left = (selectedSquare.getCol() + (float)0.5) * cellDimensions;
-        float top = (selectedSquare.getRow() + (float)0.5) * cellDimensions;
-        float radius = cellDimensions / (float)1.5;
-
-        /*
-         External Citation:
-         ChatGPT: find how to create a gradual gradient
-         November 12th
-         */
-        RadialGradient gradientSelected = new RadialGradient(
-                left, top, radius,
-                0xFF00FFFF,  // Cyan color at the outer edge (opaque)
-                0x0000FFFF,  // Transparent cyan at the center
-                Shader.TileMode.CLAMP
-        );
-
-        // Apply the gradient to the paint
-        paintSelected.setShader(gradientSelected);
-
-        canvas.drawCircle(left, top, radius, paintSelected);
-
     }
 
     /**
@@ -410,8 +445,6 @@ public class ShogiGUI extends View {
             default:
                 Log.d("GUI", "No type for promotion");
         }
-
-        scaleBitmaps();
     }
 
     private void checkOwnerBitmap(int owner, int arrayPosition){
@@ -420,10 +453,15 @@ public class ShogiGUI extends View {
         }
     }
 
-    private void scaleBitmaps() {
+    // deprecated function -> was overused which slowed down the GUI a lot
+/*  private void scaleBitmaps() {
         for (int i = 0; i < scaledBitmaps.size(); i++) {
-            scaledBitmaps.set(i, Bitmap.createScaledBitmap(scaledBitmaps.get(i), (int) cellDimensions, (int) cellDimensions, true));
+            scaledBitmaps.set(i, scaleBitmap(scaledBitmaps.get(i)));
         }
+    } */
+
+    private Bitmap scaleBitmap(Bitmap toScale){
+        return Bitmap.createScaledBitmap(toScale, (int) cellDimensions, (int) cellDimensions, true);
     }
 }
 

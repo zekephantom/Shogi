@@ -45,6 +45,9 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 	// the android activity that we are running
 	private GameMainActivity myActivity;
 
+	// the field the user touched on
+	private ShogiSquare gridTouched;
+
 
 	/**
 	 * constructor
@@ -189,10 +192,14 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 		float x = motionEvent.getX();
 		float y = motionEvent.getY();
 
-		ShogiSquare gridTouched = shogiBoard.gridSelection(x, y);
+		gridTouched = shogiBoard.gridSelection(x, y);
 		if(gridTouched != null) Log.d("Touch", "field touched: \n row: "+gridTouched.getRow()+" col: "+gridTouched.getCol());
 		//(gridTouched != null)? shogiBoard.drawSelected(gridTouched) : shogiBoard.flash(Color.RED, 50);
 		shogiBoard.setSelected(gridTouched);
+
+		if (state.getPiece(gridTouched) != null){
+			shogiBoard.setPossibleMoves(state.getPiece(gridTouched).getPossibleMoves(state));
+		}
 
 		return true;
 	}
