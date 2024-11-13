@@ -9,7 +9,11 @@ import edu.up.cs301.GameFramework.infoMessage.GameState;
  * It stores information about the piece's type, owner, promotion status, whether it's on the board,
  * and its position on the board.
  *
- * @author
+ * @author Ezekiel Rafanan
+ * @author Jona Bodirsky
+ * @author Arnaj Sandhu
+ * @author Makengo Lokombo
+ * @author James Pham
  * @version November 2023
  */
 public class ShogiPiece {
@@ -77,6 +81,7 @@ public class ShogiPiece {
         this.owner = original.owner;
         this.promoted = original.promoted;
         this.onBoard = original.onBoard;
+        this.position = original.position.clone();
         if (!(original.possibleMoves == null)){
             for(ShogiSquare sq : original.possibleMoves) {
                 this.possibleMoves.add(sq.clone());
@@ -112,6 +117,10 @@ public class ShogiPiece {
 
     public ArrayList<ShogiSquare> getPossibleMoves(GameState gameState){
         return possibleMoves;
+    }
+
+    public void setPossibleMoves(ArrayList<ShogiSquare> possibleMoves) {
+        this.possibleMoves = possibleMoves;
     }
 
     // Method for promoting a piece
