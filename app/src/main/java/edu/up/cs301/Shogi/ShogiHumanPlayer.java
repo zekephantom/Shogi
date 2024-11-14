@@ -56,7 +56,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 	private ShogiSquare gridTouched;
 	private ShogiPiece selectedPiece;
 	private Boolean pieceIsSelected = false;
-	private ArrayList<ShogiSquare> piecePossibleMoves;
+	private ArrayList<ShogiSquare> piecePossibleMoves = new ArrayList<>();
 
 
 	/**
@@ -202,7 +202,9 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 
 	@Override
 	public boolean onTouch(View view, MotionEvent motionEvent) {
-
+	if (motionEvent.getAction() != MotionEvent.ACTION_DOWN) {
+		return false;
+	}
 		float x = motionEvent.getX();
 		float y = motionEvent.getY();
 
@@ -212,14 +214,15 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 			// will return captured pieces being col 9, 10 for player 1, 0
 			gridTouched = shogiBoard.gridSelection(x, y);
 
-			if (gridTouched != null)
-				Log.d("Touch", "field touched: \n row: " + gridTouched.getRow() + " col: " + gridTouched.getCol());
+			if (gridTouched != null) {
+                Log.d("Touch", "field touched: \n row: " + gridTouched.getRow() + " col: " + gridTouched.getCol());
+            }
 
 			// Logic to get the possible move if a piece is selected
 			if (pieceIsSelected) { // drop action
 				// Check if the drop move is a legal move
 				for (ShogiSquare targetSquare : piecePossibleMoves) {
-					if (gridTouched == targetSquare) {
+					if (gridTouched.getRow() == targetSquare.getRow() && gridTouched.getCol() == targetSquare.getCol()) {
 						// send move action here
 						ShogiMoveAction action = new ShogiMoveAction(this, selectedPiece, gridTouched);
 						game.sendAction(action);
@@ -242,8 +245,9 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 				pieceIsSelected = false;
 
 			} else { // no piece currently selected
-				if (selectedPiece != null)
+				if (selectedPiece != null) {
 					shogiBoard.setPriorMoveSquares(selectedPiece.getPosition(), gridTouched);
+				}
 				selectedPiece = state.getPiece(gridTouched);
 				// TODO: to make sure that selection also works for captured
 				// 	pieces we have to logically put them in the right location
@@ -253,7 +257,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 					shogiBoard.setSelected(gridTouched);
 					piecePossibleMoves = selectedPiece.getPossibleMoves(state);
 					shogiBoard.setPossibleMoves(piecePossibleMoves);
-					//pieceIsSelected = true;
+					pieceIsSelected = true;
 					Log.d("Touch", "Piece getting selected");
 				} else {
 					Log.d("Touch", "Piece not selected");
