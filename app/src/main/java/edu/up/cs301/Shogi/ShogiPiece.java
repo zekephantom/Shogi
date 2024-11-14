@@ -54,7 +54,7 @@ public class ShogiPiece {
     private ShogiSquare position;
 
     // ArrayList of all possible moves
-    private ArrayList<ShogiSquare> possibleMoves;
+    private ArrayList<ShogiSquare> possibleMoves = new ArrayList<>();
 
     /**
      * Constructor for ShogiPiece
@@ -82,8 +82,8 @@ public class ShogiPiece {
         this.promoted = original.promoted;
         this.onBoard = original.onBoard;
         this.position = original.position.clone();
-        if (!(original.possibleMoves == null)){
-            for(ShogiSquare sq : original.possibleMoves) {
+        if (original.possibleMoves != null){
+            for (ShogiSquare sq : original.possibleMoves) {
                 this.possibleMoves.add(sq.clone());
             }
         }

@@ -270,12 +270,17 @@ public class ShogiState extends GameState {
 		int row = currentPosition.getRow() + rowDirection;
 		int col = currentPosition.getCol() + colDirection;
 
-		while (row != targetPosition.getRow() || col != targetPosition.getCol()) {
-			if (getPiece(new ShogiSquare(row, col)) != null && getPiece(new ShogiSquare(row, col)).isOnBoard() && getPiece(new ShogiSquare(row, col)).getOwner() != currentPlayer) {
-				return true;
+		while (row - rowDirection != targetPosition.getRow() || col - colDirection != targetPosition.getCol()) {
+			if (getPiece(new ShogiSquare(row, col)) != null && getPiece(new ShogiSquare(row, col)).isOnBoard()) {
+				if (getPiece(new ShogiSquare(row, col)).getOwner() == currentPlayer) {
+					return true;
+				}
 			}
 			row += rowDirection;
 			col += colDirection;
+			if (getPiece(new ShogiSquare(row, col)).getOwner() != currentPlayer) {
+				return false;
+			}
 		}
 		return false;
 	}
@@ -301,10 +306,11 @@ public class ShogiState extends GameState {
 
 		// if the piece is trying to move to where is the piece currently is, or not within bounds, or one of the current players pieces, return false
 		if (targetRow == currentRow && targetCol == currentCol || isOutOfBounds(targetPosition)) {
-			if (getPiece(targetPosition) != null) {
-				if (getPiece(targetPosition).getOwner() == getCurrentPlayer()){
-					return false;
-				}
+			return false;
+		}
+		if (getPiece(targetPosition) != null) {
+			if (getPiece(targetPosition).getOwner() == getCurrentPlayer()){
+				return false;
 			}
 		}
 
@@ -342,10 +348,11 @@ public class ShogiState extends GameState {
 
 		// if the piece is trying to move to where is the piece currently is, or not within bounds, or one of the current players pieces, return false
 		if (targetRow == currentRow && targetCol == currentCol || isOutOfBounds(targetPosition)) {
-			if (getPiece(targetPosition) != null) {
-				if (getPiece(targetPosition).getOwner() == getCurrentPlayer()){
-					return false;
-				}
+			return false;
+		}
+		if (getPiece(targetPosition) != null) {
+			if (getPiece(targetPosition).getOwner() == getCurrentPlayer()){
+				return false;
 			}
 		}
 
@@ -397,10 +404,11 @@ public class ShogiState extends GameState {
 
 		// if the piece is trying to move to where is the piece currently is, or not within bounds, or one of the current players pieces, return false
 		if (targetRow == currentRow && targetCol == currentCol || isOutOfBounds(targetPosition)) {
-			if (getPiece(targetPosition) != null) {
-				if (getPiece(targetPosition).getOwner() == getCurrentPlayer()){
-					return false;
-				}
+			return false;
+		}
+		if (getPiece(targetPosition) != null) {
+			if (getPiece(targetPosition).getOwner() == getCurrentPlayer()){
+				return false;
 			}
 		}
 
@@ -457,10 +465,11 @@ public class ShogiState extends GameState {
 
 		// if the piece is trying to move to where is the piece currently is, or not within bounds, or one of the current players pieces, return false
 		if (targetRow == currentRow && targetCol == currentCol || isOutOfBounds(targetPosition)) {
-			if (getPiece(targetPosition) != null) {
-				if (getPiece(targetPosition).getOwner() == getCurrentPlayer()){
-					return false;
-				}
+			return false;
+		}
+		if (getPiece(targetPosition) != null) {
+			if (getPiece(targetPosition).getOwner() == getCurrentPlayer()){
+				return false;
 			}
 		}
 
@@ -521,10 +530,11 @@ public class ShogiState extends GameState {
 
 		// if the piece is trying to move to where is the piece currently is, or not within bounds, or one of the current players pieces, return false
 		if (targetRow == currentRow && targetCol == currentCol || isOutOfBounds(targetPosition)) {
-			if (getPiece(targetPosition) != null) {
-				if (getPiece(targetPosition).getOwner() == getCurrentPlayer()){
-					return false;
-				}
+			return false;
+		}
+		if (getPiece(targetPosition) != null) {
+			if (getPiece(targetPosition).getOwner() == getCurrentPlayer()){
+				return false;
 			}
 		}
 
@@ -583,10 +593,11 @@ public class ShogiState extends GameState {
 
 		// if the piece is trying to move to where is the piece currently is, or not within bounds, or one of the current players pieces, return false
 		if (targetRow == currentRow && targetCol == currentCol || isOutOfBounds(targetPosition)) {
-			if (getPiece(targetPosition) != null) {
-				if (getPiece(targetPosition).getOwner() == getCurrentPlayer()){
-					return false;
-				}
+			return false;
+		}
+		if (getPiece(targetPosition) != null) {
+			if (getPiece(targetPosition).getOwner() == getCurrentPlayer()){
+				return false;
 			}
 		}
 
@@ -655,17 +666,19 @@ public class ShogiState extends GameState {
 
 		// if the piece is trying to move to where is the piece currently is, or not within bounds, or one of the current players pieces, return false
 		if (targetRow == currentRow && targetCol == currentCol || isOutOfBounds(targetPosition)) {
-			if (getPiece(targetPosition) != null) {
-				if (getPiece(targetPosition).getOwner() == getCurrentPlayer()){
-					return false;
-				}
+			return false;
+		}
+		if (getPiece(targetPosition) != null) {
+			if (getPiece(targetPosition).getOwner() == getCurrentPlayer()){
+				return false;
 			}
 		}
 
 		if (piece.isPromoted()) {
 			// If promoted, move like a Gold General
 			return moveAsGoldGeneral(piece, targetPosition, finalizeMove);
-		} else {
+		}
+		else {
 			// Unpromoted Lance: Only moves forward in the same column
 			if (colDiff == 0) {
 				if ((piece.getOwner() == 0 && rowDiff < 0) || (piece.getOwner() == 1 && rowDiff > 0)) {
@@ -707,10 +720,11 @@ public class ShogiState extends GameState {
 
 		// if the piece is trying to move to where is the piece currently is, or not within bounds, or one of the current players pieces, return false
 		if (targetRow == currentRow && targetCol == currentCol || isOutOfBounds(targetPosition)) {
-			if (getPiece(targetPosition) != null) {
-				if (getPiece(targetPosition).getOwner() == getCurrentPlayer()){
-					return false;
-				}
+			return false;
+		}
+		if (getPiece(targetPosition) != null) {
+			if (getPiece(targetPosition).getOwner() == getCurrentPlayer()){
+				return false;
 			}
 		}
 
