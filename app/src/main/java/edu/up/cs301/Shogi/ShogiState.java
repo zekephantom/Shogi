@@ -41,9 +41,9 @@ public class ShogiState extends GameState {
 		initPieces();
 		currentPlayer = 0; // Player 0 starts
 		gamePhase = "Main Play";
-		/*for (ShogiPiece piece : pieces){
+		for (ShogiPiece piece : pieces) {
 			updatePossibleMoves(piece);
-		}*/
+		}
 	}
 
 	// Copy constructor for deep copying
@@ -300,8 +300,12 @@ public class ShogiState extends GameState {
 		ShogiSquare targetPosition = new ShogiSquare(targetRow, targetCol);
 
 		// if the piece is trying to move to where is the piece currently is, or not within bounds, or one of the current players pieces, return false
-		if (targetRow == currentRow && targetCol == currentCol || isOutOfBounds(targetPosition) || getPiece(targetPosition).getOwner() == getCurrentPlayer()) {
-			return false;
+		if (targetRow == currentRow && targetCol == currentCol || isOutOfBounds(targetPosition)) {
+			if (getPiece(targetPosition) != null) {
+				if (getPiece(targetPosition).getOwner() == getCurrentPlayer()){
+					return false;
+				}
+			}
 		}
 
 		int rowDiff = Math.abs(currentRow - targetRow);
@@ -337,8 +341,12 @@ public class ShogiState extends GameState {
 		ShogiSquare targetPosition = new ShogiSquare(targetRow, targetCol);
 
 		// if the piece is trying to move to where is the piece currently is, or not within bounds, or one of the current players pieces, return false
-		if (targetRow == currentRow && targetCol == currentCol || isOutOfBounds(targetPosition) || getPiece(targetPosition).getOwner() == getCurrentPlayer()) {
-			return false;
+		if (targetRow == currentRow && targetCol == currentCol || isOutOfBounds(targetPosition)) {
+			if (getPiece(targetPosition) != null) {
+				if (getPiece(targetPosition).getOwner() == getCurrentPlayer()){
+					return false;
+				}
+			}
 		}
 
 		if (piece.isPromoted()) {
@@ -388,8 +396,12 @@ public class ShogiState extends GameState {
 		int colDiff = Math.abs(targetCol - currentCol);
 
 		// if the piece is trying to move to where is the piece currently is, or not within bounds, or one of the current players pieces, return false
-		if (targetRow == currentRow && targetCol == currentCol || isOutOfBounds(targetPosition) || getPiece(targetPosition).getOwner() == getCurrentPlayer()) {
-			return false;
+		if (targetRow == currentRow && targetCol == currentCol || isOutOfBounds(targetPosition)) {
+			if (getPiece(targetPosition) != null) {
+				if (getPiece(targetPosition).getOwner() == getCurrentPlayer()){
+					return false;
+				}
+			}
 		}
 
 		// If promoted (Dragon Horse), allow one-step orthogonal moves in addition to diagonal
@@ -444,8 +456,12 @@ public class ShogiState extends GameState {
 		int colDiff = targetCol - currentCol;
 
 		// if the piece is trying to move to where is the piece currently is, or not within bounds, or one of the current players pieces, return false
-		if (targetRow == currentRow && targetCol == currentCol || isOutOfBounds(targetPosition) || getPiece(targetPosition).getOwner() == getCurrentPlayer()) {
-			return false;
+		if (targetRow == currentRow && targetCol == currentCol || isOutOfBounds(targetPosition)) {
+			if (getPiece(targetPosition) != null) {
+				if (getPiece(targetPosition).getOwner() == getCurrentPlayer()){
+					return false;
+				}
+			}
 		}
 
 		// Define allowed moves for the Gold General based on player direction
@@ -504,8 +520,12 @@ public class ShogiState extends GameState {
 		int colDiff = targetCol - currentCol;
 
 		// if the piece is trying to move to where is the piece currently is, or not within bounds, or one of the current players pieces, return false
-		if (targetRow == currentRow && targetCol == currentCol || isOutOfBounds(targetPosition) || getPiece(targetPosition).getOwner() == getCurrentPlayer()) {
-			return false;
+		if (targetRow == currentRow && targetCol == currentCol || isOutOfBounds(targetPosition)) {
+			if (getPiece(targetPosition) != null) {
+				if (getPiece(targetPosition).getOwner() == getCurrentPlayer()){
+					return false;
+				}
+			}
 		}
 
 		if (piece.isPromoted()) {
@@ -562,8 +582,12 @@ public class ShogiState extends GameState {
 		int colDiff = targetCol - currentCol;
 
 		// if the piece is trying to move to where is the piece currently is, or not within bounds, or one of the current players pieces, return false
-		if (targetRow == currentRow && targetCol == currentCol || isOutOfBounds(targetPosition) || getPiece(targetPosition).getOwner() == getCurrentPlayer()) {
-			return false;
+		if (targetRow == currentRow && targetCol == currentCol || isOutOfBounds(targetPosition)) {
+			if (getPiece(targetPosition) != null) {
+				if (getPiece(targetPosition).getOwner() == getCurrentPlayer()){
+					return false;
+				}
+			}
 		}
 
 		if (piece.isPromoted()) {
@@ -630,8 +654,12 @@ public class ShogiState extends GameState {
 		int colDiff = targetCol - currentCol;
 
 		// if the piece is trying to move to where is the piece currently is, or not within bounds, or one of the current players pieces, return false
-		if (targetRow == currentRow && targetCol == currentCol || isOutOfBounds(targetPosition) || getPiece(targetPosition).getOwner() == getCurrentPlayer()) {
-			return false;
+		if (targetRow == currentRow && targetCol == currentCol || isOutOfBounds(targetPosition)) {
+			if (getPiece(targetPosition) != null) {
+				if (getPiece(targetPosition).getOwner() == getCurrentPlayer()){
+					return false;
+				}
+			}
 		}
 
 		if (piece.isPromoted()) {
@@ -678,8 +706,12 @@ public class ShogiState extends GameState {
 		int rowDirection = (currentPlayer == 0) ? -1 : 1;
 
 		// if the piece is trying to move to where is the piece currently is, or not within bounds, or one of the current players pieces, return false
-		if (targetRow == currentRow && targetCol == currentCol || isOutOfBounds(targetPosition) || getPiece(targetPosition).getOwner() == getCurrentPlayer()) {
-			return false;
+		if (targetRow == currentRow && targetCol == currentCol || isOutOfBounds(targetPosition)) {
+			if (getPiece(targetPosition) != null) {
+				if (getPiece(targetPosition).getOwner() == getCurrentPlayer()){
+					return false;
+				}
+			}
 		}
 
 		if (!piece.isPromoted()) {
@@ -787,6 +819,9 @@ public class ShogiState extends GameState {
 			// Delegate to the dropPiece method
 			return dropPiece(dropAction);
 		}
+		for (ShogiPiece piece : pieces) {
+			updatePossibleMoves(piece);
+		}
 
 		// If action is neither a move nor a drop, return false
 		return false;
@@ -843,6 +878,15 @@ public class ShogiState extends GameState {
 		int currentCol = piece.getPosition().getCol();
 		int rowDiff = targetPosition.getRow() - currentRow;
 		int colDiff = targetPosition.getCol() - currentCol;
+
+		// if the piece is trying to move to where is the piece currently is, or not within bounds, or one of the current players pieces, return false
+		if (targetPosition.getRow() == currentRow && targetPosition.getCol() == currentCol || isOutOfBounds(targetPosition)) {
+			if (getPiece(targetPosition) != null) {
+				if (getPiece(targetPosition).getOwner() == getCurrentPlayer()){
+					return false;
+				}
+			}
+		}
 
 		int[][] validMoves;
 
