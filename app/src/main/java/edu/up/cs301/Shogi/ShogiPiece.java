@@ -113,8 +113,6 @@ public class ShogiPiece {
         return promoted;
     }
 
-    // added to temporarily fix the error in dumb AI - Jona
-
     public ArrayList<ShogiSquare> getPossibleMoves(GameState gameState){
         return possibleMoves;
     }

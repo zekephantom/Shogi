@@ -41,6 +41,9 @@ public class ShogiState extends GameState {
 		initPieces();
 		currentPlayer = 0; // Player 0 starts
 		gamePhase = "Main Play";
+		/*for (ShogiPiece piece : pieces){
+			updatePossibleMoves(piece);
+		}*/
 	}
 
 	// Copy constructor for deep copying

@@ -50,12 +50,15 @@ public class ShogiGUI extends View {
 
     private ShogiSquare selectedSquare;
     private ArrayList<ShogiSquare> possibleMoves;
+    private ShogiSquare priorOrig;
+    private ShogiSquare priorTarget;
 
 
     // Helpful variables for drawing
     // private Canvas savedCanvas;
     private float width;
     private float height;
+    private float radius;
     private float cellWidth;
     private float cellHeight;
     private float cellDimensions;
@@ -68,7 +71,7 @@ public class ShogiGUI extends View {
 
     }
 
-// ------------------------ Setter methods ----------------
+// ------------------------ Setter methods ---------------------------
 
     // setter method for the shogi state
     public void setShogiState(ShogiState state){
@@ -84,7 +87,13 @@ public class ShogiGUI extends View {
     // setter method for possible moves
     public void setPossibleMoves(ArrayList<ShogiSquare> possible){
         this.possibleMoves = possible;
-       // invalidate(); // TODO once possible moves is working
+        invalidate();
+    }
+    // setter method for previous move squares
+    public void setPriorMoveSquares(ShogiSquare orig, ShogiSquare target){
+        this.priorOrig = orig;
+        this.priorTarget = target;
+        invalidate();
     }
 
 // ------------------------- INIT methods -----------------------------
@@ -120,7 +129,7 @@ public class ShogiGUI extends View {
     }
 
 
-    // Initializes variables and cellDimensions so that it has only to be done once
+    // Initializes variables and cellDimensions only if there are changes
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
@@ -135,6 +144,7 @@ public class ShogiGUI extends View {
         cellDimensions = Math.min(cellWidth, cellHeight);
         capturedFieldRadius = (float) (0.4*cellDimensions);
         fieldDimensions = cellDimensions*9;
+        radius = cellDimensions / (float)1.5; // for the circles being drawn
 
         // load bitmaps in here to make sure all dimensions are available
         loadBitmaps(contextLocal);
@@ -153,10 +163,10 @@ public class ShogiGUI extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         drawBoard(canvas);
-        drawPreviousMove(canvas);
+        drawPriorMove(canvas);// TODO
         drawSelected(canvas);
-        drawPossibleMoves(canvas);
-        drawCheck(canvas);
+        drawPossibleMoves(canvas);// TODO
+        drawCheck(canvas);// TODO
         drawPieces(canvas);
     }
 
@@ -251,47 +261,55 @@ public class ShogiGUI extends View {
 
 
     public void drawSelected(Canvas canvas){
-        // TODO: only highlight when a field with an actual piece is selected
         if (selectedSquare == null) return;
 
-        Paint paintSelected = new Paint();
-        Paint paintPossible = new Paint();
-        Paint paintCheck = new Paint();
-        //paintSelected.setColor(0xA0FFFFFF);
-        //paintSelected.setAntiAlias(true);
+        int selectedColor = 0xFF00FFFF;
 
-        float left = (selectedSquare.getCol() + (float)0.5) * cellDimensions;
+        float left;
         float top = (selectedSquare.getRow() + (float)0.5) * cellDimensions;
-        float radius = cellDimensions / (float)1.5;
 
-        /*
-         External Citation:
-         ChatGPT: find how to create a gradual gradient
-         November 12th
-         */
-        RadialGradient gradientSelected = new RadialGradient(
-                left, top, radius,
-                0xFF00FFFF,  // Cyan color at the outer edge (opaque)
-                0x0000FFFF,  // Transparent cyan at the center
-                Shader.TileMode.CLAMP
-        );
 
-        // Apply the gradient to the paint
-        paintSelected.setShader(gradientSelected);
+        // Checks if it is selecting a captured piece from player 1 which is stored in col 9
+        // but printed in col 0
+        if (selectedSquare.getCol() == 9) left = (float)0.5 * cellDimensions;
+        else if (selectedSquare.getCol() == 10) left = (selectedSquare.getCol() + (float)0.5) * cellDimensions;
+        else left = (selectedSquare.getCol() + (float)1.5) * cellDimensions;
 
-        canvas.drawCircle(left, top, radius, paintSelected);
+        drawCricle(canvas, selectedColor,left, top);
+
 
     }
 
-    public void drawPreviousMove(Canvas canvas){
+
+    public void drawPriorMove(Canvas canvas){
+        if(priorOrig == null || priorTarget == null) return;
+        Paint paintPrior = new Paint();
+        paintPrior.setColor(0xA0FFFFFF);
+        float left = switchLogicToGraphic(priorOrig).getCol() * cellDimensions;
+        float top = switchLogicToGraphic(priorOrig).getRow()* cellDimensions;
+        canvas.drawRect(left, top, left+cellDimensions, top+cellDimensions, paintPrior);
+
+        left = switchLogicToGraphic(priorTarget).getCol()* cellDimensions;
+        top = switchLogicToGraphic(priorTarget).getRow()* cellDimensions;
+        canvas.drawRect(left, top, left+cellDimensions, top+cellDimensions, paintPrior);
 
     }
 
     public void drawPossibleMoves(Canvas canvas){
+        if(possibleMoves == null) return;
+        int possibleColor = 0xFFFF0000;
 
+        for (ShogiSquare move : possibleMoves){
+
+            float left= (move.getCol() + (float)1.5) * cellDimensions;
+            float top = (move.getRow() + (float)0.5) * cellDimensions;
+
+            drawCricle(canvas, possibleColor,left, top);
+
+        }
     }
 
-    public void drawCheck(Canvas caanvaas){
+    public void drawCheck(Canvas canvas){
 
     }
 
@@ -299,6 +317,8 @@ public class ShogiGUI extends View {
 
     /**
      function that returns what square has been touched
+     important ! -> switches column 0 to column 9 (captured col for player 1)
+        in order to function with the game logic
      */
      public  ShogiSquare gridSelection(float x, float y){
 
@@ -307,29 +327,73 @@ public class ShogiGUI extends View {
 
         // Find row
         for(int i = 0; i < 9; i++){
-            float leftB = cellDimensions*i;
-            if ((leftB < y) && ((leftB+cellDimensions)>y)){
+            float topBound = cellDimensions*i;
+            if ((topBound < y) && ((topBound+cellDimensions)>y)){
                 squareReturn.setRow(i);
                 break;
             }
         }
         // Find col
         for(int i = 0; i < 11; i++){
-            float topB = cellDimensions*i;
-            if ((topB < x) && ((topB+cellDimensions) > x)){
-                squareReturn.setCol(i);
+            float leftBoundary = cellDimensions*i;
+            if ((leftBoundary < x) && ((leftBoundary+cellDimensions) > x)){
+                if (i == 0) squareReturn.setCol(9);
+                else if (i == 10) squareReturn.setCol(10);
+                else squareReturn.setCol(i-1);
                 break;
             }
         }
+
+        // the empty spots around the captured fields that are unused
         if (squareReturn.getRow() == 9 || squareReturn.getCol() == 11
         || squareReturn.getRow() == 0 && squareReturn.getCol() == 10
         || squareReturn.getRow() == 1 && squareReturn.getCol() == 10
-        || squareReturn.getRow() == 7 && squareReturn.getCol() == 0
-        || squareReturn.getRow() == 8 && squareReturn.getCol() == 0){
+        || squareReturn.getRow() == 7 && squareReturn.getCol() == 9
+        || squareReturn.getRow() == 8 && squareReturn.getCol() == 9){
             Log.d("GUI", "Touch outside of legal fields");
             return null;
         }
+
         return squareReturn;
+    }
+
+    /**
+     * Helper function to switch square location between logic and graphic.
+     * -> logic has col 0 switched with col 9
+     * @param logic
+     * @return
+     */
+    private ShogiSquare switchLogicToGraphic(ShogiSquare logic){
+        if (logic == null) Log.d("GUI", "null object passed into switchLogicToGraphic");
+
+        ShogiSquare graphic = new ShogiSquare(logic);
+
+        if (graphic.getCol() == 9) graphic.setCol(0);
+        else if (graphic.getCol() != 10) graphic.setCol(graphic.getCol() + 1);
+
+        return graphic;
+    }
+
+    private void drawCricle(Canvas canvas, int color, float left, float top){
+        Paint toPaint = new Paint();
+
+        /*
+         External Citation:
+         ChatGPT: find how to create a gradual gradient
+         November 12th
+         */
+        RadialGradient gradientSelected = new RadialGradient(
+                left, top, radius,
+                color,  //  color at the center
+                color-0xFF000000,  // Transparent at the outer edge
+                Shader.TileMode.CLAMP
+        );
+
+        // Apply the gradient to the paint
+        toPaint.setShader(gradientSelected);
+
+        canvas.drawCircle(left, top, radius, toPaint);
+
     }
 
     /**

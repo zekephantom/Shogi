@@ -1,19 +1,24 @@
 package edu.up.cs301.Shogi;
 
 
+import edu.up.cs301.GameFramework.infoMessage.GameState;
 import edu.up.cs301.GameFramework.players.GameHumanPlayer;
 import edu.up.cs301.GameFramework.GameMainActivity;
 import edu.up.cs301.GameFramework.infoMessage.GameInfo;
 import edu.up.cs301.GameFramework.utilities.Logger;
 import edu.up.cs301.shogi.R;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
+import android.os.Handler;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.view.View.OnClickListener;
+
+import androidx.appcompat.app.AlertDialog;
 
 import java.util.ArrayList;
 
@@ -45,8 +50,13 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 	// the android activity that we are running
 	private GameMainActivity myActivity;
 
+	private Handler guiHandler = null;
+
 	// the field the user touched on
 	private ShogiSquare gridTouched;
+	private ShogiPiece selectedPiece;
+	private Boolean pieceIsSelected = false;
+	private ArrayList<ShogiSquare> piecePossibleMoves;
 
 
 	/**
@@ -79,35 +89,29 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 	/**
 	 * Updates the display based on the current game state.
 	 */
-	protected void updateDisplay() {
+	protected void updateDisplay(ShogiState updatedState) {
+
+		// copied from computer player 2, idk if we need a new thread here
+		if (guiHandler != null) {
+			guiHandler.post(
+					new Runnable() {
+						public void run() {
+							if (updatedState != null) {
+								//shogiBoard.setShogiState(updatedState);
+
+								// when this is uncommented it doesnt work because the game
+								// state passed in is not properly initialized
+							}
+						}});
+		}
+
+	/* Code used for game state test
 		// set the text in the appropriate widget
 	if(state == null) return;
 	Log.d("toString", state.toString());
-	}
 
-
-	/**
-	 * This method gets called when the user clicks the 'Run Test' button.
-	 * It performs the following actions:
-	 * 1. Clears any text currently displayed in the EditText.
-	 * 2. Creates a new instance of the game state class.
-	 * 3. Creates a deep copy of the first instance.
-	 *
-	 * @param button
-	 *      the button that was clicked
 	 */
-/*
-	@Override
-	public void onClick(View button) {
-		// if we are not yet connected to a game, ignore
-		if (game == null) return;
-
-		// ShogiStateTest
-		// shogiStateTest();
-
-
-	}// onClick*/
-
+	}
 
 	/**
 	 * Callback method when we receive information from the game.
@@ -117,13 +121,22 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 	 */
 	@Override
 	public void receiveInfo(GameInfo info) {
-		// ignore the message if it's not a ShogiState message
-		if (!(info instanceof ShogiState)) return;
-		
+
+		if (shogiBoard == null) return;
+
+		/*if (info instanceof IllegalMoveInfo || info instanceof NotYourTurnInfo) {
+			// if the move was out of turn or otherwise illegal, flash the screen
+			surfaceView.flash(Color.RED, 50);
+		}
+		else*/ if (!(info instanceof ShogiState))
+			// ignore the message if it's not a ShogiState message
+			return;
+		else {
+			this.state = (ShogiState)info;
+			updateDisplay(state);
+		}
 		// update our state; then update the display
-		this.state = (ShogiState)info;
-		//shogiBoard.setShogiState(state);
-		updateDisplay();
+		if (this.state == null) Log.d("state", "State is null");
 	}
 	
 	/**
@@ -139,6 +152,10 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 		// remember the activity
 		this.myActivity = activity;
 
+
+		// remember the handler for the GUI thread
+		this.guiHandler = new Handler();
+
 		//  set the right content view
 		activity.setContentView(R.layout.game_interface);
 
@@ -152,32 +169,29 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 		shogiBoard = (ShogiGUI)myActivity.findViewById(R.id.shogiBoard);
 		shogiBoard.setShogiState(state);
 
-		ArrayList<ShogiPiece> pieces = state.getPieces();
-
-		// testing of the GUI functionality
-/*
-		// captured
+// --------- testing of the GUI functionality ---------------
+/*		// captured
 		state.getPieces().get(15).setOnBoard(false);
-		shogiBoard.setShogiState(state);
+		updateDisplay(state);
 
 		// promoted
 		state.getPieces().get(35).setPromoted(true);
-		shogiBoard.setShogiState(state);
+		updateDisplay(state);
 
 		// owner
 		state.getPieces().get(35).setOwner(1-state.getPieces().get(35).getOwner());
-		shogiBoard.setShogiState(state);
+		updateDisplay(state);
 */
-		//Logger.log("set listener","OnTouch");
+
+		Logger.log("set listener","OnTouch");
 		shogiBoard.setOnTouchListener(this);
 
-		// add switchListeners for englisch/japanese
-		// TODO: on touch to flip
+
 		// TODO: add switchListeners for englisch/japanese
+		// TODO: quit button
 
-
-/*
-		Button quit = findViewById(R.id.butQuit);
+		Button quit = myActivity.findViewById(R.id.butQuit);
+		/*
 		quit.setOnClickListener(new View.OnClickListener(){
 			@Override
 			public void onClick(View v){
@@ -192,17 +206,65 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 		float x = motionEvent.getX();
 		float y = motionEvent.getY();
 
-		gridTouched = shogiBoard.gridSelection(x, y);
-		if(gridTouched != null) Log.d("Touch", "field touched: \n row: "+gridTouched.getRow()+" col: "+gridTouched.getCol());
-		//(gridTouched != null)? shogiBoard.drawSelected(gridTouched) : shogiBoard.flash(Color.RED, 50);
-		shogiBoard.setSelected(gridTouched);
+		// Only checks the state if a new field is touched
+		// -> multiple onTouch calls during a single touch
+		if (gridTouched != shogiBoard.gridSelection(x,y)) {
+			// will return captured pieces being col 9, 10 for player 1, 0
+			gridTouched = shogiBoard.gridSelection(x, y);
 
-		if (state.getPiece(gridTouched) != null){
-			shogiBoard.setPossibleMoves(state.getPiece(gridTouched).getPossibleMoves(state));
+			if (gridTouched != null)
+				Log.d("Touch", "field touched: \n row: " + gridTouched.getRow() + " col: " + gridTouched.getCol());
+
+			// Logic to get the possible move if a piece is selected
+			if (pieceIsSelected) { // drop action
+				// Check if the drop move is a legal move
+				for (ShogiSquare targetSquare : piecePossibleMoves) {
+					if (gridTouched == targetSquare) {
+						// send move action here
+						ShogiMoveAction action = new ShogiMoveAction(this, selectedPiece, gridTouched);
+						game.sendAction(action);
+						Log.d("Touch", "Piece selected move valid");
+						shogiBoard.setPriorMoveSquares(selectedPiece.getPosition(), gridTouched);
+
+						// reset the selected piece
+						selectedPiece = null;
+						shogiBoard.setSelected(null);
+						pieceIsSelected = false;
+						return true;
+					}
+				}
+
+				Log.d("Touch", "Piece selected move invalid");
+				// else deselect the piece
+				// TODO flash screen potentially
+				selectedPiece = null;
+				shogiBoard.setSelected(null);
+				pieceIsSelected = false;
+
+			} else { // no piece currently selected
+				if (selectedPiece != null)
+					shogiBoard.setPriorMoveSquares(selectedPiece.getPosition(), gridTouched);
+				selectedPiece = state.getPiece(gridTouched);
+				// TODO: to make sure that selection also works for captured
+				// 	pieces we have to logically put them in the right location
+				//  when being captured within the shogiState
+				if (selectedPiece != null) {
+
+					shogiBoard.setSelected(gridTouched);
+					piecePossibleMoves = selectedPiece.getPossibleMoves(state);
+					shogiBoard.setPossibleMoves(piecePossibleMoves);
+					//pieceIsSelected = true;
+					Log.d("Touch", "Piece getting selected");
+				} else {
+					Log.d("Touch", "Piece not selected");
+					// pieceIsSelected = false;
+					// TODO flash screen potentially
+				}
+			}
 		}
 
 		return true;
-	}
+	}//onTouch
 
 	/**
 	 * code from shogi test that gets called in onClick
@@ -273,7 +335,29 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 		//Print string representations for both copies
 		testResultsEditText.append("First Copy: \n" + firstCopy.toString() + "\n");
 		testResultsEditText.append("Second Copy:\n" + secondCopy.toString() + "\n");
-	}
+	}// shogiGameStateTest()
+
+	/**
+	 * This method gets called when the user clicks the 'Run Test' button.
+	 * It performs the following actions:
+	 * 1. Clears any text currently displayed in the EditText.
+	 * 2. Creates a new instance of the game state class.
+	 * 3. Creates a deep copy of the first instance.
+	 *
+	 * @param button
+	 *      the button that was clicked
+	 */
+/*
+	@Override
+	public void onClick(View button) {
+		// if we are not yet connected to a game, ignore
+		if (game == null) return;
+
+		// ShogiStateTest
+		// shogiStateTest();
+
+
+	}// onClick*/
 
 }// class ShogiHumanPlayer
 
