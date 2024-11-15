@@ -55,7 +55,6 @@ public class ShogiGUI extends View {
 
 
     // Helpful variables for drawing
-    // private Canvas savedCanvas;
     private float width;
     private float height;
     private float radius;
@@ -65,6 +64,13 @@ public class ShogiGUI extends View {
     private float fieldDimensions;
     private float capturedFieldRadius;
 
+    // TODO: add colors here for easier configuring
+
+    /**
+     * Constructor
+     * @param context
+     * @param attrs
+     */
     public ShogiGUI(Context context, AttributeSet attrs) {
         super(context, attrs);
         contextLocal = context; // needed to call the loadBitmaps method outside of the ctr
@@ -163,13 +169,18 @@ public class ShogiGUI extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         drawBoard(canvas);
-        drawPriorMove(canvas);// TODO
+        drawPriorMove(canvas);
         drawSelected(canvas);
         drawPossibleMoves(canvas);// TODO
         drawCheck(canvas);// TODO
         drawPieces(canvas);
     }
 
+    /**
+     * draws the background of the board, the grid for the fields,
+     * and the patches for the captured pieces
+     * @param canvas
+     */
     private void drawBoard(Canvas canvas) {
         canvas.drawColor(Color.WHITE);
 
@@ -221,9 +232,6 @@ public class ShogiGUI extends View {
      * @param canvas
      */
     private void drawPieces(Canvas canvas) {
-        // Test on drawing a piece after scaling it
-        //Bitmap scaledBitmap = Bitmap.createScaledBitmap(kingLower, (int) cellDimensions, (int) cellDimensions, true);
-        //canvas.drawBitmap(scaledBitmap, cellDimensions*5, cellDimensions*8, null);
 
         int row, col;
 
@@ -259,13 +267,16 @@ public class ShogiGUI extends View {
         }
     }
 
-
+    /**
+     * draws a blue orb around the that has been selected
+     * @param canvas
+     */
     public void drawSelected(Canvas canvas){
-        if (selectedSquare == null) return;
 
+        if (selectedSquare == null) return;
         int selectedColor = 0xFF00FFFF;
 
-        float left;
+        float left = switchLogicToGraphic(selectedSquare).getCol();
         float top = (selectedSquare.getRow() + (float)0.5) * cellDimensions;
 
 
@@ -277,16 +288,20 @@ public class ShogiGUI extends View {
 
         drawCricle(canvas, selectedColor,left, top);
 
-
     }
 
-
+    /**
+     * Draws white semitransparent squares from where to where a piece
+     * has moved in the previous move
+     * @param canvas
+     */
     public void drawPriorMove(Canvas canvas){
         if(priorOrig == null || priorTarget == null) return;
         Paint paintPrior = new Paint();
-        paintPrior.setColor(0xA0FFFFFF);
+        paintPrior.setColor(0x90FFFFFF);
+
         float left = switchLogicToGraphic(priorOrig).getCol() * cellDimensions;
-        float top = switchLogicToGraphic(priorOrig).getRow()* cellDimensions;
+        float top = switchLogicToGraphic(priorOrig).getRow() * cellDimensions;
         canvas.drawRect(left, top, left+cellDimensions, top+cellDimensions, paintPrior);
 
         left = switchLogicToGraphic(priorTarget).getCol()* cellDimensions;
@@ -295,20 +310,29 @@ public class ShogiGUI extends View {
 
     }
 
+    /**
+     * draws white circles on all the squares where a
+     * selected piece can move to
+     * @param canvas
+     */
     public void drawPossibleMoves(Canvas canvas){
-        if(possibleMoves == null) return;
-        int possibleColor = 0xFFFF0000;
+        if(selectedSquare == null || possibleMoves == null) return;
+        int possibleMoveColor = 0xFFFFFFFF;
 
         for (ShogiSquare move : possibleMoves){
 
             float left= (move.getCol() + (float)1.5) * cellDimensions;
             float top = (move.getRow() + (float)0.5) * cellDimensions;
 
-            drawCricle(canvas, possibleColor,left, top);
+            drawCricle(canvas, possibleMoveColor,left, top);
 
         }
     }
 
+    /**
+     * draws a red circle around the King if it has been checked
+     * @param canvas
+     */
     public void drawCheck(Canvas canvas){
 
     }
@@ -441,7 +465,10 @@ public class ShogiGUI extends View {
      * https://stackoverflow.com/a/29982596
      *Solution: I used the example code from this answer.
      */
-    // rotates bitmap 180 degrees to be used as a "enemy" piece
+    /**
+     * rotates bitmap 180 degrees to be used as a "enemy" piece
+     * @param source
+      */
     public static Bitmap flippedBitmap(Bitmap source)
     {
         Matrix matrix = new Matrix();
@@ -450,6 +477,11 @@ public class ShogiGUI extends View {
         return flipped;
     }
 
+    /**
+     * returns the right row on where a captured piece has to be drawn
+     * @param piece
+     * @return
+     */
     private int drawCaptured(ShogiPiece piece){
         // TODO: add a number onScreen to the captured piece depending how many pieces are on the field
         int row;
@@ -481,6 +513,12 @@ public class ShogiGUI extends View {
         return row;
     }
 
+    /**
+     * checks if the Bitmap of a piece has to its promoted version
+     * @param prom
+     * @param piece
+     * @param arrayPosition
+     */
     private void checkPromoteBitmap(Boolean prom, ShogiPiece piece, int arrayPosition){
         switch (piece.getType()) {
             case Rook:
@@ -511,6 +549,11 @@ public class ShogiGUI extends View {
         }
     }
 
+    /**
+     * flips a piece if it is the opponents piece (player 1 in this case)
+     * @param owner
+     * @param arrayPosition
+     */
     private void checkOwnerBitmap(int owner, int arrayPosition){
         if(owner == 1){
             scaledBitmaps.set(arrayPosition, flippedBitmap(scaledBitmaps.get(arrayPosition)));
@@ -524,6 +567,11 @@ public class ShogiGUI extends View {
         }
     } */
 
+    /**
+     * simplifies the scaling of a singular Bitmap
+     * @param toScale
+     * @return
+     */
     private Bitmap scaleBitmap(Bitmap toScale){
         return Bitmap.createScaledBitmap(toScale, (int) cellDimensions, (int) cellDimensions, true);
     }
