@@ -176,4 +176,9 @@ public class ShogiPiece {
     public void setPosition(ShogiSquare position) {
         this.position = position;
     }
+
+    @Override
+    public String toString() {
+        return this.type.toString() + " at " + this.position;
+    }
 }

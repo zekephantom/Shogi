@@ -18,6 +18,7 @@ import edu.up.cs301.GameFramework.infoMessage.GameState;
  */
 public class ShogiState extends GameState {
 
+
 	// Instance variables
 	// List of all active pieces on the board
 	private ArrayList<ShogiPiece> pieces;
@@ -705,7 +706,7 @@ public class ShogiState extends GameState {
 	 * @return True if the move is successful, false otherwise.
 	 */
 	public boolean movePawn(ShogiMoveAction action, boolean finalizeMove) {
-		ShogiPiece piece = action.getPiece();
+		ShogiPiece piece = getPiece(action.getPiece().getPosition());
 		if (piece.getType() != ShogiPiece.PieceType.Pawn || piece.getOwner() != currentPlayer) {
 			return false;
 		}
@@ -739,7 +740,7 @@ public class ShogiState extends GameState {
 		}
 
 		// Check for capturing own piece
-		ShogiPiece targetPiece = getPiece(new ShogiSquare(targetRow, targetCol));
+		ShogiPiece targetPiece = getPiece(targetPosition);
 		if (targetPiece != null && targetPiece.getOwner() == currentPlayer) {
 			return false;
 		}
@@ -798,7 +799,8 @@ public class ShogiState extends GameState {
 		if (action instanceof ShogiMoveAction) {
 			// Handle move actions
 			ShogiMoveAction moveAction = (ShogiMoveAction) action;
-			ShogiPiece piece = moveAction.getPiece();
+			ShogiPiece piece = getPiece(moveAction.getPiece().getPosition());
+
 
 			// Ensure the piece belongs to the current player
 			if (piece.getOwner() != currentPlayer) {

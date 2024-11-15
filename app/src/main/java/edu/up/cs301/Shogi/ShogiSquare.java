@@ -63,4 +63,9 @@ public class ShogiSquare {
 	public boolean equals(ShogiSquare other) {
 		return getRow() == other.getRow() && getCol() == other.getCol();
 	}
+
+	@Override
+	public String toString() {
+		return "" + row + "," + col;
+	}
 }
