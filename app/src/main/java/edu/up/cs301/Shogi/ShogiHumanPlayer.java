@@ -97,7 +97,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 					new Runnable() {
 						public void run() {
 							if (updatedState != null) {
-								//shogiBoard.setShogiState(updatedState);
+								shogiBoard.setShogiState(updatedState);
 
 								// when this is uncommented it doesnt work because the game
 								// state passed in is not properly initialized

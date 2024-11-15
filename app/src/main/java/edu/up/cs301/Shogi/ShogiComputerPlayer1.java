@@ -1,5 +1,6 @@
 package edu.up.cs301.Shogi;
 
+import edu.up.cs301.GameFramework.infoMessage.NotYourTurnInfo;
 import edu.up.cs301.GameFramework.players.GameComputerPlayer;
 import edu.up.cs301.GameFramework.infoMessage.GameInfo;
 import edu.up.cs301.GameFramework.utilities.Tickable;
@@ -12,7 +13,7 @@ import java.util.ArrayList;
  * @author Your Name
  * @version October 2024
  */
-public class ShogiComputerPlayer1 extends GameComputerPlayer implements Tickable {
+public class ShogiComputerPlayer1 extends GameComputerPlayer{
 
 	/**
 	 * Constructor for objects of class ShogiComputerPlayer1
@@ -22,10 +23,6 @@ public class ShogiComputerPlayer1 extends GameComputerPlayer implements Tickable
 	public ShogiComputerPlayer1(String name) {
 		// Invoke superclass constructor
 		super(name);
-
-		// Start the timer, ticking every second
-		getTimer().setInterval(1000);
-		getTimer().start();
 	}
 
 	/**
@@ -35,48 +32,33 @@ public class ShogiComputerPlayer1 extends GameComputerPlayer implements Tickable
 	 */
 	@Override
 	protected void receiveInfo(GameInfo info) {
-		// Currently not processing game state changes
-	}
-
-	/**
-	 * Callback method: the timer ticked
-	 */
-	protected void timerTicked() {
-		// Check if it's the AI's turn
 		ShogiState gameState = (ShogiState) game.getGameState();
-		if (gameState.getCurrentPlayer() != 1) return; // AI is Player 1
 
-		// Get all pieces that belong to the AI and are on the board
+		// if not our turn, return
+		if (gameState.getCurrentPlayer() != playerNum) return;
+
+
 		ArrayList<ShogiPiece> playerPieces = new ArrayList<>();
 		for (ShogiPiece piece : gameState.getPieces()) {
-			if (piece.getOwner() == 1 && piece.isOnBoard()) {
+			if (piece.getOwner() == playerNum && piece.isOnBoard()) {
 				playerPieces.add(piece);
 			}
 		}
 
-		// If there are no pieces to move, return
-		if (playerPieces.isEmpty()) return;
+		ArrayList<ShogiSquare> possibleMoves = new ArrayList<>();
 
-		// Choose a random piece from the player's pieces
+		while (possibleMoves.isEmpty()) {
+			// Choose a random piece from the player's pieces
+			ShogiPiece selectedPiece = playerPieces.get((int)(Math.random() * playerPieces.size()));
+			// Get all possible moves for the selected piece
+			possibleMoves = selectedPiece.getPossibleMoves(gameState);
+		}
+
 		ShogiPiece selectedPiece = playerPieces.get((int)(Math.random() * playerPieces.size()));
 
-		// Get all possible moves for the selected piece
-		ArrayList<ShogiSquare> possibleMoves = selectedPiece.getPossibleMoves(gameState);
+		ShogiSquare targetSquare = selectedPiece.getPossibleMoves(gameState).get((int)(Math.random() * selectedPiece.getPossibleMoves(gameState).size()));
 
-		// If there are no possible moves, return
-		if (possibleMoves.isEmpty()) return;
-
-		// Choose a random move from the available moves
-
-		ShogiSquare[] selectedMove = new ShogiSquare[]{
-				possibleMoves.get((int) (Math.random() * possibleMoves.size()))
-		};
-		ShogiSquare targetRow = selectedMove[0];
-		ShogiSquare targetCol = selectedMove[1];
-
-		// Create a move action and send it to the game
-		ShogiMoveAction moveAction = new ShogiMoveAction(this, selectedPiece, targetRow, targetCol);
+		ShogiMoveAction moveAction = new ShogiMoveAction(this, selectedPiece, targetSquare);
 		game.sendAction(moveAction);
-
 	}
 }
