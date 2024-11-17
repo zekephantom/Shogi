@@ -337,7 +337,7 @@ public class ShogiGUI extends View {
 
     }
 
-// -------------------------- Helper functions and initialiazation -----------------
+// -------------------------- Helper functions and initialization -----------------
 
     /**
      function that returns what square has been touched

@@ -156,14 +156,10 @@ public class ShogiState extends GameState {
 	 * @param piece The piece to capture.
 	 */
 	private void capturePiece(ShogiPiece piece) {
+		piece.setOwner(currentPlayer);
 		piece.setOnBoard(false);
-		piece.setPromoted(false);
-		//pieces.remove(piece);//TODO change the field on where the capt piece goes
-		//if (currentPlayer == 0) {
-		//	capturedPiecesPlayer0.add(piece);
-		//} else {
-		//	capturedPiecesPlayer1.add(piece);
-		//}
+		piece.setPromoted(false);//TODO change the field on where the capt piece goes
+
 	}
 
 	/**
@@ -295,7 +291,7 @@ public class ShogiState extends GameState {
 	 */
 	public boolean moveKing(ShogiMoveAction action, boolean finalizeMove) {
 		ShogiPiece piece = getPiece(action.getPiece().getPosition());
-		if (piece.getType() != ShogiPiece.PieceType.King || piece.getOwner() != currentPlayer) {
+		if (piece.getType() != ShogiPiece.PieceType.King || piece.getOwner() != currentPlayer || !piece.isOnBoard()) {
 			return false;
 		}
 
@@ -339,7 +335,7 @@ public class ShogiState extends GameState {
 	 */
 	public boolean moveRook(ShogiMoveAction action, boolean finalizeMove) {
 		ShogiPiece piece = getPiece(action.getPiece().getPosition());
-		if (piece.getType() != ShogiPiece.PieceType.Rook || piece.getOwner() != currentPlayer) {return false;}
+		if (piece.getType() != ShogiPiece.PieceType.Rook || piece.getOwner() != currentPlayer || !piece.isOnBoard()) {return false;}
 
 		int currentRow = piece.getPosition().getRow();
 		int currentCol = piece.getPosition().getCol();
@@ -392,7 +388,7 @@ public class ShogiState extends GameState {
 	 */
 	public boolean moveBishop(ShogiMoveAction action, boolean finalizeMove) {
 		ShogiPiece piece = getPiece(action.getPiece().getPosition());
-		if (piece.getType() != ShogiPiece.PieceType.Bishop || piece.getOwner() != currentPlayer) {return false;}
+		if (piece.getType() != ShogiPiece.PieceType.Bishop || piece.getOwner() != currentPlayer || !piece.isOnBoard()) {return false;}
 
 		int currentRow = piece.getPosition().getRow();
 		int currentCol = piece.getPosition().getCol();
@@ -453,7 +449,7 @@ public class ShogiState extends GameState {
 	 */
 	public boolean moveGoldGeneral(ShogiMoveAction action, boolean finalizeMove) {
 		ShogiPiece piece = getPiece(action.getPiece().getPosition());
-		if (piece.getType() != ShogiPiece.PieceType.GoldGeneral || piece.getOwner() != currentPlayer) {return false;}
+		if (piece.getType() != ShogiPiece.PieceType.GoldGeneral || piece.getOwner() != currentPlayer || !piece.isOnBoard()) {return false;}
 
 		int currentRow = piece.getPosition().getRow();
 		int currentCol = piece.getPosition().getCol();
@@ -518,7 +514,7 @@ public class ShogiState extends GameState {
 	 */
 	public boolean moveSilverGeneral(ShogiMoveAction action, boolean finalizeMove) {
 		ShogiPiece piece = getPiece(action.getPiece().getPosition());
-		if (piece.getType() != ShogiPiece.PieceType.SilverGeneral || piece.getOwner() != currentPlayer) {
+		if (piece.getType() != ShogiPiece.PieceType.SilverGeneral || piece.getOwner() != currentPlayer || !piece.isOnBoard()) {
 			return false;
 		}
 		int currentRow = piece.getPosition().getRow();
@@ -579,7 +575,7 @@ public class ShogiState extends GameState {
 	 */
 	public boolean moveKnight(ShogiMoveAction action, boolean finalizeMove) {
 		ShogiPiece piece = getPiece(action.getPiece().getPosition());
-		if (piece.getType() != ShogiPiece.PieceType.Knight || piece.getOwner() != currentPlayer) {
+		if (piece.getType() != ShogiPiece.PieceType.Knight || piece.getOwner() != currentPlayer || !piece.isOnBoard()) {
 			return false;
 		}
 
@@ -652,7 +648,7 @@ public class ShogiState extends GameState {
 	 */
 	public boolean moveLance(ShogiMoveAction action, boolean finalizeMove) {
 		ShogiPiece piece = getPiece(action.getPiece().getPosition());
-		if (piece.getType() != ShogiPiece.PieceType.Lance || piece.getOwner() != currentPlayer) {
+		if (piece.getType() != ShogiPiece.PieceType.Lance || piece.getOwner() != currentPlayer || !piece.isOnBoard()) {
 			return false;
 		}
 
@@ -707,7 +703,7 @@ public class ShogiState extends GameState {
 	 */
 	public boolean movePawn(ShogiMoveAction action, boolean finalizeMove) {
 		ShogiPiece piece = getPiece(action.getPiece().getPosition());
-		if (piece.getType() != ShogiPiece.PieceType.Pawn || piece.getOwner() != currentPlayer) {
+		if (piece.getType() != ShogiPiece.PieceType.Pawn || piece.getOwner() != currentPlayer || !piece.isOnBoard()) {
 			return false;
 		}
 
@@ -1087,10 +1083,11 @@ public class ShogiState extends GameState {
 	 * @param piece The piece to update the possibleMoves ArrayList
 	 */
 	private void updatePossibleMoves(ShogiPiece piece) {
-		//if (piece.getOwner() != currentPlayer) {
-        //    return;
-        //}
 		ArrayList<ShogiSquare> possibleMoves = new ArrayList<>();
+		if (!piece.isOnBoard()) {
+			piece.setPossibleMoves(possibleMoves);
+            return;
+        }
 		switch (piece.getType()) {
 			case King:
 				for (int x = -1; x <= 1; x++) {
@@ -1127,7 +1124,7 @@ public class ShogiState extends GameState {
 
 					if (x == 0) {
 						for (int y = -8; y <= 8; y++) {
-							targetPosition = new ShogiSquare(piece.getPosition().getRow() + x, piece.getPosition().getCol());
+							targetPosition = new ShogiSquare(piece.getPosition().getRow() + x, piece.getPosition().getCol() + y);
 							checkMove = new ShogiMoveAction(null, piece, targetPosition);
 
 							if (moveRook(checkMove, false)) {
