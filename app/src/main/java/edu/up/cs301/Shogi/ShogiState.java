@@ -279,7 +279,7 @@ public class ShogiState extends GameState {
 			}
 			row += rowDirection;
 			col += colDirection;
-			if (getPiece(new ShogiSquare(row, col)).getOwner() != currentPlayer) {
+			if (getPiece(new ShogiSquare(row, col)) != null && getPiece(new ShogiSquare(row, col)).getOwner() != currentPlayer) {
 				return false;
 			}
 		}
@@ -627,7 +627,7 @@ public class ShogiState extends GameState {
 					// Knights can jump over pieces, so no need to check for path obstructions
 					// Check if target square has own piece
 					ShogiPiece targetPiece = getPiece(targetPosition);
-					if (targetPiece.isOnBoard() && targetPiece.getOwner() == currentPlayer) {
+					if (targetPiece != null && targetPiece.isOnBoard() && targetPiece.getOwner() == currentPlayer) {
 						return false;
 					}
 					if (finalizeMove) {
@@ -810,21 +810,69 @@ public class ShogiState extends GameState {
 			// Delegate to the specific move method based on piece type
 			switch (piece.getType()) {
 				case King:
-					return moveKing(moveAction, true);
+					if (moveKing(moveAction, true)) {
+						for (ShogiPiece updatePiece : pieces) {
+							updatePossibleMoves(updatePiece);
+						}
+						return true;
+					}
+					return false;
 				case Rook:
-					return moveRook(moveAction, true);
+					if (moveRook(moveAction, true)) {
+						for (ShogiPiece updatePiece : pieces) {
+							updatePossibleMoves(updatePiece);
+						}
+						return true;
+					}
+					return false;
 				case Bishop:
-					return moveBishop(moveAction, true);
+					if (moveBishop(moveAction, true)) {
+						for (ShogiPiece updatePiece : pieces) {
+							updatePossibleMoves(updatePiece);
+						}
+						return true;
+					}
+					return false;
 				case GoldGeneral:
-					return moveGoldGeneral(moveAction, true);
+					if (moveGoldGeneral(moveAction, true)) {
+						for (ShogiPiece updatePiece : pieces) {
+							updatePossibleMoves(updatePiece);
+						}
+						return true;
+					}
+					return false;
 				case SilverGeneral:
-					return moveSilverGeneral(moveAction, true);
+					if (moveSilverGeneral(moveAction, true)) {
+						for (ShogiPiece updatePiece : pieces) {
+							updatePossibleMoves(updatePiece);
+						}
+						return true;
+					}
+					return false;
 				case Knight:
-					return moveKnight(moveAction, true);
+					if (moveKnight(moveAction, true)) {
+						for (ShogiPiece updatePiece : pieces) {
+							updatePossibleMoves(updatePiece);
+						}
+						return true;
+					}
+					return false;
 				case Lance:
-					return moveLance(moveAction, true);
+					if (moveLance(moveAction, true)) {
+						for (ShogiPiece updatePiece : pieces) {
+							updatePossibleMoves(updatePiece);
+						}
+						return true;
+					}
+					return false;
 				case Pawn:
-					return movePawn(moveAction, true);
+					if (movePawn(moveAction, true)) {
+						for (ShogiPiece updatePiece : pieces) {
+							updatePossibleMoves(updatePiece);
+						}
+						return true;
+					}
+					return false;
 				default:
 					return false;
 			}
@@ -835,9 +883,7 @@ public class ShogiState extends GameState {
 			// Delegate to the dropPiece method
 			return dropPiece(dropAction);
 		}
-		for (ShogiPiece piece : pieces) {
-			updatePossibleMoves(piece);
-		}
+
 
 		// If action is neither a move nor a drop, return false
 		return false;
@@ -1041,9 +1087,9 @@ public class ShogiState extends GameState {
 	 * @param piece The piece to update the possibleMoves ArrayList
 	 */
 	private void updatePossibleMoves(ShogiPiece piece) {
-		if (piece.getOwner() != currentPlayer) {
-            return;
-        }
+		//if (piece.getOwner() != currentPlayer) {
+        //    return;
+        //}
 		ArrayList<ShogiSquare> possibleMoves = new ArrayList<>();
 		switch (piece.getType()) {
 			case King:
