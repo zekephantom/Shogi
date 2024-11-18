@@ -12,9 +12,6 @@ import android.util.Log;
  * @version July 2013
  */
 public class ShogiLocalGame extends LocalGame {
-
-	public static final int TARGET_MAGNITUDE = 10;
-
 	// the game's state
 	private ShogiState gameState;
 	
