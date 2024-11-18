@@ -273,11 +273,13 @@ public class ShogiState extends GameState {
 					return true;
 				}
 			}
+			if (getPiece(new ShogiSquare(row - rowDirection, col - colDirection)) != null && getPiece(new ShogiSquare(row - rowDirection, col - colDirection)).isOnBoard()) {
+				if (getPiece(new ShogiSquare(row - rowDirection, col - colDirection)).getOwner() != currentPlayer) {
+					return true;
+				}
+			}
 			row += rowDirection;
 			col += colDirection;
-			if (getPiece(new ShogiSquare(row, col)) != null && getPiece(new ShogiSquare(row, col)).getOwner() != currentPlayer) {
-				return false;
-			}
 		}
 		return false;
 	}
