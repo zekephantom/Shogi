@@ -236,9 +236,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 					shogiBoard.setPriorMoveSquares(selectedPiece.getPosition(), gridTouched);
 				}
 				selectedPiece = state.getPiece(gridTouched);
-				// TODO: to make sure that selection also works for captured
-				// 	pieces we have to logically put them in the right location
-				//  when being captured within the shogiState
+
 				if (selectedPiece != null) {
 
 					shogiBoard.setSelected(gridTouched);
