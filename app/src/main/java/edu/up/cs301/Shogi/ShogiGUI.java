@@ -328,13 +328,14 @@ public class ShogiGUI extends View {
     public void drawCheck(Canvas canvas){
         int checkColor = 0xFFFF0000;
         ShogiSquare king;
-        if(shogiState.isKingInCheck(shogiState.getCurrentPlayer())){
-            if (shogiState.getCurrentPlayer() == 0) {
-                king = shogiState.getPieces().get(4).getPosition();
-            }
-            else {
-                king = shogiState.getPieces().get(36).getPosition();
-            }
+        if (shogiState.isKingInCheck(shogiState.getCurrentPlayer())){
+            king = shogiState.getPieces().get(4).getPosition();
+            float left = (king.getCol() + (float)1.5) * cellDimensions;
+            float top = (king.getRow() + (float)0.5) * cellDimensions;
+            drawCricle(canvas, checkColor,left, top);
+        }
+        if (shogiState.isKingInCheck(1 - shogiState.getCurrentPlayer())) {
+            king = shogiState.getPieces().get(24).getPosition();
             float left = (king.getCol() + (float)1.5) * cellDimensions;
             float top = (king.getRow() + (float)0.5) * cellDimensions;
             drawCricle(canvas, checkColor,left, top);

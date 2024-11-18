@@ -1367,7 +1367,7 @@ public class ShogiState extends GameState {
 			king = pieces.get(4);
 		}
 		else {
-			king = pieces.get(36);
+			king = pieces.get(24);
 		}
 
 		if (king == null) {
@@ -1422,6 +1422,9 @@ public class ShogiState extends GameState {
 					for (ShogiSquare opponentMove : opponentsPossibleMoves) {
 						if (opponentMove.equals(kingMove)) {
 							kingLegalMovesChecked[i] = true; // The move at index i is checked by an opponent piece
+							if (i == kingsPossibleMoves.size()) {
+								break;
+							}
 						}
 					}
 				}
