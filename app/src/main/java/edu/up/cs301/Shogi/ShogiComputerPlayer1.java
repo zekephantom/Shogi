@@ -26,6 +26,14 @@ public class ShogiComputerPlayer1 extends GameComputerPlayer{
 	}
 
 	/**
+	 * Gets the player number for this player
+	 */
+	public int getPlayerNum() {
+		return playerNum;
+	}
+
+
+	/**
 	 * Callback method -- the game's state has changed
 	 *
 	 * @param info The information received from the game state

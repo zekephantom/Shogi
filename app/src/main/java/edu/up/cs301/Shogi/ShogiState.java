@@ -158,7 +158,7 @@ public class ShogiState extends GameState {
 	private void capturePiece(ShogiPiece piece) {
 		piece.setOwner(currentPlayer);
 		piece.setOnBoard(false);
-		piece.setPromoted(false);//TODO change the field on where the capt piece goes
+		piece.setPromoted(false);
 
 	}
 
@@ -320,14 +320,15 @@ public class ShogiState extends GameState {
 			return false;
 		}
 		if (getPiece(targetPosition) != null) {
-			if (getPiece(targetPosition).getOwner() == getCurrentPlayer()){
+			if (getPiece(targetPosition).getOwner() == piece.getOwner()){
 				return false;
 			}
 		}
+
 		// go through each piece
 		for (int i = 0; i < pieces.size(); i++) {
 			ShogiPiece curPiece = pieces.get(i);
-			if (curPiece.getOwner() != getCurrentPlayer() && curPiece.getType() != ShogiPiece.PieceType.King && curPiece.isOnBoard()) {
+			if (curPiece.getOwner() != piece.getOwner() && curPiece.getType() != ShogiPiece.PieceType.King && curPiece.isOnBoard()) {
 				updatePossibleMoves(curPiece);
 				// go through each possible move for the current piece
 				for (ShogiSquare possibleMove : curPiece.getPossibleMoves()) {
@@ -386,7 +387,7 @@ public class ShogiState extends GameState {
 			return false;
 		}
 		if (getPiece(targetPosition) != null) {
-			if (getPiece(targetPosition).getOwner() == getCurrentPlayer()){
+			if (getPiece(targetPosition).getOwner() == piece.getOwner()){
 				return false;
 			}
 		}
@@ -451,7 +452,7 @@ public class ShogiState extends GameState {
 			return false;
 		}
 		if (getPiece(targetPosition) != null) {
-			if (getPiece(targetPosition).getOwner() == getCurrentPlayer()){
+			if (getPiece(targetPosition).getOwner() == piece.getOwner()){
 				return false;
 			}
 		}
@@ -521,7 +522,7 @@ public class ShogiState extends GameState {
 			return false;
 		}
 		if (getPiece(targetPosition) != null) {
-			if (getPiece(targetPosition).getOwner() == getCurrentPlayer()){
+			if (getPiece(targetPosition).getOwner() == piece.getOwner()){
 				return false;
 			}
 		}
@@ -595,7 +596,7 @@ public class ShogiState extends GameState {
 			return false;
 		}
 		if (getPiece(targetPosition) != null) {
-			if (getPiece(targetPosition).getOwner() == getCurrentPlayer()){
+			if (getPiece(targetPosition).getOwner() == piece.getOwner()){
 				return false;
 			}
 		}
@@ -666,7 +667,7 @@ public class ShogiState extends GameState {
 			return false;
 		}
 		if (getPiece(targetPosition) != null) {
-			if (getPiece(targetPosition).getOwner() == getCurrentPlayer()){
+			if (getPiece(targetPosition).getOwner() == piece.getOwner()){
 				return false;
 			}
 		}
@@ -747,7 +748,7 @@ public class ShogiState extends GameState {
 			return false;
 		}
 		if (getPiece(targetPosition) != null) {
-			if (getPiece(targetPosition).getOwner() == getCurrentPlayer()){
+			if (getPiece(targetPosition).getOwner() == piece.getOwner()){
 				return false;
 			}
 		}
@@ -810,7 +811,7 @@ public class ShogiState extends GameState {
 			return false;
 		}
 		if (getPiece(targetPosition) != null) {
-			if (getPiece(targetPosition).getOwner() == getCurrentPlayer()){
+			if (getPiece(targetPosition).getOwner() == piece.getOwner()){
 				return false;
 			}
 		}
@@ -988,8 +989,20 @@ public class ShogiState extends GameState {
 	 * Solution: Structured the method to return true if the action matches the current player; added a TODO to refine the actual check.
 	 */
 	public boolean isActionFromCurrentPlayer(GameAction action) {
-		return true; // TODO: finish implementing this block of code, should not return true
-	}
+		if (action.getPlayer() instanceof ShogiHumanPlayer) {
+			ShogiHumanPlayer player = (ShogiHumanPlayer) action.getPlayer();
+			return player.getPlayerNum() == currentPlayer;
+		}
+		else if (action.getPlayer() instanceof ShogiComputerPlayer1) {
+			ShogiComputerPlayer1 player = (ShogiComputerPlayer1) action.getPlayer();
+			return player.getPlayerNum() == currentPlayer;
+		}
+		else if (action.getPlayer() instanceof ShogiComputerPlayer2) {
+			ShogiComputerPlayer2 player = (ShogiComputerPlayer2) action.getPlayer();
+			return player.getPlayerNum() == currentPlayer;
+		}
+        return false;
+    }
 
 
 	// TODO: Decide whether or not to use this block of code; commented for now

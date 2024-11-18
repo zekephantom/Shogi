@@ -41,8 +41,16 @@ public class ShogiComputerPlayer2 extends ShogiComputerPlayer1 {
 	public ShogiComputerPlayer2(String name) {
 		super(name);
 	}
-	
-    /**
+
+	/**
+	 * Gets the player number for this player
+	 */
+	public int getPlayerNum() {
+		return playerNum;
+	}
+
+
+	/**
      * callback method--game's state has changed
      * 
      * @param info

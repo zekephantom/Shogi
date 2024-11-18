@@ -88,6 +88,13 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 	}
 
 	/**
+	 * Gets the player number for this player
+	 */
+	public int getPlayerNum() {
+		return playerNum;
+	}
+
+	/**
 	 * Updates the display based on the current game state.
 	 */
 	protected void updateDisplay(ShogiState updatedState) {
@@ -171,7 +178,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 		shogiBoard.setOnTouchListener(this);
 
 
-		// TODO: add switchListeners for englisch/japanese
+		// TODO: add switchListeners for english/japanese
 		// TODO: quit button
 
 		Button quit = myActivity.findViewById(R.id.butQuit);
