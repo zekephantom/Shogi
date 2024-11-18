@@ -171,7 +171,7 @@ public class ShogiGUI extends View {
         drawBoard(canvas);
         drawPriorMove(canvas);
         drawSelected(canvas);
-        drawPossibleMoves(canvas);// TODO
+        drawPossibleMoves(canvas);
         drawCheck(canvas);// TODO
         drawPieces(canvas);
     }
@@ -276,18 +276,10 @@ public class ShogiGUI extends View {
         if (selectedSquare == null) return;
         int selectedColor = 0xFF00FFFF;
 
-        float left = switchLogicToGraphic(selectedSquare).getCol();
+        float left = (switchLogicToGraphic(selectedSquare).getCol() + (float)0.5) * cellDimensions;
         float top = (selectedSquare.getRow() + (float)0.5) * cellDimensions;
 
-
-        // Checks if it is selecting a captured piece from player 1 which is stored in col 9
-        // but printed in col 0
-        if (selectedSquare.getCol() == 9) left = (float)0.5 * cellDimensions;
-        else if (selectedSquare.getCol() == 10) left = (selectedSquare.getCol() + (float)0.5) * cellDimensions;
-        else left = (selectedSquare.getCol() + (float)1.5) * cellDimensions;
-
         drawCricle(canvas, selectedColor,left, top);
-
     }
 
     /**
@@ -304,8 +296,8 @@ public class ShogiGUI extends View {
         float top = switchLogicToGraphic(priorOrig).getRow() * cellDimensions;
         canvas.drawRect(left, top, left+cellDimensions, top+cellDimensions, paintPrior);
 
-        left = switchLogicToGraphic(priorTarget).getCol()* cellDimensions;
-        top = switchLogicToGraphic(priorTarget).getRow()* cellDimensions;
+        left = switchLogicToGraphic(priorTarget).getCol() * cellDimensions;
+        top = switchLogicToGraphic(priorTarget).getRow() * cellDimensions;
         canvas.drawRect(left, top, left+cellDimensions, top+cellDimensions, paintPrior);
 
     }
@@ -321,7 +313,7 @@ public class ShogiGUI extends View {
 
         for (ShogiSquare move : possibleMoves){
 
-            float left= (move.getCol() + (float)1.5) * cellDimensions;
+            float left = (move.getCol() + (float)1.5) * cellDimensions;
             float top = (move.getRow() + (float)0.5) * cellDimensions;
 
             drawCricle(canvas, possibleMoveColor,left, top);
@@ -334,7 +326,19 @@ public class ShogiGUI extends View {
      * @param canvas
      */
     public void drawCheck(Canvas canvas){
-
+        int checkColor = 0xFFFF0000;
+        ShogiSquare king;
+        if(shogiState.isKingInCheck(shogiState.getCurrentPlayer())){
+            if (shogiState.getCurrentPlayer() == 0) {
+                king = shogiState.getPieces().get(4).getPosition();
+            }
+            else {
+                king = shogiState.getPieces().get(36).getPosition();
+            }
+            float left = (king.getCol() + (float)1.5) * cellDimensions;
+            float top = (king.getRow() + (float)0.5) * cellDimensions;
+            drawCricle(canvas, checkColor,left, top);
+        }
     }
 
 // -------------------------- Helper functions and initialization -----------------
