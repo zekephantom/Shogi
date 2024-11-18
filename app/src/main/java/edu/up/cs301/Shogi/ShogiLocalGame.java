@@ -89,6 +89,12 @@ public class ShogiLocalGame extends LocalGame {
 	 */
 	@Override
 	protected String checkIfGameOver() {
+		if (gameState.isCheckmate(1 - gameState.getCurrentPlayer())) {
+			return "Player " +  (1 - gameState.getCurrentPlayer()) + " has won.";
+		}
+		if (gameState.isCheckmate(gameState.getCurrentPlayer())) {
+			return "Player " +  (gameState.getCurrentPlayer()) + " has won.";
+		}
 		return null;
 	}
 
