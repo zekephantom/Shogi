@@ -13,8 +13,6 @@ import android.util.Log;
  */
 public class ShogiLocalGame extends LocalGame {
 
-	public static final int TARGET_MAGNITUDE = 10;
-
 	// the game's state
 	private ShogiState gameState;
 	
@@ -40,9 +38,7 @@ public class ShogiLocalGame extends LocalGame {
 		super.state = state;
 	}
 
-	/**
-	 *
-	 */
+
 	@Override
 	protected boolean makeMove(GameAction action) {
 		// Get the player who initiated the action
