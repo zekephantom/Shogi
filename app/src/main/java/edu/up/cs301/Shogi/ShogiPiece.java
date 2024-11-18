@@ -113,7 +113,7 @@ public class ShogiPiece {
         return promoted;
     }
 
-    public ArrayList<ShogiSquare> getPossibleMoves(GameState gameState){
+    public ArrayList<ShogiSquare> getPossibleMoves(){
         return possibleMoves;
     }
 

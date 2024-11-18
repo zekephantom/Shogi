@@ -255,7 +255,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 				if (selectedPiece != null) {
 
 					shogiBoard.setSelected(gridTouched);
-					piecePossibleMoves = selectedPiece.getPossibleMoves(state);
+					piecePossibleMoves = selectedPiece.getPossibleMoves();
 					shogiBoard.setPossibleMoves(piecePossibleMoves);
 					pieceIsSelected = true;
 					Log.d("Touch", "Piece getting selected");

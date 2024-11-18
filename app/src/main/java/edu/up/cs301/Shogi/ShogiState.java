@@ -1271,6 +1271,84 @@ public class ShogiState extends GameState {
 		piece.setPossibleMoves(possibleMoves);
 	}
 
+	public boolean isKingInCheck(int player) {
+		ShogiPiece king;
+		if (player == 0) {
+			king = pieces.get(4);
+		}
+		else {
+			king = pieces.get(36);
+		}
+
+		if (king == null) {
+			throw new IllegalStateException("King not found for player: " + player);
+		}
+
+		ShogiSquare kingPosition = king.getPosition();
+
+
+		// Check if any opponent's piece can attack the king
+		for (ShogiPiece piece : pieces) {
+			updatePossibleMoves(piece);
+			if (piece.getOwner() != player && piece.isOnBoard()) {
+				ArrayList<ShogiSquare> possibleMoves = piece.getPossibleMoves();
+
+				for (ShogiSquare move : possibleMoves) {
+					if (move.equals(kingPosition)) {
+						return true; // The king is in check
+					}
+				}
+			}
+		}
+
+		return false; // The king is not in check
+	}
+
+
+	public boolean isCheckmate(int player) {
+		if (!isKingInCheck(player)) {
+			return false; // Not in check, so not checkmate
+		}
+
+		// set king's possible moves based on player to check for
+		ArrayList <ShogiSquare> kingsPossibleMoves = new ArrayList<>();
+		if (player == 0) {
+			kingsPossibleMoves = pieces.get(4).getPossibleMoves();
+		}
+		else {
+			kingsPossibleMoves = pieces.get(36).getPossibleMoves();
+		}
+		boolean[] kingLegalMovesChecked = new boolean[kingsPossibleMoves.size()];
+		// go through all of the kings possible moves
+		for (int i = 0; i < kingsPossibleMoves.size(); i++) {
+			ShogiSquare kingMove = kingsPossibleMoves.get(i);
+			// go through all of the pieces
+			for (ShogiPiece piece : pieces) {
+				if (piece.getOwner() != player && piece.isOnBoard()) {
+					// store opponent piece's possible moves
+					ArrayList<ShogiSquare> possibleMoves = piece.getPossibleMoves();
+
+					// check if opponent piece's can move to the same square as the king can
+					for (ShogiSquare opponentMove : possibleMoves) {
+						if (opponentMove.equals(kingMove)) {
+							kingLegalMovesChecked[i] = true; // The move at index i is checked by an opponent piece
+						}
+					}
+				}
+			}
+		}
+		boolean checkmate = true;
+		// if any if the possible moves are not checked, its not checkmate
+        for (boolean b : kingLegalMovesChecked) {
+            if (!b) {
+                checkmate = false;
+                break;
+            }
+        }
+
+		return checkmate;
+	}
+
 
 	@Override
 	public String toString() {
