@@ -785,6 +785,13 @@ public class ShogiState extends GameState {
 	 */
 	public boolean movePawn(ShogiMoveAction action, boolean finalizeMove) {
 		ShogiPiece piece = getPiece(action.getPiece().getPosition());
+		/**
+		 * External Citation
+		 * Date: 15 November 2024
+		 * Problem: A copy of the game state is being changed, but not the original game state
+		 * Resource: Professor Andrew Nuxoll
+		 * Solution: Added 'ShogiPiece piece = getPiece(action.GetPiece().getPosition());
+		 */
 		if (piece == null) return false;
 		// check if the piece we are trying to move is owned by the currentPlayer if finalizeMove is true
 		if (finalizeMove) {
@@ -828,6 +835,13 @@ public class ShogiState extends GameState {
 
 		// Check for capturing own piece
 		ShogiPiece targetPiece = getPiece(targetPosition);
+		/**
+		 * External Citation
+		 * Date: 15 November 2024
+		 * Problem: A copy of the game state is being changed, but not the original game state
+		 * Resource: Professor Andrew Nuxoll
+		 * Solution: Added 'ShogiPiece targetPiece = getPiece(targetPosition);'
+		 */
 		if (targetPiece != null && targetPiece.getOwner() == currentPlayer) {
 			return false;
 		}

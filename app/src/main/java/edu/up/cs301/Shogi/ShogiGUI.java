@@ -28,7 +28,6 @@ import edu.up.cs301.shogi.R;
  * ShogiRenderer renders the board and pieces based on the state of ShogiBoard.
  */
 public class ShogiGUI extends View {
-    // TODO: check if private is the right access modifier for the Bitmap
     private ShogiState shogiState;
     private Context contextLocal;
     private List<Bitmap> scaledBitmaps = new ArrayList<>();
@@ -172,7 +171,7 @@ public class ShogiGUI extends View {
         drawPriorMove(canvas);
         drawSelected(canvas);
         drawPossibleMoves(canvas);
-        drawCheck(canvas);// TODO
+        drawCheck(canvas);
         drawPieces(canvas);
     }
 
@@ -190,8 +189,8 @@ public class ShogiGUI extends View {
         Paint paintCapturedField = new Paint();
         paintBlack.setColor(Color.BLACK);
         paintBlack.setStrokeWidth(4);
-        paintBackground.setColor(0xFF926211);
-        paintCapturedField.setColor(0xa3d3d3d3);
+        paintBackground.setColor(0xFF926211); // brown
+        paintCapturedField.setColor(0xa3d3d3d3); // grey
 
         // add background
         canvas.drawRect(0,0,width,height, paintBlack);
@@ -274,7 +273,7 @@ public class ShogiGUI extends View {
     public void drawSelected(Canvas canvas){
 
         if (selectedSquare == null) return;
-        int selectedColor = 0xFF00FFFF;
+        int selectedColor = 0xFF00FFFF; // cyan
 
         float left = (switchLogicToGraphic(selectedSquare).getCol() + (float)0.5) * cellDimensions;
         float top = (selectedSquare.getRow() + (float)0.5) * cellDimensions;
@@ -290,7 +289,7 @@ public class ShogiGUI extends View {
     public void drawPriorMove(Canvas canvas){
         if(priorOrig == null || priorTarget == null) return;
         Paint paintPrior = new Paint();
-        paintPrior.setColor(0x90FFFFFF);
+        paintPrior.setColor(0x90FFFFFF); // faint white
 
         float left = switchLogicToGraphic(priorOrig).getCol() * cellDimensions;
         float top = switchLogicToGraphic(priorOrig).getRow() * cellDimensions;
@@ -309,7 +308,7 @@ public class ShogiGUI extends View {
      */
     public void drawPossibleMoves(Canvas canvas){
         if(selectedSquare == null || possibleMoves == null) return;
-        int possibleMoveColor = 0xFFFFFFFF;
+        int possibleMoveColor = 0xFFFFFFFF; // white
 
         for (ShogiSquare move : possibleMoves){
 
@@ -326,7 +325,7 @@ public class ShogiGUI extends View {
      * @param canvas
      */
     public void drawCheck(Canvas canvas){
-        int checkColor = 0xFFFF0000;
+        int checkColor = 0xFFFF0000; // red
         ShogiSquare king;
         if (shogiState.isKingInCheck(shogiState.getCurrentPlayer())){
             king = shogiState.getPieces().get(4).getPosition();
