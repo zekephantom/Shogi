@@ -54,6 +54,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 
 	// the field the user touched on
 	private ShogiSquare gridTouched;
+	private ShogiSquare priorGridTouched;
 	private ShogiPiece selectedPiece;
 	private Boolean pieceIsSelected = false;
 	private ArrayList<ShogiSquare> piecePossibleMoves = new ArrayList<>();
@@ -91,18 +92,8 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 	 */
 	protected void updateDisplay(ShogiState updatedState) {
 
-		// copied from computer player 2, idk if we need a new thread here
-		if (guiHandler != null) {
-			guiHandler.post(
-					new Runnable() {
-						public void run() {
-							if (updatedState != null) {
-								shogiBoard.setShogiState(updatedState);
-
-								// when this is uncommented it doesnt work because the game
-								// state passed in is not properly initialized
-							}
-						}});
+		if (updatedState != null) {
+			shogiBoard.setShogiState(updatedState);
 		}
 
 	/* Code used for game state test
@@ -124,19 +115,12 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 
 		if (shogiBoard == null) return;
 
-		/*if (info instanceof IllegalMoveInfo || info instanceof NotYourTurnInfo) {
-			// if the move was out of turn or otherwise illegal, flash the screen
-			surfaceView.flash(Color.RED, 50);
-		}
-		else*/ if (!(info instanceof ShogiState))
-			// ignore the message if it's not a ShogiState message
+		if (!(info instanceof ShogiState))
 			return;
 		else {
 			this.state = (ShogiState)info;
 			updateDisplay(state);
 		}
-		// update our state; then update the display
-		if (this.state == null) Log.d("state", "State is null");
 	}
 	
 	/**
@@ -208,10 +192,13 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 		float x = motionEvent.getX();
 		float y = motionEvent.getY();
 
+
 		// Only checks the state if a new field is touched
 		// -> multiple onTouch calls during a single touch
 		if (gridTouched != shogiBoard.gridSelection(x,y)) {
+
 			// will return captured pieces being col 9, 10 for player 1, 0
+			if (gridTouched != null) priorGridTouched = new ShogiSquare(gridTouched);
 			gridTouched = shogiBoard.gridSelection(x, y);
 
 			if (gridTouched != null) {
@@ -227,7 +214,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 						ShogiMoveAction action = new ShogiMoveAction(this, selectedPiece, gridTouched);
 						game.sendAction(action);
 						Log.d("Touch", "Piece selected move valid");
-						shogiBoard.setPriorMoveSquares(selectedPiece.getPosition(), gridTouched);
+						shogiBoard.setPriorMoveSquares(priorGridTouched, gridTouched);
 
 						// reset the selected piece
 						selectedPiece = null;
