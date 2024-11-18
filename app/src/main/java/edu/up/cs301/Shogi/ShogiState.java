@@ -273,9 +273,13 @@ public class ShogiState extends GameState {
 					return true;
 				}
 			}
-			if (getPiece(new ShogiSquare(row - rowDirection, col - colDirection)) != null && getPiece(new ShogiSquare(row - rowDirection, col - colDirection)).isOnBoard()) {
-				if (getPiece(new ShogiSquare(row - rowDirection, col - colDirection)).getOwner() != currentPlayer) {
-					return true;
+			int nextRow = row - rowDirection;
+			int nextCol = col - colDirection;
+			if (nextRow >= 0 && nextCol >= 0) {
+				if (getPiece(new ShogiSquare(nextRow, nextCol)) != null && getPiece(new ShogiSquare(nextRow, nextCol)).isOnBoard()) {
+					if (getPiece(new ShogiSquare(nextRow, nextCol)).getOwner() != currentPlayer) {
+						return true;
+					}
 				}
 			}
 			row += rowDirection;
@@ -318,6 +322,20 @@ public class ShogiState extends GameState {
 		if (getPiece(targetPosition) != null) {
 			if (getPiece(targetPosition).getOwner() == getCurrentPlayer()){
 				return false;
+			}
+		}
+		// go through each piece
+		for (int i = 0; i < pieces.size(); i++) {
+			ShogiPiece curPiece = pieces.get(i);
+			if (curPiece.getOwner() != getCurrentPlayer() && curPiece.getType() != ShogiPiece.PieceType.King && curPiece.isOnBoard()) {
+				updatePossibleMoves(curPiece);
+				// go through each possible move for the current piece
+				for (ShogiSquare possibleMove : curPiece.getPossibleMoves()) {
+					// check if we are trying to move where an opponents piece can move to
+					if (targetPosition.equals(possibleMove)) {
+						return false;
+					}
+				}
 			}
 		}
 
@@ -766,6 +784,7 @@ public class ShogiState extends GameState {
 	 */
 	public boolean movePawn(ShogiMoveAction action, boolean finalizeMove) {
 		ShogiPiece piece = getPiece(action.getPiece().getPosition());
+		if (piece == null) return false;
 		// check if the piece we are trying to move is owned by the currentPlayer if finalizeMove is true
 		if (finalizeMove) {
 			if (piece.getType() != ShogiPiece.PieceType.Pawn || piece.getOwner() != currentPlayer || !piece.isOnBoard()) {
@@ -1387,7 +1406,7 @@ public class ShogiState extends GameState {
 			kingsPossibleMoves = pieces.get(4).getPossibleMoves();
 		}
 		else {
-			kingsPossibleMoves = pieces.get(36).getPossibleMoves();
+			kingsPossibleMoves = pieces.get(24).getPossibleMoves();
 		}
 		boolean[] kingLegalMovesChecked = new boolean[kingsPossibleMoves.size()];
 		// go through all of the kings possible moves
