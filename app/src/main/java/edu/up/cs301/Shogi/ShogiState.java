@@ -212,12 +212,12 @@ public class ShogiState extends GameState {
 
 		// Check for own piece at target
 		ShogiPiece targetPiece = getPiece(targetPosition);
-		if (targetPiece != null && targetPiece.getOwner() == currentPlayer) {
+		if (targetPiece != null && targetPiece.getOwner() == piece.getOwner()) {
 			return false;
 		}
 
 		// Handle capture
-		if (targetPiece != null && targetPiece.getOwner() != currentPlayer) {
+		if (targetPiece != null && targetPiece.getOwner() != piece.getOwner()) {
 			capturePiece(targetPiece);
 		}
 
@@ -269,7 +269,7 @@ public class ShogiState extends GameState {
 
 		while (row - rowDirection != targetPosition.getRow() || col - colDirection != targetPosition.getCol()) {
 			if (getPiece(new ShogiSquare(row, col)) != null && getPiece(new ShogiSquare(row, col)).isOnBoard()) {
-				if (getPiece(new ShogiSquare(row, col)).getOwner() == currentPlayer) {
+				if (getPiece(new ShogiSquare(row, col)).getOwner() == piece.getOwner()) {
 					return true;
 				}
 			}
@@ -277,7 +277,7 @@ public class ShogiState extends GameState {
 			int nextCol = col - colDirection;
 			if (nextRow >= 0 && nextCol >= 0) {
 				if (getPiece(new ShogiSquare(nextRow, nextCol)) != null && getPiece(new ShogiSquare(nextRow, nextCol)).isOnBoard()) {
-					if (getPiece(new ShogiSquare(nextRow, nextCol)).getOwner() != currentPlayer) {
+					if (getPiece(new ShogiSquare(nextRow, nextCol)).getOwner() != piece.getOwner()) {
 						return true;
 					}
 				}
@@ -697,7 +697,7 @@ public class ShogiState extends GameState {
 					// Knights can jump over pieces, so no need to check for path obstructions
 					// Check if target square has own piece
 					ShogiPiece targetPiece = getPiece(targetPosition);
-					if (targetPiece != null && targetPiece.isOnBoard() && targetPiece.getOwner() == currentPlayer) {
+					if (targetPiece != null && targetPiece.isOnBoard() && targetPiece.getOwner() == piece.getOwner()) {
 						return false;
 					}
 					if (finalizeMove) {
@@ -842,7 +842,7 @@ public class ShogiState extends GameState {
 		 * Resource: Professor Andrew Nuxoll
 		 * Solution: Added 'ShogiPiece targetPiece = getPiece(targetPosition);'
 		 */
-		if (targetPiece != null && targetPiece.getOwner() == currentPlayer) {
+		if (targetPiece != null && targetPiece.getOwner() == piece.getOwner()) {
 			return false;
 		}
 
