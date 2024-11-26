@@ -1097,7 +1097,7 @@ public class ShogiState extends GameState {
 	 * @return True if the drop is successful, false otherwise.
 	 */
 	public boolean dropPiece(ShogiDropAction action, boolean finalizeMove) {
-		ShogiPiece piece = action.getPieceToDrop();
+		ShogiPiece piece = getPiece(action.getPiece().getPosition());
 
 		// Verify that the current player owns the piece to drop
 		//ArrayList<ShogiPiece> capturedPieces = currentPlayer == 0 ? capturedPiecesPlayer0 : capturedPiecesPlayer1;

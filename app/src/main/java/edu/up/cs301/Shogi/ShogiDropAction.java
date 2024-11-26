@@ -32,4 +32,8 @@ public class ShogiDropAction extends GameAction {
     public ShogiSquare getTargetPosition() {
         return targetPosition;
     }
+
+    public ShogiPiece getPiece() {
+        return pieceToDrop;
+    }
 }
