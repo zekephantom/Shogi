@@ -78,6 +78,20 @@ public class ShogiComputerPlayer2 extends GameComputerPlayer {
 				}
 			}
 		}
+		ArrayList<ShogiSquare> possibleMoves = new ArrayList<>();
+		ShogiPiece selectedPiece = null;
+
+		while (possibleMoves.isEmpty()) {
+			// Choose a random piece from the player's pieces
+			selectedPiece = playerPieces.get((int)(Math.random() * playerPieces.size()));
+			// Get all possible moves for the selected piece
+			possibleMoves = selectedPiece.getPossibleMoves();
+		}
+
+		ShogiSquare targetSquare = selectedPiece.getPossibleMoves().get((int)(Math.random() * selectedPiece.getPossibleMoves().size()));
+
+		ShogiMoveAction moveAction = new ShogiMoveAction(this, selectedPiece, targetSquare);
+		game.sendAction(moveAction);
 
 	}
 }

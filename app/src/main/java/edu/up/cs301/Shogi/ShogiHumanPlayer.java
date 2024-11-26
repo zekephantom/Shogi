@@ -222,8 +222,11 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 				// drop action
 				if(!selectedPiece.isOnBoard()){
 
-					ShogiDropAction action = new ShogiDropAction(this, selectedPiece, gridTouched);
-					game.sendAction(action);
+					ShogiDropAction dropAction = new ShogiDropAction(this, selectedPiece, gridTouched);
+					if (state.dropPiece(dropAction, false)) {
+						game.sendAction(dropAction);
+					}
+
 					shogiBoard.setPriorMoveSquares(priorGridTouched, gridTouched);
 
 					// reset the selected piece
@@ -261,9 +264,19 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 				if (selectedPiece != null) {
 					shogiBoard.setPriorMoveSquares(selectedPiece.getPosition(), gridTouched);
 				}
-				selectedPiece = state.getPiece(gridTouched);
+
+				// get piece if there is a piece on the touched grid
+				if(gridTouched != null) selectedPiece = state.getPiece(gridTouched);
 
 				if (selectedPiece != null) {
+
+					// checks that only pieces from current user can be selected
+					if (selectedPiece.getOwner()==1){
+						//TODO make sure this works for Network play
+						selectedPiece = null;
+						return true;
+					}
+
 					shogiBoard.setSelected(gridTouched);
 					piecePossibleMoves = selectedPiece.getPossibleMoves();
 					shogiBoard.setPossibleMoves(piecePossibleMoves);
