@@ -25,7 +25,7 @@ import edu.up.cs301.GameFramework.utilities.FlashSurfaceView;
 import edu.up.cs301.shogi.R;
 
 /**
- * ShogiRenderer renders the board and pieces based on the state of ShogiBoard.
+ * ShogiGUI renders the board and pieces based on the state of ShogiBoard.
  */
 public class ShogiGUI extends View {
     private ShogiState shogiState;

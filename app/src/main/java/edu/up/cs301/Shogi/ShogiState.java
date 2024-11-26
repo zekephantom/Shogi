@@ -170,7 +170,8 @@ public class ShogiState extends GameState {
 	 */
 	public ShogiPiece getPiece(ShogiSquare position) {
 		for (ShogiPiece piece : pieces) {
-			if (piece.isOnBoard() && piece.getPosition().equals(position)) {
+			// isOnboard is not needed and breaks GUI selection for a captured piece
+			if (/*piece.isOnBoard() && */piece.getPosition().equals(position)) {
 				return piece;
 			}
 		}

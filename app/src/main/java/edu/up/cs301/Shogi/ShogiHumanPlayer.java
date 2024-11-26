@@ -199,6 +199,10 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 		float x = motionEvent.getX();
 		float y = motionEvent.getY();
 
+        // TODO end of game message
+		// TODO dropping function
+		// TODO not let human player select a enemy piece
+
 
 		// Only checks the state if a new field is touched
 		// -> multiple onTouch calls during a single touch
@@ -213,10 +217,25 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
             }
 
 			// Logic to get the possible move if a piece is selected
-			if (pieceIsSelected) { // drop action
-				// Check if the drop move is a legal move
-				for (ShogiSquare targetSquare : piecePossibleMoves) {
-					if (gridTouched.getRow() == targetSquare.getRow() && gridTouched.getCol() == targetSquare.getCol()) {
+			if (pieceIsSelected) {
+
+				// drop action
+				if(!selectedPiece.isOnBoard()){
+
+					ShogiDropAction action = new ShogiDropAction(this, selectedPiece, gridTouched);
+					game.sendAction(action);
+					shogiBoard.setPriorMoveSquares(priorGridTouched, gridTouched);
+
+					// reset the selected piece
+					selectedPiece = null;
+					shogiBoard.setSelected(null);
+					pieceIsSelected = false;
+					return true;
+
+				}
+				// create move action if legal
+				for (ShogiSquare possibleTargetSquare : piecePossibleMoves) {
+					if (gridTouched.getRow() == possibleTargetSquare.getRow() && gridTouched.getCol() == possibleTargetSquare.getCol()) {
 						// send move action here
 						ShogiMoveAction action = new ShogiMoveAction(this, selectedPiece, gridTouched);
 						game.sendAction(action);
@@ -238,14 +257,13 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 				shogiBoard.setSelected(null);
 				pieceIsSelected = false;
 
-			} else { // no piece currently selected
+			} else { // no piece currently selected ---------------
 				if (selectedPiece != null) {
 					shogiBoard.setPriorMoveSquares(selectedPiece.getPosition(), gridTouched);
 				}
 				selectedPiece = state.getPiece(gridTouched);
 
 				if (selectedPiece != null) {
-
 					shogiBoard.setSelected(gridTouched);
 					piecePossibleMoves = selectedPiece.getPossibleMoves();
 					shogiBoard.setPossibleMoves(piecePossibleMoves);
