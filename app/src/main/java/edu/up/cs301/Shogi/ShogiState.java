@@ -1,5 +1,6 @@
 package edu.up.cs301.Shogi;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import edu.up.cs301.GameFramework.actionMessage.GameAction;
@@ -16,7 +17,7 @@ import edu.up.cs301.GameFramework.infoMessage.GameState;
  *
  * @version November 2024
  */
-public class ShogiState extends GameState {
+public class ShogiState extends GameState implements Serializable {
 
 
 	// Instance variables

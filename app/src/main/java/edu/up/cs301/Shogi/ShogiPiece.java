@@ -1,5 +1,6 @@
 package edu.up.cs301.Shogi;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import edu.up.cs301.GameFramework.infoMessage.GameState;
@@ -16,7 +17,7 @@ import edu.up.cs301.GameFramework.infoMessage.GameState;
  * @author James Pham
  * @version November 2023
  */
-public class ShogiPiece {
+public class ShogiPiece implements Serializable {
     // Enum for the type of the piece
     /**
      * External Citation:

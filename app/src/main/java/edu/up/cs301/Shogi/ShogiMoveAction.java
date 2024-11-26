@@ -1,5 +1,7 @@
 package edu.up.cs301.Shogi;
 
+import java.io.Serializable;
+
 import edu.up.cs301.GameFramework.players.GamePlayer;
 import edu.up.cs301.GameFramework.actionMessage.GameAction;
 
@@ -13,7 +15,7 @@ import edu.up.cs301.GameFramework.actionMessage.GameAction;
  * @author Ezekiel Rafanan
  * @version October 2024
  */
-public class ShogiMoveAction extends GameAction {
+public class ShogiMoveAction extends GameAction implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private ShogiPiece piece;

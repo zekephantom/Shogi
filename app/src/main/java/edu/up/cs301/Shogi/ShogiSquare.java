@@ -1,5 +1,6 @@
 package edu.up.cs301.Shogi;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -15,7 +16,7 @@ import java.util.Objects;
  * @version November 2024
  */
 
-public class ShogiSquare {
+public class ShogiSquare implements Serializable {
 	private int row;
 	private int col;
 
