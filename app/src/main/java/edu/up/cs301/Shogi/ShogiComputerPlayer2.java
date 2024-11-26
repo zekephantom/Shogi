@@ -13,7 +13,6 @@ import java.util.Random;
 * @version September 2013
 */
 public class ShogiComputerPlayer2 extends GameComputerPlayer {
-
 	private Random rand = null;
 	/**
 	 * Constructor for objects of class ShogiComputerPlayer1
@@ -23,7 +22,6 @@ public class ShogiComputerPlayer2 extends GameComputerPlayer {
 	public ShogiComputerPlayer2(String name) {
 		// Invoke superclass constructor
 		super(name);
-
 		rand = new Random();
 	}
 
@@ -55,6 +53,26 @@ public class ShogiComputerPlayer2 extends GameComputerPlayer {
 			}
 		}
 
+		ShogiPiece king = null;
+		if (gameState.isKingInCheck(playerNum)) {
+			if (playerNum == 0) {
+				king = gameState.getPieces().get(4);
+			}
+			else {
+				king = gameState.getPieces().get(24);
+			}
+			for (int x = -1; x <= 1; x++) {
+				for (int y = -1; y <= 1; y++) {
+					ShogiSquare targetPosition = new ShogiSquare(king.getPosition().getRow() + x, king.getPosition().getCol() + y);
+					ShogiMoveAction checkMove = new ShogiMoveAction(this, king, targetPosition);
+
+					if (gameState.moveKing(checkMove, false)) {
+						game.sendAction(checkMove);
+					}
+				}
+			}
+		}
+
 		for (ShogiPiece selectedPiece : playerPieces) {
 			if (selectedPiece.isOnBoard()) {
 				ArrayList<ShogiSquare> possibleMoves = selectedPiece.getPossibleMoves();
@@ -78,17 +96,18 @@ public class ShogiComputerPlayer2 extends GameComputerPlayer {
 				}
 			}
 		}
+
 		ArrayList<ShogiSquare> possibleMoves = new ArrayList<>();
 		ShogiPiece selectedPiece = null;
 
 		while (possibleMoves.isEmpty()) {
 			// Choose a random piece from the player's pieces
-			selectedPiece = playerPieces.get((int)(Math.random() * playerPieces.size()));
+			selectedPiece = playerPieces.get(rand.nextInt(playerPieces.size()));
 			// Get all possible moves for the selected piece
 			possibleMoves = selectedPiece.getPossibleMoves();
 		}
 
-		ShogiSquare targetSquare = selectedPiece.getPossibleMoves().get((int)(Math.random() * selectedPiece.getPossibleMoves().size()));
+		ShogiSquare targetSquare = selectedPiece.getPossibleMoves().get(rand.nextInt(selectedPiece.getPossibleMoves().size()));
 
 		ShogiMoveAction moveAction = new ShogiMoveAction(this, selectedPiece, targetSquare);
 		game.sendAction(moveAction);

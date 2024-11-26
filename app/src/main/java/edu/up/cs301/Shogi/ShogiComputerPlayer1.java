@@ -6,6 +6,7 @@ import edu.up.cs301.GameFramework.infoMessage.GameInfo;
 import edu.up.cs301.GameFramework.utilities.Tickable;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * A computer version of a player in the game. This AI will randomly select valid moves.
@@ -14,7 +15,7 @@ import java.util.ArrayList;
  * @version October 2024
  */
 public class ShogiComputerPlayer1 extends GameComputerPlayer{
-
+	private Random rand = null;
 	/**
 	 * Constructor for objects of class ShogiComputerPlayer1
 	 *
@@ -23,6 +24,7 @@ public class ShogiComputerPlayer1 extends GameComputerPlayer{
 	public ShogiComputerPlayer1(String name) {
 		// Invoke superclass constructor
 		super(name);
+		rand = new Random();
 	}
 
 	/**
@@ -58,12 +60,12 @@ public class ShogiComputerPlayer1 extends GameComputerPlayer{
 
 		while (possibleMoves.isEmpty()) {
 			// Choose a random piece from the player's pieces
-			selectedPiece = playerPieces.get((int)(Math.random() * playerPieces.size()));
+			selectedPiece = playerPieces.get(rand.nextInt(playerPieces.size()));
 			// Get all possible moves for the selected piece
 			possibleMoves = selectedPiece.getPossibleMoves();
 		}
-		
-		ShogiSquare targetSquare = selectedPiece.getPossibleMoves().get((int)(Math.random() * selectedPiece.getPossibleMoves().size()));
+
+		ShogiSquare targetSquare = selectedPiece.getPossibleMoves().get(rand.nextInt(selectedPiece.getPossibleMoves().size()));
 
 		ShogiMoveAction moveAction = new ShogiMoveAction(this, selectedPiece, targetSquare);
 		game.sendAction(moveAction);
