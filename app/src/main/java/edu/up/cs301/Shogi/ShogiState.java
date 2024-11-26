@@ -1122,13 +1122,20 @@ public class ShogiState extends GameState {
 		}
 
 		// Place the piece on the board
-		piece.setOnBoard(true);
-		piece.setPosition(targetPosition);
+		if (finalizeMove) {
+			piece.setOnBoard(true);
+			piece.setPosition(targetPosition);
 
-		// Switch turn
-		switchTurn();
+			// Switch turn
+			switchTurn();
+			return true;
+		}
+		else{
+			return true;
+		}
 
-		return true;
+
+
 	}
 
 	/**
