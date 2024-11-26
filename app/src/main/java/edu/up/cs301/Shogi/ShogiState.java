@@ -159,7 +159,7 @@ public class ShogiState extends GameState {
 		piece.setOwner(currentPlayer);
 		piece.setOnBoard(false);
 		piece.setPromoted(false);
-
+		piece.setPossibleMoves(null);
 	}
 
 	/**
@@ -983,7 +983,7 @@ public class ShogiState extends GameState {
 			ShogiDropAction dropAction = (ShogiDropAction) action;
 
 			// Delegate to the dropPiece method
-			return dropPiece(dropAction);
+			return dropPiece(dropAction, true);
 		}
 
 
@@ -1096,7 +1096,7 @@ public class ShogiState extends GameState {
 	 * @param action The drop action to handle.
 	 * @return True if the drop is successful, false otherwise.
 	 */
-	public boolean dropPiece(ShogiDropAction action) {
+	public boolean dropPiece(ShogiDropAction action, boolean finalizeMove) {
 		ShogiPiece piece = action.getPieceToDrop();
 
 		// Verify that the current player owns the piece to drop
