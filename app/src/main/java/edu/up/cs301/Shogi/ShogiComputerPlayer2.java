@@ -1,12 +1,10 @@
 package edu.up.cs301.Shogi;
 
-import edu.up.cs301.GameFramework.GameMainActivity;
 import edu.up.cs301.GameFramework.infoMessage.GameInfo;
+import edu.up.cs301.GameFramework.players.GameComputerPlayer;
 
-import android.app.Activity;
-import android.os.Handler;
-import android.util.Log;
-import android.widget.TextView;
+import java.util.ArrayList;
+import java.util.Random;
 
 
 /**
@@ -14,32 +12,19 @@ import android.widget.TextView;
 * @author Andrew M. Nuxoll
 * @version September 2013
 */
-public class ShogiComputerPlayer2 extends ShogiComputerPlayer1 {
-	
-	/*
-	 * instance variables
-	 */
-	// the most recent game state
-	private ShogiState currentGameState = null;
-	
-	// If this player is running the GUI, the activity (null if the player is
-	// not running a GUI).
-	private Activity activityForGui = null;
+public class ShogiComputerPlayer2 extends GameComputerPlayer {
 
-	private TextView shogiValueTextView = null;
-	
-	// If this player is running the GUI, the handler for the GUI thread (otherwise
-	// null)
-	private Handler guiHandler = null;
-	
+	private Random rand = null;
 	/**
-	 * constructor
-	 * 
-	 * @param name
-	 * 		the player's name
+	 * Constructor for objects of class ShogiComputerPlayer1
+	 *
+	 * @param name The player's name
 	 */
 	public ShogiComputerPlayer2(String name) {
+		// Invoke superclass constructor
 		super(name);
+
+		rand = new Random();
 	}
 
 	/**
@@ -51,71 +36,48 @@ public class ShogiComputerPlayer2 extends ShogiComputerPlayer1 {
 
 
 	/**
-     * callback method--game's state has changed
-     * 
-     * @param info
-     * 		the information (presumably containing the game's state)
-     */
+	 * Callback method -- the game's state has changed
+	 *
+	 * @param info The information received from the game state
+	 */
 	@Override
 	protected void receiveInfo(GameInfo info) {
-		// perform superclass behavior
-		super.receiveInfo(info);
-		
-		Log.i("computer player", "receiving");
-		
-		// if there is no game, ignore
-		if (game == null) {
-			return;
-		}
-		else if (info instanceof ShogiState) {
-			currentGameState = (ShogiState)info;
-			updateDisplay();
-		}
-	}
-	
+		ShogiState gameState = (ShogiState) game.getGameState();
 
-	private void updateDisplay() {
-		if (guiHandler != null) {
-			guiHandler.post(
-					new Runnable() {
-						public void run() {
-						if (shogiValueTextView != null && currentGameState != null) {
+		// if not our turn, return
+		if (gameState.getCurrentPlayer() != playerNum) return;
 
-						}
-					}});
-		}
-	}
-	
-	/**
-	 * Tells whether we support a GUI
-	 * 
-	 * @return
-	 * 		true because we support a GUI
-	 */
-	public boolean supportsGui() {
-		return true;
-	}
-	
-	/**
-	 * callback method--our player has been chosen/rechosen to be the GUI,
-	 * called from the GUI thread.
-	 * 
-	 * @param a
-	 * 		the activity under which we are running
-	 */
-	@Override
-	public void setAsGui(GameMainActivity a) {
-		
-		// remember who our activity is
-		this.activityForGui = a;
-		
-		// remember the handler for the GUI thread
-		this.guiHandler = new Handler();
-		
-		// if the state is non=null, update the display
-		if (currentGameState != null) {
-			updateDisplay();
-		}
-	}
 
+		ArrayList<ShogiPiece> playerPieces = new ArrayList<>();
+		for (ShogiPiece piece : gameState.getPieces()) {
+			if (piece.getOwner() == playerNum) {
+				playerPieces.add(piece);
+			}
+		}
+
+		for (ShogiPiece selectedPiece : playerPieces) {
+			if (selectedPiece.isOnBoard()) {
+				ArrayList<ShogiSquare> possibleMoves = selectedPiece.getPossibleMoves();
+
+				for (ShogiSquare targetSquare : possibleMoves) {
+					if (gameState.getPiece(targetSquare).getOwner() != playerNum) {
+						ShogiMoveAction moveAction = new ShogiMoveAction(this, selectedPiece, targetSquare);
+						game.sendAction(moveAction);
+						return;
+					}
+				}
+			}
+		}
+
+		for (ShogiPiece selectedPiece : playerPieces) {
+			if (!selectedPiece.isOnBoard()) {
+				ShogiSquare targetSquare = new ShogiSquare(rand.nextInt(7), rand.nextInt(7));
+				ShogiDropAction dropAction = new ShogiDropAction(this, selectedPiece, targetSquare);
+				if (gameState.dropPiece(dropAction, false)) {
+					game.sendAction(dropAction);
+				}
+			}
+		}
+
+	}
 }
