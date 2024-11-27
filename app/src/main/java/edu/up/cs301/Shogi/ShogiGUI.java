@@ -19,6 +19,7 @@ import android.view.View;
 import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import edu.up.cs301.GameFramework.utilities.FlashSurfaceView;
@@ -27,6 +28,7 @@ import edu.up.cs301.shogi.R;
 /**
  * ShogiGUI renders the board and pieces based on the state of ShogiBoard.
  */
+//TODO flip GUI for second network player
 public class ShogiGUI extends View {
     private ShogiState shogiState;
     private Context contextLocal;
@@ -51,6 +53,7 @@ public class ShogiGUI extends View {
     private ArrayList<ShogiSquare> possibleMoves;
     private ShogiSquare priorOrig;
     private ShogiSquare priorTarget;
+    private int[][] capturedCount = new int[9][11];
 
 
     // Helpful variables for drawing
@@ -173,6 +176,7 @@ public class ShogiGUI extends View {
         drawPossibleMoves(canvas);
         drawCheck(canvas);
         drawPieces(canvas);
+        drawCapturedCount(canvas);
     }
 
     /**
@@ -209,6 +213,13 @@ public class ShogiGUI extends View {
             canvas.drawLine(cellDimensions, y, cellDimensions+fieldDimensions, y, paintBlack);
         }
 
+        // Draw circles that display promotion zones
+        float miniCircleR = cellDimensions/12;
+        canvas.drawCircle(cellDimensions*4, cellDimensions*3, miniCircleR, paintBlack);
+        canvas.drawCircle(cellDimensions*4, cellDimensions*6, miniCircleR, paintBlack);
+        canvas.drawCircle(cellDimensions*7, cellDimensions*3, miniCircleR, paintBlack);
+        canvas.drawCircle(cellDimensions*7, cellDimensions*6, miniCircleR, paintBlack);
+
         // draw fields for captured pieces
         // Player 1
         for (int i = 0; i < 7; i++){
@@ -236,6 +247,12 @@ public class ShogiGUI extends View {
 
         ArrayList<ShogiPiece> pieces = shogiState.getPieces();
 
+        // reset captured count array to 1
+        // capturedCount[][] = 1;
+        for (int i = 0; i < capturedCount.length; i++) {
+            Arrays.fill(capturedCount[i], 0);
+        }
+
         for(int i = 0; i < scaledBitmaps.size(); i++){
 
             ShogiPiece piece = pieces.get(i);
@@ -255,6 +272,8 @@ public class ShogiGUI extends View {
                 col = (piece.getOwner() == 0)? 10 : 0;
                 // Set row according to piece type and owner
                 row = drawCaptured(piece); // hides switch statement in method
+                // increment captured count if there is a piece already
+                if(shogiState.getPiece(piecePosition) != null) capturedCount[row][col]++;
             }
 
             // Calculate the position to draw the Bitmap
@@ -267,7 +286,7 @@ public class ShogiGUI extends View {
     }
 
     /**
-     * draws a blue orb around the that has been selected
+     * draws a blue orb around the piece that has been selected
      * @param canvas
      */
     public void drawSelected(Canvas canvas){
@@ -339,6 +358,47 @@ public class ShogiGUI extends View {
             float top = (king.getRow() + (float)0.5) * cellDimensions;
             drawCricle(canvas, checkColor,left, top);
         }
+    }
+
+
+    /**
+     * draws a number next to each captured pieces if it is more than 1
+     * @param canvas
+     */
+    public void drawCapturedCount(Canvas canvas){
+        Log.d("GUI", "inside draw captured count");
+        Paint circleFill = new Paint();
+        Paint circleOutline = new Paint();
+        Paint numbers = new Paint();
+        circleFill.setColor(Color.WHITE);
+        circleOutline.setColor(Color.BLACK);
+        numbers.setColor(Color.BLACK);
+        circleOutline.setStrokeWidth(3);
+        circleOutline.setStyle(Paint.Style.STROKE);
+        numbers.setTextSize(cellDimensions/4);
+
+        float xOffset = cellDimensions*3/4;
+        float yOffset = cellDimensions/4;
+        float numberR = cellDimensions/5;
+
+        // numbers player 1
+        for(int i = 0; i < 7; i++){
+            if(capturedCount[i][0] > 1){
+                canvas.drawCircle(xOffset, i*cellDimensions+yOffset, numberR, circleFill);
+                canvas.drawCircle(xOffset, i*cellDimensions+yOffset, numberR, circleOutline);
+                canvas.drawText(String.valueOf(capturedCount[i][0]), (float)0.68*cellDimensions, (i+(float)0.33)*cellDimensions, numbers);
+            }
+        }
+        // numbers player 2
+        for(int i = 2; i < 9; i++){
+            if(capturedCount[i][10]>1){
+                canvas.drawCircle(10*cellDimensions+xOffset, i*cellDimensions+yOffset, numberR, circleFill);
+                canvas.drawCircle(10*cellDimensions+xOffset, i*cellDimensions+yOffset, numberR, circleOutline);
+                canvas.drawText(String.valueOf(capturedCount[i][10]), (float)10.68*cellDimensions, (i+(float)0.33)*cellDimensions, numbers);
+
+            }
+        }
+
     }
 
 // -------------------------- Helper functions and initialization -----------------

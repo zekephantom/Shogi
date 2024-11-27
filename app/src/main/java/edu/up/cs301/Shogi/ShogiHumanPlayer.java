@@ -201,8 +201,6 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 
         // TODO end of game message
 		// TODO pop up window for promoting
-		// TODO not let human player select a enemy piece
-		// TODO being able to select new piece while another piece is still selected
 
 		// Only checks the state if a new field is touched
 		// -> multiple onTouch calls during a single touch
