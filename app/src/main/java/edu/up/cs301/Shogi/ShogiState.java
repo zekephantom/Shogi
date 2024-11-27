@@ -1,5 +1,7 @@
 package edu.up.cs301.Shogi;
 
+import android.util.Log;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -172,8 +174,12 @@ public class ShogiState extends GameState implements Serializable {
 	public ShogiPiece getPiece(ShogiSquare position) {
 		for (ShogiPiece piece : pieces) {
 			// isOnboard is not needed and breaks GUI selection for a captured piece
-			if (/*piece.isOnBoard() && */piece.getPosition().equals(position)) {
-				return piece;
+			try{
+				if (/*piece.isOnBoard() && */piece.getPosition().equals(position)) {
+					return piece;
+				}
+			}catch(NullPointerException npe){
+				Log.d("NULL", piece.toString());
 			}
 		}
 		return null;

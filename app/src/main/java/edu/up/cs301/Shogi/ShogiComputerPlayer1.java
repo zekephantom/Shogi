@@ -69,5 +69,7 @@ public class ShogiComputerPlayer1 extends GameComputerPlayer{
 
 		ShogiMoveAction moveAction = new ShogiMoveAction(this, selectedPiece, targetSquare);
 		game.sendAction(moveAction);
+
+		//shogiBoard.setPriorMoveSquares(priorGridTouched, gridTouched);
 	}
 }

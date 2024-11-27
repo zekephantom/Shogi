@@ -180,6 +180,6 @@ public class ShogiPiece implements Serializable {
 
     @Override
     public String toString() {
-        return this.type.toString() + " at " + this.position;
+        return "Player: " + this.getOwner() + ", Type: " +this.type.toString() + " at " + this.position;
     }
 }

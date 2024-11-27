@@ -200,9 +200,9 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 		float y = motionEvent.getY();
 
         // TODO end of game message
-		// TODO dropping function
+		// TODO pop up window for promoting
 		// TODO not let human player select a enemy piece
-
+		// TODO being able to select new piece while another piece is still selected
 
 		// Only checks the state if a new field is touched
 		// -> multiple onTouch calls during a single touch
@@ -216,7 +216,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
                 Log.d("Touch", "field touched: \n row: " + gridTouched.getRow() + " col: " + gridTouched.getCol());
             }
 
-			// Logic to get the possible move if a piece is selected
+			// -----------  move a selected piece ----------------
 			if (pieceIsSelected) {
 
 				// drop action
@@ -225,18 +225,27 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 					ShogiDropAction dropAction = new ShogiDropAction(this, selectedPiece, gridTouched);
 					if (state.dropPiece(dropAction, false)) {
 						game.sendAction(dropAction);
+						shogiBoard.setPriorMoveSquares(priorGridTouched, gridTouched);
+
+						// reset the selected piece
+						selectedPiece = null;
+						shogiBoard.setSelected(null);
+						pieceIsSelected = false;
+						return true;
 					}
 
-					shogiBoard.setPriorMoveSquares(priorGridTouched, gridTouched);
+					// Invalid drop
+					// TODO draw red fields if it is a illegal drop
+					// shogiBoard.setPriorMoveSquares(priorGridTouched, gridTouched);
 
 					// reset the selected piece
 					selectedPiece = null;
 					shogiBoard.setSelected(null);
 					pieceIsSelected = false;
-					return true;
-
+					// return true;
 				}
-				// create move action if legal
+
+				// move action
 				for (ShogiSquare possibleTargetSquare : piecePossibleMoves) {
 					if (gridTouched.getRow() == possibleTargetSquare.getRow() && gridTouched.getCol() == possibleTargetSquare.getCol()) {
 						// send move action here
@@ -254,13 +263,15 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 				}
 
 				Log.d("Touch", "Piece selected move invalid");
-				// else deselect the piece
-				// TODO flash screen potentially
+
+				// else deselect the piece and try to select another piece
 				selectedPiece = null;
 				shogiBoard.setSelected(null);
 				pieceIsSelected = false;
 
-			} else { // no piece currently selected ---------------
+			}
+			if(!pieceIsSelected) { // --------- no piece currently selected ---------------
+
 				if (selectedPiece != null) {
 					shogiBoard.setPriorMoveSquares(selectedPiece.getPosition(), gridTouched);
 				}
@@ -269,10 +280,8 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 				if(gridTouched != null) selectedPiece = state.getPiece(gridTouched);
 
 				if (selectedPiece != null) {
-
-					// checks that only pieces from current user can be selected
-					if (selectedPiece.getOwner()==1){
-						//TODO make sure this works for Network play
+					// checks that only pieces from current player can be selected
+					if (selectedPiece.getOwner() != state.getCurrentPlayer()){
 						selectedPiece = null;
 						return true;
 					}
@@ -285,9 +294,9 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 				} else {
 					Log.d("Touch", "Piece not selected");
 					// pieceIsSelected = false;
-					// TODO flash screen potentially
 				}
-			}
+
+			}// piece is selected
 		}
 
 		return true;
