@@ -156,7 +156,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 
 		//  set the right content view
 		activity.setContentView(R.layout.game_interface);
-		// TODO flip GUI here?
+
 		// uncomment when running game state test
 		/*
 		this.testResultsEditText = (EditText) activity.findViewById(R.id.tv_test_results);
@@ -184,7 +184,9 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 		Logger.log("set listener","OnTouch");
 		shogiBoard.setOnTouchListener(this);
 
+
 		// TODO: add switchListeners for english/japanese
+		// TODO: quit button
 
 		Button quit = myActivity.findViewById(R.id.butQuit);
 		quit.setOnClickListener(new View.OnClickListener(){
@@ -412,33 +414,6 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 		testResultsEditText.append("First Copy: \n" + firstCopy.toString() + "\n");
 		testResultsEditText.append("Second Copy:\n" + secondCopy.toString() + "\n");
 	}// shogiGameStateTest()
-
-	@Override
-	public boolean onDown(@NonNull MotionEvent motionEvent) {
-		return false;
-	}
-
-	@Override
-	public void onShowPress(@NonNull MotionEvent motionEvent) {
-
-	}
-
-	@Override
-	public boolean onSingleTapUp(@NonNull MotionEvent motionEvent) {
-		return false;
-	}
-
-
-
-	@Override
-	public void onLongPress(@NonNull MotionEvent motionEvent) {
-
-	}
-
-	@Override
-	public boolean onFling(@Nullable MotionEvent motionEvent, @NonNull MotionEvent motionEvent1, float v, float v1) {
-		return false;
-	}
 
 	/**
 	 * This method gets called when the user clicks the 'Run Test' button.
