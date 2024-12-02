@@ -1,5 +1,10 @@
 package edu.up.cs301.Shogi;
 
+import android.content.DialogInterface;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
 import java.util.ArrayList;
 
 import edu.up.cs301.GameFramework.GameMainActivity;
@@ -84,5 +89,8 @@ public class ShogiMainActivity extends GameMainActivity {
 		if (state == null)  state = new ShogiState();
 		return new ShogiLocalGame(state);
 	}
+
+
+
 
 }
