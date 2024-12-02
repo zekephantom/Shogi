@@ -12,12 +12,15 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Handler;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.view.View.OnClickListener;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 
 import java.util.ArrayList;
@@ -35,7 +38,7 @@ import java.util.ArrayList;
  * @author Makengo Lokombo
  * @version July 2013 (original), 28 October 2024
  */
-public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchListener {
+public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchListener, GestureDetector.OnGestureListener {
 
 	/* instance variables */
 	// The EditText that displays test results or game state information
@@ -49,6 +52,8 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 	
 	// the android activity that we are running
 	private GameMainActivity myActivity;
+
+	// private GestureDetector myDetector = new GestureDetector(this, this);
 
 	private Handler guiHandler = null;
 
@@ -149,7 +154,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 
 		//  set the right content view
 		activity.setContentView(R.layout.game_interface);
-
+		// TODO flip GUI here?
 		// uncomment when running game state test
 		/*
 		this.testResultsEditText = (EditText) activity.findViewById(R.id.tv_test_results);
@@ -177,7 +182,6 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 		Logger.log("set listener","OnTouch");
 		shogiBoard.setOnTouchListener(this);
 
-
 		// TODO: add switchListeners for english/japanese
 		// TODO: quit button
 
@@ -201,6 +205,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 
         // TODO end of game message
 		// TODO pop up window for promoting
+		// TODO make sure only the right tablet can select players
 
 		// Only checks the state if a new field is touched
 		// -> multiple onTouch calls during a single touch
@@ -301,6 +306,22 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 	}//onTouch
 
 	/**
+	 * implements drag and drop for moving a piece
+	 * @param motionEvent
+	 * @param motionEvent1
+	 * @param v
+	 * @param v1
+	 * @return
+	 */
+	@Override
+	public boolean onScroll(@Nullable MotionEvent motionEvent, @NonNull MotionEvent motionEvent1, float v, float v1) {
+
+		return false;
+	}
+
+
+
+	/**
 	 * code from shogi test that gets called in onClick
 	 */
 	public void shogiStateTest(){
@@ -370,6 +391,33 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 		testResultsEditText.append("First Copy: \n" + firstCopy.toString() + "\n");
 		testResultsEditText.append("Second Copy:\n" + secondCopy.toString() + "\n");
 	}// shogiGameStateTest()
+
+	@Override
+	public boolean onDown(@NonNull MotionEvent motionEvent) {
+		return false;
+	}
+
+	@Override
+	public void onShowPress(@NonNull MotionEvent motionEvent) {
+
+	}
+
+	@Override
+	public boolean onSingleTapUp(@NonNull MotionEvent motionEvent) {
+		return false;
+	}
+
+
+
+	@Override
+	public void onLongPress(@NonNull MotionEvent motionEvent) {
+
+	}
+
+	@Override
+	public boolean onFling(@Nullable MotionEvent motionEvent, @NonNull MotionEvent motionEvent1, float v, float v1) {
+		return false;
+	}
 
 	/**
 	 * This method gets called when the user clicks the 'Run Test' button.

@@ -547,7 +547,6 @@ public class ShogiGUI extends View {
      * @return
      */
     private int drawCaptured(ShogiPiece piece){
-        // TODO: add a number onScreen to the captured piece depending how many pieces are on the field
         int row;
         switch (piece.getType()) {
             case Rook:

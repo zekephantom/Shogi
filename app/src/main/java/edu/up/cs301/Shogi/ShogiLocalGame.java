@@ -86,6 +86,16 @@ public class ShogiLocalGame extends LocalGame {
 	 */
 	@Override
 	protected String checkIfGameOver() {
+
+		// TODO not legally allowed to capture King
+		// force players to make moves that protect the King
+		if(!gameState.getPieces().get(4).isOnBoard()){
+			return "King was captured! Player " +  (gameState.getCurrentPlayer()) + " has won.\n";
+		}
+		if(!gameState.getPieces().get(24).isOnBoard()){
+			return "King was captured! Player " +  (1 - gameState.getCurrentPlayer()) + " has won.\n";
+		}
+
 		if (gameState.isCheckmate(1 - gameState.getCurrentPlayer())) {
 			return "Player " +  (gameState.getCurrentPlayer()) + " has won.";
 		}
