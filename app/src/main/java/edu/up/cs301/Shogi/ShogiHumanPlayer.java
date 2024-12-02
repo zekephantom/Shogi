@@ -1,6 +1,8 @@
 package edu.up.cs301.Shogi;
 
 
+import static androidx.core.app.ActivityCompat.finishAffinity;
+
 import edu.up.cs301.GameFramework.infoMessage.GameState;
 import edu.up.cs301.GameFramework.players.GameHumanPlayer;
 import edu.up.cs301.GameFramework.GameMainActivity;
@@ -186,6 +188,13 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 		// TODO: quit button
 
 		Button quit = myActivity.findViewById(R.id.butQuit);
+		quit.setOnClickListener(new View.OnClickListener(){
+			@Override
+			public void onClick(View v){
+				confirmExit();
+			}
+		});
+
 		/*
 		quit.setOnClickListener(new View.OnClickListener(){
 			@Override
@@ -319,7 +328,20 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 		return false;
 	}
 
+	private void confirmExit() {
+		// Show a confirmation dialog before exiting
+		new AlertDialog.Builder(myActivity)
+				.setTitle("Quit App")
+				.setMessage("Are you sure you want to quit?")
+				.setIcon(android.R.drawable.ic_dialog_alert)
+				.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
+					public void onClick(DialogInterface dialog, int whichButton) {
+						// Close the app
+						finishAffinity(myActivity); // Close all activities and exit
+					}})
+				.setNegativeButton(android.R.string.no, null).show();
+	}
 
 	/**
 	 * code from shogi test that gets called in onClick

@@ -93,32 +93,6 @@ public class ShogiMainActivity extends GameMainActivity {
 	}
 
 
-	/**
-	 * shows popup window on screen that displays that the King was captured and what player has won
-	 * @param playerNum
-	 */
-	 public void  endOfGameKingCaptured(int playerNum){
 
-
-		// Create the AlertDialog
-		 AlertDialog show;
-         show = new AlertDialog.Builder(this)
-                 .setTitle("End of Game")
-                 .setMessage("Player " + playerNum + " King was captured.\n Player " + (1 - playerNum) + " has won the game.")
-                 .setPositiveButton("Exit", new DialogInterface.OnClickListener() {
-                     @Override
-                     public void onClick(DialogInterface dialog, int which) {
-                         finish(); // Close the app
-                     }
-                 })
-                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                     @Override
-                     public void onClick(DialogInterface dialog, int which) {
-                         dialog.dismiss(); // Close the dialog
-                     }
-                 })
-                 //.setCancelable(true) // Allow the dialog to be dismissed by tapping outside
-                 .show();
-     }
 
 }
