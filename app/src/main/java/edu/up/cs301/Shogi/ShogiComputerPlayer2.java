@@ -78,7 +78,7 @@ public class ShogiComputerPlayer2 extends GameComputerPlayer {
 				ArrayList<ShogiSquare> possibleMoves = selectedPiece.getPossibleMoves();
 
 				for (ShogiSquare targetSquare : possibleMoves) {
-					if (gameState.getPiece(targetSquare).getOwner() != playerNum) {
+					if (gameState.getPiece(targetSquare) != null && gameState.getPiece(targetSquare).getOwner() != playerNum) {
 						ShogiMoveAction moveAction = new ShogiMoveAction(this, selectedPiece, targetSquare);
 						game.sendAction(moveAction);
 						return;

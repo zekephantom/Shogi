@@ -42,16 +42,14 @@ public class ShogiMainActivity extends GameMainActivity {
 			}});
 		
 		// a computer player type (player type 1)
-		playerTypes.add(new GamePlayerType("Computer Player") {
+		playerTypes.add(new GamePlayerType("Computer Player (Dumb)") {
 			public GamePlayer createPlayer(String name) {
 				return new ShogiComputerPlayer1(name);
 			}});
 		
 		// a computer player type (player type 2)
-		playerTypes.add(new GamePlayerType("Computer Player (GUI)") {
-			public GamePlayer createPlayer(String name) {
-				return new ShogiComputerPlayer2(name);
-			}});
+		playerTypes.add(new GamePlayerType("Computer Player (Smart)") {
+			public GamePlayer createPlayer(String name) { return new ShogiComputerPlayer2(name); }});
 
 		// Create a game configuration class for Shogi:
 		// - player types as given above
