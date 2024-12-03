@@ -179,7 +179,7 @@ public class ShogiState extends GameState implements Serializable {
 					return piece;
 				}
 			}catch(NullPointerException npe){
-				Log.d("NULL", piece.toString());
+				Log.d("NULL", "null obj");
 			}
 		}
 		return null;
@@ -274,18 +274,20 @@ public class ShogiState extends GameState implements Serializable {
 
 		int row = currentPosition.getRow() + rowDirection;
 		int col = currentPosition.getCol() + colDirection;
+		ShogiSquare steppedPosition = new ShogiSquare(row, col);
 
 		while (row - rowDirection != targetPosition.getRow() || col - colDirection != targetPosition.getCol()) {
-			if (getPiece(new ShogiSquare(row, col)) != null && getPiece(new ShogiSquare(row, col)).isOnBoard()) {
-				if (getPiece(new ShogiSquare(row, col)).getOwner() == piece.getOwner()) {
+			if (getPiece(steppedPosition) != null && getPiece(steppedPosition).isOnBoard()) {
+				if (getPiece(steppedPosition).getOwner() == piece.getOwner()) {
 					return true;
 				}
 			}
 			int nextRow = row - rowDirection;
 			int nextCol = col - colDirection;
+			ShogiSquare nextPosition = new ShogiSquare(nextRow, nextCol);
 			if (nextRow >= 0 && nextCol >= 0) {
-				if (getPiece(new ShogiSquare(nextRow, nextCol)) != null && getPiece(new ShogiSquare(nextRow, nextCol)).isOnBoard()) {
-					if (getPiece(new ShogiSquare(nextRow, nextCol)).getOwner() != piece.getOwner()) {
+				if (getPiece(nextPosition) != null && getPiece(nextPosition).isOnBoard()) {
+					if (getPiece(nextPosition).getOwner() != piece.getOwner()) {
 						return true;
 					}
 				}
@@ -916,6 +918,10 @@ public class ShogiState extends GameState implements Serializable {
 				return false;
 			}
 
+			if (getPiece(((ShogiMoveAction) action).getTargetPosition()) != null &&
+					getPiece(((ShogiMoveAction) action).getTargetPosition()).getType() == ShogiPiece.PieceType.King) {
+				return false;
+			}
 			// Delegate to the specific move method based on piece type
 			switch (piece.getType()) {
 				case King:
@@ -1025,21 +1031,6 @@ public class ShogiState extends GameState implements Serializable {
 		}
         return false;
     }
-
-
-	// TODO: Decide whether or not to use this block of code; commented for now
-//	/**
-//	 * Retrieves the player number associated with a GamePlayer instance.
-//	 *
-//	 * @param player The GamePlayer instance.
-//	 * @return The player number (0 or 1).
-//	 */
-//	private int getPlayerNum(GamePlayer player) {
-//		// Implement logic to determine player number from GamePlayer instance
-//		// This could be based on a mapping or an attribute within GamePlayer
-//		// For this example, we'll assume there's a method getPlayerNum()
-//		return player.getPlayerNum();
-//	}
 
 
 	/**

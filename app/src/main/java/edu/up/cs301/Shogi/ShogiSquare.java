@@ -61,8 +61,14 @@ public class ShogiSquare implements Serializable {
 		this.col = col;
 	}
 
-	public boolean equals(ShogiSquare other) {
-		return getRow() == other.getRow() && getCol() == other.getCol();
+	@Override
+	public boolean equals(Object other) {
+		if (other instanceof ShogiSquare) {
+			return getRow() == ((ShogiSquare) other).getRow() && getCol() == ((ShogiSquare) other).getCol();
+		}
+		else {
+			return false;
+		}
 	}
 
 	@Override

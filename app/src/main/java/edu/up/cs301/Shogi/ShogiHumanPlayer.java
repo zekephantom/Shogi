@@ -185,7 +185,6 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 		shogiBoard.setOnTouchListener(this);
 
 		// TODO: add switchListeners for english/japanese
-		// TODO: quit button
 
 		Button quit = myActivity.findViewById(R.id.butQuit);
 		quit.setOnClickListener(new View.OnClickListener(){
