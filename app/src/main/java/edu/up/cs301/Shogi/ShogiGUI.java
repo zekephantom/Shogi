@@ -121,7 +121,7 @@ public class ShogiGUI extends View {
             rook = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.eng_rook));
             prom_rook = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.eng_prook));
             bishop = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.eng_bishop));
-            prom_bishop = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.eng_bishop));
+            prom_bishop = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.eng_pbishop));
             goldGen = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.eng_goldgen));
             silverGen = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.eng_silvergen));
             prom_silver = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.eng_psilver));
@@ -373,13 +373,12 @@ public class ShogiGUI extends View {
         int checkColor = 0xFFFF0000; // red
         ShogiSquare king;
         if (shogiState.isKingInCheck(shogiState.getCurrentPlayer())){
-            king = shogiState.getPieces().get(4).getPosition();
-            float left = (king.getCol() + (float)1.5) * cellDimensions;
-            float top = (king.getRow() + (float)0.5) * cellDimensions;
-            drawCricle(canvas, checkColor,left, top);
-        }
-        if (shogiState.isKingInCheck(1 - shogiState.getCurrentPlayer())) {
-            king = shogiState.getPieces().get(24).getPosition();
+            if (shogiState.getCurrentPlayer() == 0) {
+                king = shogiState.getPieces().get(4).getPosition();
+            }
+            else {
+                king = shogiState.getPieces().get(24).getPosition();
+            }
             float left = (king.getCol() + (float)1.5) * cellDimensions;
             float top = (king.getRow() + (float)0.5) * cellDimensions;
             drawCricle(canvas, checkColor,left, top);

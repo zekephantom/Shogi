@@ -95,10 +95,10 @@ public class ShogiLocalGame extends LocalGame {
 			return "King was captured! Player " +  (1 - gameState.getCurrentPlayer()) + " has won.\n";
 		}
 
-		if (gameState.isCheckmate(1 - gameState.getCurrentPlayer())) {
+		if (gameState.isCheckmate(1 - gameState.getCurrentPlayer(), players[1 - gameState.getCurrentPlayer()])) {
 			return "Player " +  (gameState.getCurrentPlayer()) + " has won.";
 		}
-		if (gameState.isCheckmate(gameState.getCurrentPlayer())) {
+		if (gameState.isCheckmate(gameState.getCurrentPlayer(), players[gameState.getCurrentPlayer()])) {
 			return "Player " +  (1 - gameState.getCurrentPlayer()) + " has won.";
 		}
 		return null;

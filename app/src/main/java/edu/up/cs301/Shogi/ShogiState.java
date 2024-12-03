@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import edu.up.cs301.GameFramework.actionMessage.GameAction;
 import edu.up.cs301.GameFramework.infoMessage.GameState;
+import edu.up.cs301.GameFramework.players.GamePlayer;
 
 /**
  * This class represents the state of the Shogi game.
@@ -1078,6 +1079,24 @@ public class ShogiState extends GameState implements Serializable {
 		return false;
 	}
 
+	public boolean checkIfMoveProtectsKing(GameAction action){
+		if (action instanceof ShogiMoveAction) {
+			ShogiState copy = new ShogiState(this);
+			copy.moveAction(action);
+			if (!copy.isKingInCheck(((ShogiMoveAction) action).getPiece().getOwner())) {
+				return true;
+			}
+		}
+		if (action instanceof ShogiDropAction) {
+			ShogiState copy = new ShogiState(this);
+			copy.moveAction(action);
+			if (!copy.isKingInCheck(((ShogiDropAction) action).getPiece().getOwner())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	/**
 	 * Checks if the given action was initiated by the current player.
 	 *
@@ -1104,6 +1123,7 @@ public class ShogiState extends GameState implements Serializable {
 			return player.getPlayerNum() == currentPlayer;
 		}
         return false;
+
     }
 
 
@@ -1192,6 +1212,11 @@ public class ShogiState extends GameState implements Serializable {
 		if (!isValidDrop(piece, targetPosition)) {
 			return false;
 		}
+
+		if (checkIfMoveProtectsKing(action)) {
+			// TODO implement forcing a piece drop to protect king
+		}
+
 
 		// Place the piece on the board
 		if (finalizeMove) {
@@ -1502,14 +1527,14 @@ public class ShogiState extends GameState implements Serializable {
 	}
 
 
-	public boolean isCheckmate(int player) {
-		if (!isKingInCheck(player)) {
+	public boolean isCheckmate(int playerNum, GamePlayer player) {
+		if (!isKingInCheck(playerNum)) {
 			return false; // Not in check, so not checkmate
 		}
 
-		// set king's possible moves based on player to check for
+		// set king's possible moves based on playerNum to check for
 		ArrayList <ShogiSquare> kingsPossibleMoves = new ArrayList<>();
-		if (player == 0) {
+		if (playerNum == 0) {
 			kingsPossibleMoves = pieces.get(4).getPossibleMoves();
 		}
 		else {
@@ -1521,7 +1546,7 @@ public class ShogiState extends GameState implements Serializable {
 			ShogiSquare kingMove = kingsPossibleMoves.get(i);
 			// go through all of the pieces
 			for (ShogiPiece piece : pieces) {
-				if (piece.getOwner() != player && piece.isOnBoard()) {
+				if (piece.getOwner() != playerNum && piece.isOnBoard()) {
 					// store opponent piece's possible moves
 					ArrayList<ShogiSquare> opponentsPossibleMoves = piece.getPossibleMoves();
 
@@ -1540,11 +1565,48 @@ public class ShogiState extends GameState implements Serializable {
 		boolean checkmate = true;
 		// if any of the possible moves are not checked, its not checkmate
         for (boolean b : kingLegalMovesChecked) {
-            if (!b) {
-                checkmate = false;
-                break;
-            }
-        }
+			if (!b) {
+				checkmate = false;
+				break;
+			}
+		}
+		if (checkmate) {
+			for (ShogiPiece piece : pieces) {
+				if (piece.getOwner() == playerNum) {
+					if (piece.isOnBoard()) {
+						// store our piece's possible moves
+						ArrayList<ShogiSquare> possibleMoves = piece.getPossibleMoves();
+
+						// check if the piece can move in a way that makes the king not be in check
+						for (int i = 0; i < possibleMoves.size(); i++) {
+							ShogiSquare move = possibleMoves.get(i);
+							ShogiMoveAction moveAction = new ShogiMoveAction(player, piece, move);
+							if (checkIfMoveProtectsKing(moveAction)) {
+								return false;
+							}
+							else {
+								ArrayList<ShogiSquare> newPossibleMoves = piece.getPossibleMoves();
+								newPossibleMoves.remove(i);
+								piece.setPossibleMoves(newPossibleMoves);
+							}
+						}
+					}
+					else {
+						for (int x = 0; x <= 8; x++) {
+							for (int y = 0; y <= 8; y++) {
+								ShogiSquare move = new ShogiSquare(x,y);
+								ShogiMoveAction moveAction = new ShogiMoveAction(player, piece, move);
+								if (isValidDrop(piece, move)) {
+									if (checkIfMoveProtectsKing(moveAction)) {
+										return false;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
 
 		return checkmate;
 	}
