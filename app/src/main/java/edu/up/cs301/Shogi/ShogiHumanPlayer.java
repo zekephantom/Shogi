@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.view.View.OnClickListener;
+import android.widget.Switch;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -198,6 +199,15 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 
 
 		// TODO: add switchListeners for english/japanese
+		Switch language = myActivity.findViewById(R.id.swLanguage);
+		language.setOnClickListener(new View.OnClickListener(){
+			@Override
+			public void onClick(View v){
+
+				shogiBoard.setLanguage(true);
+			}
+		});
+		// TODO: quit button
 
 		Button quit = myActivity.findViewById(R.id.butQuit);
 		quit.setOnClickListener(new View.OnClickListener(){
