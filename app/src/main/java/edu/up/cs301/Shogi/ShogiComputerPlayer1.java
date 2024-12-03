@@ -55,6 +55,29 @@ public class ShogiComputerPlayer1 extends GameComputerPlayer{
 			}
 		}
 
+		// move king if in check
+		ShogiPiece king = null;
+		if (gameState.isKingInCheck(playerNum)) {
+			if (playerNum == 0) {
+				king = gameState.getPieces().get(4);
+			}
+			else {
+				king = gameState.getPieces().get(24);
+			}
+			for (int x = -1; x <= 1; x++) {
+				for (int y = -1; y <= 1; y++) {
+					ShogiSquare targetSquare = new ShogiSquare(king.getPosition().getRow() + x, king.getPosition().getCol() + y);
+					ShogiMoveAction checkMove = new ShogiMoveAction(this, king, targetSquare);
+
+					if (gameState.moveKing(checkMove, false)) {
+						// Sends the move to human player so that he can print the move
+						ShogiHumanPlayer.setPriorMove(king.getPosition(),targetSquare);
+						game.sendAction(checkMove);
+					}
+				}
+			}
+		}
+
 		ArrayList<ShogiSquare> possibleMoves = new ArrayList<>();
 		ShogiPiece selectedPiece = null;
 
