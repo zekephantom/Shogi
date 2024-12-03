@@ -1,13 +1,14 @@
 package edu.up.cs301.Shogi;
 
 import android.content.Context;
+import android.graphics.Canvas;
 import android.util.AttributeSet;
 
 public class ShogiGUIflipped extends ShogiGUI{
 
     private ShogiState shogiState;
     private ShogiState stateFlipped;
-    private Context contextLocal;
+
 
     // TODO finish this class
 
@@ -16,7 +17,23 @@ public class ShogiGUIflipped extends ShogiGUI{
      */
     public ShogiGUIflipped (Context context, AttributeSet attrs){
         super(context, attrs);
-        contextLocal = context;
+        super.contextLocal = context;
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        super.drawBoard(canvas);
+        super.drawPriorMove(canvas);
+        super.drawSelected(canvas);
+        super.drawPossibleMoves(canvas);
+        super.drawCheck(canvas);
+        //drawPieces(canvas);
+        super.drawCapturedCount(canvas);
+    }
+
+    private void drawPieces(Canvas canvas){
+        return;
     }
 
 

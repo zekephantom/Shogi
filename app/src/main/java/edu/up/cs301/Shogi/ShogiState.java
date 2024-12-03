@@ -977,10 +977,7 @@ public class ShogiState extends GameState implements Serializable {
 	 * @return True if the action is successful, false otherwise.
 	 */
 	public boolean moveAction(GameAction action) {
-		// Verify that the action comes from the current player
-		if (!isActionFromCurrentPlayer(action)) {
-			return false;
-		}
+
 
 		if (action instanceof ShogiMoveAction) {
 			// Handle move actions
@@ -1096,36 +1093,6 @@ public class ShogiState extends GameState implements Serializable {
 		}
 		return false;
 	}
-
-	/**
-	 * Checks if the given action was initiated by the current player.
-	 *
-	 * @param action The action to check, which contains information about the player who initiated it.
-	 * @return true if the action was initiated by the player whose turn it currently is, false otherwise.
-	 *
-	 * External Citation
-	 * Date: 8 November 2024
-	 * Problem: Needed a way to verify that an action aligns with the current player's turn to ensure valid moves.
-	 * Resource: ChatGPT 4o
-	 * Solution: Structured the method to return true if the action matches the current player; added a TODO to refine the actual check.
-	 */
-	public boolean isActionFromCurrentPlayer(GameAction action) {
-		if (action.getPlayer() instanceof ShogiHumanPlayer) {
-			ShogiHumanPlayer player = (ShogiHumanPlayer) action.getPlayer();
-			return player.getPlayerNum() == currentPlayer;
-		}
-		else if (action.getPlayer() instanceof ShogiComputerPlayer1) {
-			ShogiComputerPlayer1 player = (ShogiComputerPlayer1) action.getPlayer();
-			return player.getPlayerNum() == currentPlayer;
-		}
-		else if (action.getPlayer() instanceof ShogiComputerPlayer2) {
-			ShogiComputerPlayer2 player = (ShogiComputerPlayer2) action.getPlayer();
-			return player.getPlayerNum() == currentPlayer;
-		}
-        return false;
-
-    }
-
 
 	/**
 	 * Helper method to handle movement as a Gold General.

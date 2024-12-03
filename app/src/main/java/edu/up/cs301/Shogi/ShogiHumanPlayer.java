@@ -195,6 +195,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 		updateDisplay(state);
 */
 
+		Logger.log("set listener","OnTouch");
 		shogiBoard.setOnTouchListener(this);
 
 // Add the listener for the language switch
@@ -212,7 +213,6 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 				}
 			}
 		});
-		// TODO: quit button
 
 		Button quit = myActivity.findViewById(R.id.butQuit);
 		quit.setOnClickListener(new View.OnClickListener(){
@@ -309,6 +309,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 
 				// Draws the prior moves once the move was successful and there was a piece selected
 				if (selectedPiece != null && selectedPiece.getOwner() != state.getCurrentPlayer()) {
+					// TODO block this for if it is on the King
 					shogiBoard.setPriorMoveSquares(selectedPiece.getPosition(), gridTouched);
 				}
 
@@ -318,7 +319,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 				if (selectedPiece != null) {
 					// checks that only pieces from current player can be selected
 					Log.d("Touch", ""+playerNum);
-					if (selectedPiece.getOwner() != playerNum){
+					if (selectedPiece.getOwner() != playerNum && selectedPiece.getOwner() != state.getCurrentPlayer()){
 						selectedPiece = null;
 						return true;
 					}

@@ -16,7 +16,7 @@ import edu.up.cs301.GameFramework.actionMessage.GameAction;
  * @version October 2024
  */
 public class ShogiMoveAction extends GameAction implements Serializable {
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 112321L;
 
 	private ShogiPiece piece;
 	private ShogiSquare targetPosition;

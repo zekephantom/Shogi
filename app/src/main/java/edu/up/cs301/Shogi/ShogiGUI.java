@@ -26,41 +26,43 @@ import edu.up.cs301.shogi.R;
  */
 //TODO flip GUI for second network player
 public class ShogiGUI extends View {
-    private ShogiState shogiState;
-    private Context contextLocal;
-    private List<Bitmap> scaledBitmaps = new ArrayList<>();
-    private boolean isEnglish = false;
-    private Bitmap kingLower;
-    private Bitmap rook;
-    private Bitmap prom_rook;
-    private Bitmap bishop;
-    private Bitmap prom_bishop;
-    private Bitmap goldGen;
-    private Bitmap silverGen;
-    private Bitmap prom_silver;
-    private Bitmap knight;
-    private Bitmap prom_knight;
-    private Bitmap lance;
-    private Bitmap prom_lance;
-    private Bitmap pawn;
-    private Bitmap prom_pawn;
+    protected ShogiState shogiState;
+    protected Context contextLocal;
+    protected List<Bitmap> scaledBitmaps = new ArrayList<>();
+    protected boolean isEnglish = false;
 
-    private ShogiSquare selectedSquare;
-    private ArrayList<ShogiSquare> possibleMoves;
-    private ShogiSquare priorOrig;
-    private ShogiSquare priorTarget;
-    private int[][] capturedCount = new int[9][11];
+    protected Bitmap kingLower;
+    protected Bitmap rook;
+    protected Bitmap prom_rook;
+    protected Bitmap bishop;
+    protected Bitmap prom_bishop;
+    protected Bitmap goldGen;
+    protected Bitmap silverGen;
+    protected Bitmap prom_silver;
+    protected Bitmap knight;
+    protected Bitmap prom_knight;
+    protected Bitmap lance;
+    protected Bitmap prom_lance;
+    protected Bitmap pawn;
+    protected Bitmap prom_pawn;
+
+    protected ShogiSquare selectedSquare;
+    protected ArrayList<ShogiSquare> possibleMoves;
+    protected ShogiSquare priorOrig;
+    protected ShogiSquare priorTarget;
+    protected int[][] capturedCount = new int[9][11];
 
 
     // Helpful variables for drawing
-    private float width;
-    private float height;
-    private float radius;
-    private float cellWidth;
-    private float cellHeight;
-    private float cellDimensions;
-    private float fieldDimensions;
-    private float capturedFieldRadius;
+    protected float width;
+    protected float height;
+    protected float radius;
+    protected float cellWidth;
+    protected float cellHeight;
+    protected float cellDimensions;
+    protected float fieldDimensions;
+    protected float capturedFieldRadius;
+
 
     /**
      * Constructor
@@ -97,6 +99,7 @@ public class ShogiGUI extends View {
         this.priorTarget = target;
         invalidate();
     }
+    // setter that reimports bitmaps iif language has been changed
     public void setLanguage(boolean isEng) {
         this.isEnglish = isEng;
         loadBitmaps(contextLocal);
@@ -115,6 +118,7 @@ public class ShogiGUI extends View {
          *  Solution: Used the code format from number 3.
          */
 
+        // Uses the right bitmaps according to the boolean for language
         if(isEnglish){
             kingLower = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.eng_king));
 
@@ -132,10 +136,6 @@ public class ShogiGUI extends View {
             pawn = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.eng_pawn));
             prom_pawn = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.eng_ppawn));
             // kingUpper = BitmapFactory.decodeResource(context.getResources(), R.drawable.kingupper); // optional line of code
-// Creates arrayList in the same order to the arrayList holding all the pieces
-
-            initBitmap();
-
         }else {
             kingLower = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.kinglower));
 
@@ -153,13 +153,9 @@ public class ShogiGUI extends View {
             pawn = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.pawn));
             prom_pawn = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.prom_pawn));
             // kingUpper = BitmapFactory.decodeResource(context.getResources(), R.drawable.kingupper); // optional line of code
-
-            // Creates arrayList in the same order to the arrayList holding all the pieces
-            initBitmap();
         }
-
-
-
+        // Creates arrayList in the same order to the arrayList holding all the pieces
+        initBitmap();
     }
 
 
@@ -210,7 +206,7 @@ public class ShogiGUI extends View {
      * and the patches for the captured pieces
      * @param canvas
      */
-    private void drawBoard(Canvas canvas) {
+    protected void drawBoard(Canvas canvas) {
         canvas.drawColor(Color.WHITE);
 
         // Initializing colors used

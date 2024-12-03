@@ -16,7 +16,8 @@ import edu.up.cs301.GameFramework.players.GamePlayer;
  * @version 8 November 2024
  */
 public class ShogiDropAction extends GameAction implements Serializable {
-    //private static final long serialVersionUID = 1L;
+
+    private static final long serialVersionUID = 1214123L;
 
     private ShogiPiece pieceToDrop;
     private ShogiSquare targetPosition;
