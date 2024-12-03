@@ -66,8 +66,6 @@ public class ShogiGUI extends View {
     private float fieldDimensions;
     private float capturedFieldRadius;
 
-    // TODO: add colors here for easier configuring
-
     /**
      * Constructor
      * @param context

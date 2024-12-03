@@ -63,10 +63,12 @@ public class ShogiComputerPlayer2 extends GameComputerPlayer {
 			}
 			for (int x = -1; x <= 1; x++) {
 				for (int y = -1; y <= 1; y++) {
-					ShogiSquare targetPosition = new ShogiSquare(king.getPosition().getRow() + x, king.getPosition().getCol() + y);
-					ShogiMoveAction checkMove = new ShogiMoveAction(this, king, targetPosition);
+					ShogiSquare targetSquare = new ShogiSquare(king.getPosition().getRow() + x, king.getPosition().getCol() + y);
+					ShogiMoveAction checkMove = new ShogiMoveAction(this, king, targetSquare);
 
 					if (gameState.moveKing(checkMove, false)) {
+						// Sends the move to human player so that he can print the move
+						ShogiHumanPlayer.setPriorMove(king.getPosition(),targetSquare);
 						game.sendAction(checkMove);
 					}
 				}
@@ -80,6 +82,8 @@ public class ShogiComputerPlayer2 extends GameComputerPlayer {
 				for (ShogiSquare targetSquare : possibleMoves) {
 					if (gameState.getPiece(targetSquare) != null && gameState.getPiece(targetSquare).getOwner() != playerNum) {
 						ShogiMoveAction moveAction = new ShogiMoveAction(this, selectedPiece, targetSquare);
+						// Sends the move to human player so that he can print the move
+						ShogiHumanPlayer.setPriorMove(selectedPiece.getPosition(),targetSquare);
 						game.sendAction(moveAction);
 						return;
 					}
@@ -90,6 +94,8 @@ public class ShogiComputerPlayer2 extends GameComputerPlayer {
 		for (ShogiPiece selectedPiece : playerPieces) {
 			if (!selectedPiece.isOnBoard()) {
 				ShogiSquare targetSquare = new ShogiSquare(rand.nextInt(7), rand.nextInt(7));
+				// Sends the move to human player so that he can print the move
+				ShogiHumanPlayer.setPriorMove(selectedPiece.getPosition(),targetSquare);
 				ShogiDropAction dropAction = new ShogiDropAction(this, selectedPiece, targetSquare);
 				if (gameState.dropPiece(dropAction, false)) {
 					game.sendAction(dropAction);
@@ -108,6 +114,9 @@ public class ShogiComputerPlayer2 extends GameComputerPlayer {
 		}
 
 		ShogiSquare targetSquare = selectedPiece.getPossibleMoves().get(rand.nextInt(selectedPiece.getPossibleMoves().size()));
+
+		// Sends the move to human player so that he can print the move
+		ShogiHumanPlayer.setPriorMove(selectedPiece.getPosition(),targetSquare);
 
 		ShogiMoveAction moveAction = new ShogiMoveAction(this, selectedPiece, targetSquare);
 		game.sendAction(moveAction);

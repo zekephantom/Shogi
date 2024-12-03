@@ -67,9 +67,12 @@ public class ShogiComputerPlayer1 extends GameComputerPlayer{
 
 		ShogiSquare targetSquare = selectedPiece.getPossibleMoves().get(rand.nextInt(selectedPiece.getPossibleMoves().size()));
 
+		// Sends the move to human player so that he can print the move
+		ShogiHumanPlayer.setPriorMove(selectedPiece.getPosition(),targetSquare);
+
 		ShogiMoveAction moveAction = new ShogiMoveAction(this, selectedPiece, targetSquare);
 		game.sendAction(moveAction);
 
-		//shogiBoard.setPriorMoveSquares(priorGridTouched, gridTouched);
+
 	}
 }

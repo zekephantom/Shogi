@@ -47,7 +47,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 	private EditText testResultsEditText;
 
 	// the surface view of the board
-	private ShogiGUI shogiBoard;
+	public ShogiGUI shogiBoard;
 
 	// the most recent game state, as given to us by the ShogiLocalGame
 	private ShogiState state = new ShogiState();
@@ -60,8 +60,8 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 	private Handler guiHandler = null;
 
 	// the field the user touched on
-	private ShogiSquare gridTouched;
-	private ShogiSquare priorGridTouched;
+	private static ShogiSquare gridTouched;
+	private static ShogiSquare priorGridTouched;
 	private ShogiPiece selectedPiece;
 	private Boolean pieceIsSelected = false;
 	private ArrayList<ShogiSquare> piecePossibleMoves = new ArrayList<>();
@@ -102,6 +102,16 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 	}
 
 	/**
+	 * Setter method to print the prior move of the computer player
+	 * @param priorG
+	 * @param gridT
+	 */
+	public static void setPriorMove(ShogiSquare priorG, ShogiSquare gridT){
+		priorGridTouched = priorG;
+		gridTouched = gridT;
+	}
+
+	/**
 	 * Updates the display based on the current game state.
 	 */
 	protected void updateDisplay(ShogiState updatedState) {
@@ -132,8 +142,10 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 		if (!(info instanceof ShogiState))
 			return;
 		else {
+
 			this.state = (ShogiState)info;
 			updateDisplay(state);
+
 		}
 	}
 	
@@ -186,7 +198,6 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 
 
 		// TODO: add switchListeners for english/japanese
-		// TODO: quit button
 
 		Button quit = myActivity.findViewById(R.id.butQuit);
 		quit.setOnClickListener(new View.OnClickListener(){
@@ -213,9 +224,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 		float x = motionEvent.getX();
 		float y = motionEvent.getY();
 
-        // TODO end of game message
-		// TODO pop up window for promoting
-		// TODO make sure only the right tablet can select players
+		// TODO pop up window for promoting ?
 
 		// Only checks the state if a new field is touched
 		// -> multiple onTouch calls during a single touch
@@ -232,7 +241,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 			// -----------  move a selected piece ----------------
 			if (pieceIsSelected) {
 
-				// drop action
+				// DROP action
 				if(!selectedPiece.isOnBoard()){
 
 					ShogiDropAction dropAction = new ShogiDropAction(this, selectedPiece, gridTouched);
@@ -258,7 +267,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 					// return true;
 				}
 
-				// move action
+				// MOVE action
 				for (ShogiSquare possibleTargetSquare : piecePossibleMoves) {
 					if (gridTouched.getRow() == possibleTargetSquare.getRow() && gridTouched.getCol() == possibleTargetSquare.getCol()) {
 						// send move action here
@@ -281,11 +290,12 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 				selectedPiece = null;
 				shogiBoard.setSelected(null);
 				pieceIsSelected = false;
-
 			}
+
 			if(!pieceIsSelected) { // --------- no piece currently selected ---------------
 
-				if (selectedPiece != null) {
+				// Draws the prior moves once the move was successful and there was a piece selected
+				if (selectedPiece != null && selectedPiece.getOwner() != state.getCurrentPlayer()) {
 					shogiBoard.setPriorMoveSquares(selectedPiece.getPosition(), gridTouched);
 				}
 
@@ -294,7 +304,8 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 
 				if (selectedPiece != null) {
 					// checks that only pieces from current player can be selected
-					if (selectedPiece.getOwner() != state.getCurrentPlayer()){
+					Log.d("Touch", ""+playerNum);
+					if (selectedPiece.getOwner() != playerNum){
 						selectedPiece = null;
 						return true;
 					}
@@ -315,6 +326,21 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 		return true;
 	}//onTouch
 
+	@Override
+	public boolean onDown(@NonNull MotionEvent motionEvent) {
+		return false;
+	}
+
+	@Override
+	public void onShowPress(@NonNull MotionEvent motionEvent) {
+
+	}
+
+	@Override
+	public boolean onSingleTapUp(@NonNull MotionEvent motionEvent) {
+		return false;
+	}
+
 	/**
 	 * implements drag and drop for moving a piece
 	 * @param motionEvent
@@ -326,6 +352,16 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 	@Override
 	public boolean onScroll(@Nullable MotionEvent motionEvent, @NonNull MotionEvent motionEvent1, float v, float v1) {
 
+		return false;
+	}
+
+	@Override
+	public void onLongPress(@NonNull MotionEvent motionEvent) {
+
+	}
+
+	@Override
+	public boolean onFling(@Nullable MotionEvent motionEvent, @NonNull MotionEvent motionEvent1, float v, float v1) {
 		return false;
 	}
 
