@@ -9,20 +9,16 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.Point;
 import android.graphics.RadialGradient;
 import android.graphics.Shader;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 
-import androidx.core.content.ContextCompat;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import edu.up.cs301.GameFramework.utilities.FlashSurfaceView;
 import edu.up.cs301.shogi.R;
 
 /**
@@ -33,7 +29,7 @@ public class ShogiGUI extends View {
     private ShogiState shogiState;
     private Context contextLocal;
     private List<Bitmap> scaledBitmaps = new ArrayList<>();
-
+    private boolean isEnglish = false;
     private Bitmap kingLower;
     private Bitmap rook;
     private Bitmap prom_rook;
@@ -101,7 +97,13 @@ public class ShogiGUI extends View {
         this.priorTarget = target;
         invalidate();
     }
+    public void setLanguage(boolean isEng) {
+        this.isEnglish = isEng;
+        loadBitmaps(contextLocal);
+        invalidate();
 
+
+    }
 // ------------------------- INIT methods -----------------------------
 
     public void loadBitmaps(Context context) {
@@ -113,25 +115,51 @@ public class ShogiGUI extends View {
          *  Solution: Used the code format from number 3.
          */
 
-        kingLower = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.kinglower));
+        if(isEnglish){
+            kingLower = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.eng_king));
 
-        rook = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.rook));
-        prom_rook = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.prom_rook));
-        bishop = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.bishop));
-        prom_bishop = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.prom_bishop));
-        goldGen = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.goldgen));
-        silverGen = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.silvergen));
-        prom_silver = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.prom_silver));
-        knight = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.knight));
-        prom_knight = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.prom_knight));
-        lance = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.lance));
-        prom_lance = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.prom_lance));
-        pawn = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.pawn));
-        prom_pawn = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.prom_pawn));
-        // kingUpper = BitmapFactory.decodeResource(context.getResources(), R.drawable.kingupper); // optional line of code
+            rook = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.eng_rook));
+            prom_rook = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.eng_prook));
+            bishop = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.eng_bishop));
+            prom_bishop = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.eng_bishop));
+            goldGen = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.eng_goldgen));
+            silverGen = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.eng_silvergen));
+            prom_silver = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.eng_psilver));
+            knight = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.eng_knight));
+            prom_knight = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.eng_pknight));
+            lance = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.eng_lance));
+            prom_lance = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.eng_plance));
+            pawn = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.eng_pawn));
+            prom_pawn = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.eng_ppawn));
+            // kingUpper = BitmapFactory.decodeResource(context.getResources(), R.drawable.kingupper); // optional line of code
+// Creates arrayList in the same order to the arrayList holding all the pieces
 
-        // Creates arrayList in the same order to the arrayList holding all the pieces
-        initBitmap();
+            initBitmap();
+
+        }else {
+            kingLower = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.kinglower));
+
+            rook = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.rook));
+            prom_rook = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.prom_rook));
+            bishop = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.bishop));
+            prom_bishop = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.prom_bishop));
+            goldGen = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.goldgen));
+            silverGen = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.silvergen));
+            prom_silver = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.prom_silver));
+            knight = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.knight));
+            prom_knight = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.prom_knight));
+            lance = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.lance));
+            prom_lance = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.prom_lance));
+            pawn = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.pawn));
+            prom_pawn = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.prom_pawn));
+            // kingUpper = BitmapFactory.decodeResource(context.getResources(), R.drawable.kingupper); // optional line of code
+
+            // Creates arrayList in the same order to the arrayList holding all the pieces
+            initBitmap();
+        }
+
+
+
     }
 
 
@@ -486,6 +514,8 @@ public class ShogiGUI extends View {
      * Initialize BitMap ArrayList in the same order as the ArrayList of the pieces
      */
     private void initBitmap() {
+
+        scaledBitmaps.clear();
         // Initialize pieces for Player 0 (bottom side)
         scaledBitmaps.add(lance);
         scaledBitmaps.add(knight);
