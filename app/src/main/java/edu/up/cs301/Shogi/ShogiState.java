@@ -274,20 +274,18 @@ public class ShogiState extends GameState implements Serializable {
 
 		int row = currentPosition.getRow() + rowDirection;
 		int col = currentPosition.getCol() + colDirection;
-		ShogiSquare steppedPosition = new ShogiSquare(row, col);
 
 		while (row - rowDirection != targetPosition.getRow() || col - colDirection != targetPosition.getCol()) {
-			if (getPiece(steppedPosition) != null && getPiece(steppedPosition).isOnBoard()) {
-				if (getPiece(steppedPosition).getOwner() == piece.getOwner()) {
+			if (getPiece(new ShogiSquare(row, col)) != null && getPiece(new ShogiSquare(row, col)).isOnBoard()) {
+				if (getPiece(new ShogiSquare(row, col)).getOwner() == piece.getOwner()) {
 					return true;
 				}
 			}
 			int nextRow = row - rowDirection;
 			int nextCol = col - colDirection;
-			ShogiSquare nextPosition = new ShogiSquare(nextRow, nextCol);
 			if (nextRow >= 0 && nextCol >= 0) {
-				if (getPiece(nextPosition) != null && getPiece(nextPosition).isOnBoard()) {
-					if (getPiece(nextPosition).getOwner() != piece.getOwner()) {
+				if (getPiece(new ShogiSquare(nextRow, nextCol)) != null && getPiece(new ShogiSquare(nextRow, nextCol)).isOnBoard()) {
+					if (getPiece(new ShogiSquare(nextRow, nextCol)).getOwner() != piece.getOwner()) {
 						return true;
 					}
 				}
