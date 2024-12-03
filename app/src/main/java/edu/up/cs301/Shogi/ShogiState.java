@@ -268,26 +268,25 @@ public class ShogiState extends GameState implements Serializable {
 	 */
 	private boolean isPathBlocked(ShogiPiece piece, ShogiSquare targetPosition) {
 		ShogiSquare currentPosition = new ShogiSquare(piece.getPosition());
+		if (piece == null) return false;
 
 		int rowDirection = Integer.compare(targetPosition.getRow(), currentPosition.getRow());
 		int colDirection = Integer.compare(targetPosition.getCol(), currentPosition.getCol());
 
 		int row = currentPosition.getRow() + rowDirection;
 		int col = currentPosition.getCol() + colDirection;
-		ShogiSquare steppedPosition = new ShogiSquare(row, col);
 
 		while (row - rowDirection != targetPosition.getRow() || col - colDirection != targetPosition.getCol()) {
-			if (getPiece(steppedPosition) != null && getPiece(steppedPosition).isOnBoard()) {
-				if (getPiece(steppedPosition).getOwner() == piece.getOwner()) {
+			if (getPiece(new ShogiSquare(row, col)) != null && getPiece(new ShogiSquare(row, col)).isOnBoard()) {
+				if (getPiece(new ShogiSquare(row, col)).getOwner() == piece.getOwner()) {
 					return true;
 				}
 			}
 			int nextRow = row - rowDirection;
 			int nextCol = col - colDirection;
-			ShogiSquare nextPosition = new ShogiSquare(nextRow, nextCol);
 			if (nextRow >= 0 && nextCol >= 0) {
-				if (getPiece(nextPosition) != null && getPiece(nextPosition).isOnBoard()) {
-					if (getPiece(nextPosition).getOwner() != piece.getOwner()) {
+				if (getPiece(new ShogiSquare(nextRow, nextCol)) != null && getPiece(new ShogiSquare(nextRow, nextCol)).isOnBoard()) {
+					if (getPiece(new ShogiSquare(nextRow, nextCol)).getOwner() != piece.getOwner()) {
 						return true;
 					}
 				}
@@ -306,6 +305,75 @@ public class ShogiState extends GameState implements Serializable {
 	 * @return True if the move is valid, false otherwise.
 	 */
 	public boolean moveKing(ShogiMoveAction action, boolean finalizeMove) {
+		ShogiPiece piece = getPiece(action.getPiece().getPosition());
+		if (piece == null) return false;
+		// check if the piece we are trying to move is owned by the currentPlayer if finalizeMove is true
+		if (finalizeMove) {
+			if (piece.getType() != ShogiPiece.PieceType.King || piece.getOwner() != currentPlayer || !piece.isOnBoard()) {
+				return false;
+			}
+		}
+		else {
+			if (piece.getType() != ShogiPiece.PieceType.King || !piece.isOnBoard()) {
+				return false;
+			}
+		}
+
+		int currentRow = piece.getPosition().getRow();
+		int currentCol = piece.getPosition().getCol();
+		int targetRow = action.getTargetPosition().getRow();
+		int targetCol = action.getTargetPosition().getCol();
+		ShogiSquare targetPosition = new ShogiSquare(targetRow, targetCol);
+
+		// if the piece is trying to move to where is the piece currently is, or not within bounds, or one of the current players pieces, return false
+		if (targetRow == currentRow && targetCol == currentCol || isOutOfBounds(targetPosition)) {
+			return false;
+		}
+		if (getPiece(targetPosition) != null) {
+			if (getPiece(targetPosition).getOwner() == piece.getOwner()){
+				return false;
+			}
+		}
+
+		// go through each piece
+		for (int i = 0; i < pieces.size(); i++) {
+			ShogiPiece curPiece = pieces.get(i);
+			if (curPiece.getOwner() != piece.getOwner() && curPiece.getType() != ShogiPiece.PieceType.King && curPiece.isOnBoard()) {
+				updatePossibleMoves(curPiece);
+				// go through each possible move for the current piece
+				for (ShogiSquare possibleMove : curPiece.getPossibleMoves()) {
+					// check if we are trying to move where an opponents piece can move to
+					if (targetPosition.equals(possibleMove)) {
+						return false;
+					}
+				}
+			}
+		}
+
+		int rowDiff = Math.abs(currentRow - targetRow);
+		int colDiff = Math.abs(currentCol - targetCol);
+
+		if ((rowDiff > 1 || rowDiff < -1 || colDiff > 1 || colDiff < -1) && isOutOfBounds(targetPosition)) {
+			return false;
+		}
+
+		if (finalizeMove) {
+			return finalizeMove(piece, targetPosition);
+		}
+		else {
+			return true;
+		}
+	}
+
+
+	/**
+	 * Moves the King according to its movement rules.
+	 *
+	 * @param action The move action.
+	 * @param finalizeMove Whether the move should be finalized.
+	 * @return True if the move is valid, false otherwise.
+	 */
+	public boolean moveKingSimulateMove(ShogiMoveAction action, boolean finalizeMove) {
 		ShogiPiece piece = getPiece(action.getPiece().getPosition());
 		// check if the piece we are trying to move is owned by the currentPlayer if finalizeMove is true
 		if (finalizeMove) {
@@ -374,6 +442,7 @@ public class ShogiState extends GameState implements Serializable {
 	 */
 	public boolean moveRook(ShogiMoveAction action, boolean finalizeMove) {
 		ShogiPiece piece = getPiece(action.getPiece().getPosition());
+		if (piece == null) return false;
 		// check if the piece we are trying to move is owned by the currentPlayer if finalizeMove is true
 		if (finalizeMove) {
 			if (piece.getType() != ShogiPiece.PieceType.Rook || piece.getOwner() != currentPlayer || !piece.isOnBoard()) {
@@ -437,6 +506,7 @@ public class ShogiState extends GameState implements Serializable {
 	 */
 	public boolean moveBishop(ShogiMoveAction action, boolean finalizeMove) {
 		ShogiPiece piece = getPiece(action.getPiece().getPosition());
+		if (piece == null) return false;
 		// check if the piece we are trying to move is owned by the currentPlayer if finalizeMove is true
 		if (finalizeMove) {
 			if (piece.getType() != ShogiPiece.PieceType.Bishop || piece.getOwner() != currentPlayer || !piece.isOnBoard()) {
@@ -507,6 +577,7 @@ public class ShogiState extends GameState implements Serializable {
 	 */
 	public boolean moveGoldGeneral(ShogiMoveAction action, boolean finalizeMove) {
 		ShogiPiece piece = getPiece(action.getPiece().getPosition());
+		if (piece == null) return false;
 		// check if the piece we are trying to move is owned by the currentPlayer if finalizeMove is true
 		if (finalizeMove) {
 			if (piece.getType() != ShogiPiece.PieceType.GoldGeneral || piece.getOwner() != currentPlayer || !piece.isOnBoard()) {
@@ -581,6 +652,7 @@ public class ShogiState extends GameState implements Serializable {
 	 */
 	public boolean moveSilverGeneral(ShogiMoveAction action, boolean finalizeMove) {
 		ShogiPiece piece = getPiece(action.getPiece().getPosition());
+		if (piece == null) return false;
 		// check if the piece we are trying to move is owned by the currentPlayer if finalizeMove is true
 		if (finalizeMove) {
 			if (piece.getType() != ShogiPiece.PieceType.SilverGeneral || piece.getOwner() != currentPlayer || !piece.isOnBoard()) {
@@ -651,6 +723,7 @@ public class ShogiState extends GameState implements Serializable {
 	 */
 	public boolean moveKnight(ShogiMoveAction action, boolean finalizeMove) {
 		ShogiPiece piece = getPiece(action.getPiece().getPosition());
+		if (piece == null) return false;
 		// check if the piece we are trying to move is owned by the currentPlayer if finalizeMove is true
 		if (finalizeMove) {
 			if (piece.getType() != ShogiPiece.PieceType.Knight || piece.getOwner() != currentPlayer || !piece.isOnBoard()) {
@@ -732,6 +805,7 @@ public class ShogiState extends GameState implements Serializable {
 	 */
 	public boolean moveLance(ShogiMoveAction action, boolean finalizeMove) {
 		ShogiPiece piece = getPiece(action.getPiece().getPosition());
+		if (piece == null) return false;
 		// check if the piece we are trying to move is owned by the currentPlayer if finalizeMove is true
 		if (finalizeMove) {
 			if (piece.getType() != ShogiPiece.PieceType.Lance || piece.getOwner() != currentPlayer || !piece.isOnBoard()) {

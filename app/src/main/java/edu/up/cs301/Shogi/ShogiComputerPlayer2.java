@@ -53,6 +53,7 @@ public class ShogiComputerPlayer2 extends GameComputerPlayer {
 			}
 		}
 
+		// move king if in check
 		ShogiPiece king = null;
 		if (gameState.isKingInCheck(playerNum)) {
 			if (playerNum == 0) {
@@ -75,6 +76,7 @@ public class ShogiComputerPlayer2 extends GameComputerPlayer {
 			}
 		}
 
+		// if a piece can capture an opponents piece, do that
 		for (ShogiPiece selectedPiece : playerPieces) {
 			if (selectedPiece.isOnBoard()) {
 				ArrayList<ShogiSquare> possibleMoves = selectedPiece.getPossibleMoves();
@@ -91,6 +93,7 @@ public class ShogiComputerPlayer2 extends GameComputerPlayer {
 			}
 		}
 
+		// drop a piece if there are any to drop
 		for (ShogiPiece selectedPiece : playerPieces) {
 			if (!selectedPiece.isOnBoard()) {
 				ShogiSquare targetSquare = new ShogiSquare(rand.nextInt(7), rand.nextInt(7));
@@ -103,6 +106,7 @@ public class ShogiComputerPlayer2 extends GameComputerPlayer {
 			}
 		}
 
+		// do a random move
 		ArrayList<ShogiSquare> possibleMoves = new ArrayList<>();
 		ShogiPiece selectedPiece = null;
 

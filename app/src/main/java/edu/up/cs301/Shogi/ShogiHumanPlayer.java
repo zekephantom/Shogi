@@ -239,8 +239,6 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 		float x = motionEvent.getX();
 		float y = motionEvent.getY();
 
-		// TODO pop up window for promoting ?
-
 		// Only checks the state if a new field is touched
 		// -> multiple onTouch calls during a single touch
 		if (gridTouched != shogiBoard.gridSelection(x,y)) {
