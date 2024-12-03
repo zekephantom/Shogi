@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.textclassifier.TextClassifierEvent;
 import android.widget.Button;
 import android.widget.EditText;
 import android.view.View.OnClickListener;
@@ -25,7 +26,7 @@ import android.widget.Switch;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-
+import android.widget.CompoundButton;
 import java.util.ArrayList;
 
 /**
@@ -194,17 +195,21 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 		updateDisplay(state);
 */
 
-		Logger.log("set listener","OnTouch");
 		shogiBoard.setOnTouchListener(this);
 
-
-		// TODO: add switchListeners for english/japanese
+// Add the listener for the language switch
 		Switch language = myActivity.findViewById(R.id.swLanguage);
-		language.setOnClickListener(new View.OnClickListener(){
+		language.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 			@Override
-			public void onClick(View v){
-
-				shogiBoard.setLanguage(true);
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				// Check the switch state to set the language
+				if (isChecked) {
+					// Set language to English
+					shogiBoard.setLanguage(true); // Assuming true represents English
+				} else {
+					// Set language to Japanese
+					shogiBoard.setLanguage(false); // Assuming false represents Japanese
+				}
 			}
 		});
 		// TODO: quit button
