@@ -49,7 +49,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 	private EditText testResultsEditText;
 
 	// the surface view of the board
-	public ShogiGUI shogiBoard;
+	public ShogiGUIBase shogiBoard;
 
 	// the most recent game state, as given to us by the ShogiLocalGame
 	private ShogiState state = new ShogiState();
@@ -164,12 +164,18 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 		// remember the activity
 		this.myActivity = activity;
 
-
 		// remember the handler for the GUI thread
 		this.guiHandler = new Handler();
 
 		//  set the right content view
-		activity.setContentView(R.layout.game_interface);
+		if(playerNum == 0) {
+			activity.setContentView(R.layout.game_interface);
+			shogiBoard = (ShogiGUIBase) myActivity.findViewById(R.id.shogiBoard);
+		} else {
+			activity.setContentView(R.layout.game_interface_flipped);
+			shogiBoard = (ShogiGUIBase) myActivity.findViewById(R.id.shogiBoardFlipped);
+		}
+		shogiBoard.setShogiState(state);
 
 		// uncomment when running game state test
 		/*
@@ -178,27 +184,11 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 		runTestButton.setOnClickListener(this);
 		*/
 
-		shogiBoard = (ShogiGUI)myActivity.findViewById(R.id.shogiBoard);
-		shogiBoard.setShogiState(state);
-
-// --------- testing of the GUI functionality ---------------
-/*		// captured
-		state.getPieces().get(15).setOnBoard(false);
-		updateDisplay(state);
-
-		// promoted
-		state.getPieces().get(35).setPromoted(true);
-		updateDisplay(state);
-
-		// owner
-		state.getPieces().get(35).setOwner(1-state.getPieces().get(35).getOwner());
-		updateDisplay(state);
-*/
-
 		Logger.log("set listener","OnTouch");
-		shogiBoard.setOnTouchListener(this);
 
-// Add the listener for the language switch
+		((View) shogiBoard).setOnTouchListener(this);
+
+		// Add the listener for the language switch
 		Switch language = myActivity.findViewById(R.id.swLanguage);
 		language.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 			@Override
@@ -221,14 +211,6 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 				confirmExit();
 			}
 		});
-
-		/*
-		quit.setOnClickListener(new View.OnClickListener(){
-			@Override
-			public void onClick(View v){
-				confirmExit();
-			}
-		});*/
 	}
 
 	@Override
@@ -319,7 +301,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 				if (selectedPiece != null) {
 					// checks that only pieces from current player can be selected
 					Log.d("Touch", ""+playerNum);
-					if (selectedPiece.getOwner() != playerNum && selectedPiece.getOwner() != state.getCurrentPlayer()){
+					if (selectedPiece.getOwner() != playerNum){
 						selectedPiece = null;
 						return true;
 					}
