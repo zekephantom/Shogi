@@ -25,7 +25,7 @@ import edu.up.cs301.shogi.R;
  * ShogiGUI renders the board and pieces based on the state of ShogiBoard.
  */
 //TODO flip GUI for second network player
-public class ShogiGUI extends View implements ShogiGUIBase{
+public class ShogiGUI extends View {
     protected ShogiState shogiState;
     protected Context contextLocal;
     protected List<Bitmap> scaledBitmaps = new ArrayList<>();
@@ -109,7 +109,7 @@ public class ShogiGUI extends View implements ShogiGUIBase{
     }
 // ------------------------- INIT methods -----------------------------
 
-    protected void loadBitmaps(Context context) {
+    public void loadBitmaps(Context context) {
         /**
          * External Citation
          *  Date: 8 November 2024
@@ -269,7 +269,8 @@ public class ShogiGUI extends View implements ShogiGUIBase{
 
         ArrayList<ShogiPiece> pieces = shogiState.getPieces();
 
-        // reset captured count array to 0
+        // reset captured count array to 1
+        // capturedCount[][] = 1;
         for (int i = 0; i < capturedCount.length; i++) {
             Arrays.fill(capturedCount[i], 0);
         }
@@ -310,7 +311,7 @@ public class ShogiGUI extends View implements ShogiGUIBase{
      * draws a blue orb around the piece that has been selected
      * @param canvas
      */
-    protected void drawSelected(Canvas canvas){
+    public void drawSelected(Canvas canvas){
 
         if (selectedSquare == null) return;
         int selectedColor = 0xFF00FFFF; // cyan
@@ -326,7 +327,7 @@ public class ShogiGUI extends View implements ShogiGUIBase{
      * has moved in the previous move
      * @param canvas
      */
-    protected void drawPriorMove(Canvas canvas){
+    public void drawPriorMove(Canvas canvas){
         if(priorOrig == null || priorTarget == null) return;
         Paint paintPrior = new Paint();
         paintPrior.setColor(0x90FFFFFF); // faint white
@@ -346,7 +347,7 @@ public class ShogiGUI extends View implements ShogiGUIBase{
      * selected piece can move to
      * @param canvas
      */
-    protected void drawPossibleMoves(Canvas canvas){
+    public void drawPossibleMoves(Canvas canvas){
         if(selectedSquare == null || possibleMoves == null) return;
         int possibleMoveColor = 0xFFFFFFFF; // white
 
@@ -364,7 +365,7 @@ public class ShogiGUI extends View implements ShogiGUIBase{
      * draws a red circle around the King if it has been checked
      * @param canvas
      */
-    protected void drawCheck(Canvas canvas){
+    public void drawCheck(Canvas canvas){
         int checkColor = 0xFFFF0000; // red
         ShogiSquare king;
         if (shogiState.isKingInCheck(shogiState.getCurrentPlayer())){
@@ -380,10 +381,10 @@ public class ShogiGUI extends View implements ShogiGUIBase{
         }
         if (shogiState.isKingInCheck(1 - shogiState.getCurrentPlayer())){
             if (shogiState.getCurrentPlayer() == 0) {
-                king = shogiState.getPieces().get(24).getPosition();
+                king = shogiState.getPieces().get(4).getPosition();
             }
             else {
-                king = shogiState.getPieces().get(4).getPosition();
+                king = shogiState.getPieces().get(24).getPosition();
             }
             float left = (king.getCol() + (float)1.5) * cellDimensions;
             float top = (king.getRow() + (float)0.5) * cellDimensions;
@@ -396,7 +397,7 @@ public class ShogiGUI extends View implements ShogiGUIBase{
      * draws a number next to each captured pieces if it is more than 1
      * @param canvas
      */
-    protected void drawCapturedCount(Canvas canvas){
+    public void drawCapturedCount(Canvas canvas){
         Log.d("GUI", "inside draw captured count");
         Paint circleFill = new Paint();
         Paint circleOutline = new Paint();
@@ -439,7 +440,7 @@ public class ShogiGUI extends View implements ShogiGUIBase{
      important ! -> switches column 0 to column 9 (captured col for player 1)
         in order to function with the game logic
      */
-     public ShogiSquare gridSelection(float x, float y){
+     public  ShogiSquare gridSelection(float x, float y){
 
         // Set pos outside of possible answer
         ShogiSquare squareReturn = new ShogiSquare(9,11);
@@ -482,7 +483,7 @@ public class ShogiGUI extends View implements ShogiGUIBase{
      * @param logic
      * @return
      */
-    protected ShogiSquare switchLogicToGraphic(ShogiSquare logic){
+    private ShogiSquare switchLogicToGraphic(ShogiSquare logic){
         if (logic == null) Log.d("GUI", "null object passed into switchLogicToGraphic");
 
         ShogiSquare graphic = new ShogiSquare(logic);
@@ -493,7 +494,7 @@ public class ShogiGUI extends View implements ShogiGUIBase{
         return graphic;
     }
 
-    protected void drawCricle(Canvas canvas, int color, float left, float top){
+    private void drawCricle(Canvas canvas, int color, float left, float top){
         Paint toPaint = new Paint();
 
         /*
@@ -518,7 +519,7 @@ public class ShogiGUI extends View implements ShogiGUIBase{
     /**
      * Initialize BitMap ArrayList in the same order as the ArrayList of the pieces
      */
-    protected void initBitmap() {
+    private void initBitmap() {
 
         scaledBitmaps.clear();
         // Initialize pieces for Player 0 (bottom side)
@@ -566,7 +567,7 @@ public class ShogiGUI extends View implements ShogiGUIBase{
      * rotates bitmap 180 degrees to be used as a "enemy" piece
      * @param source
       */
-    protected static Bitmap flippedBitmap(Bitmap source)
+    public static Bitmap flippedBitmap(Bitmap source)
     {
         Matrix matrix = new Matrix();
         matrix.postRotate(180);
@@ -579,7 +580,7 @@ public class ShogiGUI extends View implements ShogiGUIBase{
      * @param piece
      * @return
      */
-    protected int drawCaptured(ShogiPiece piece){
+    private int drawCaptured(ShogiPiece piece){
         int row;
         switch (piece.getType()) {
             case Rook:
@@ -615,7 +616,7 @@ public class ShogiGUI extends View implements ShogiGUIBase{
      * @param piece
      * @param arrayPosition
      */
-    protected void checkPromoteBitmap(Boolean prom, ShogiPiece piece, int arrayPosition){
+    private void checkPromoteBitmap(Boolean prom, ShogiPiece piece, int arrayPosition){
         switch (piece.getType()) {
             case Rook:
                 scaledBitmaps.set(arrayPosition, (prom)? prom_rook : rook);
@@ -650,14 +651,14 @@ public class ShogiGUI extends View implements ShogiGUIBase{
      * @param owner
      * @param arrayPosition
      */
-    protected void checkOwnerBitmap(int owner, int arrayPosition){
+    private void checkOwnerBitmap(int owner, int arrayPosition){
         if(owner == 1){
             scaledBitmaps.set(arrayPosition, flippedBitmap(scaledBitmaps.get(arrayPosition)));
         }
     }
 
     // deprecated function -> was overused which slowed down the GUI a lot
-/*  protected void scaleBitmaps() {
+/*  private void scaleBitmaps() {
         for (int i = 0; i < scaledBitmaps.size(); i++) {
             scaledBitmaps.set(i, scaleBitmap(scaledBitmaps.get(i)));
         }
@@ -668,7 +669,7 @@ public class ShogiGUI extends View implements ShogiGUIBase{
      * @param toScale
      * @return
      */
-    protected Bitmap scaleBitmap(Bitmap toScale){
+    private Bitmap scaleBitmap(Bitmap toScale){
         return Bitmap.createScaledBitmap(toScale, (int) cellDimensions, (int) cellDimensions, true);
     }
 }
