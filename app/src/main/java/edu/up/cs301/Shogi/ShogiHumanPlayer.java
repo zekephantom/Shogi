@@ -49,7 +49,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 	private EditText testResultsEditText;
 
 	// the surface view of the board
-	public ShogiGUIBase shogiBoard;
+	public ShogiGUI shogiBoard;
 
 	// the most recent game state, as given to us by the ShogiLocalGame
 	private ShogiState state = new ShogiState();
@@ -139,6 +139,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 	@Override
 	public void receiveInfo(GameInfo info) {
 
+		shogiBoard.setPlayerNumber(playerNum);
 		if (shogiBoard == null) return;
 
 		if (!(info instanceof ShogiState))
@@ -168,13 +169,11 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 		this.guiHandler = new Handler();
 
 		//  set the right content view
-		if(playerNum == 0) {
-			activity.setContentView(R.layout.game_interface);
-			shogiBoard = (ShogiGUIBase) myActivity.findViewById(R.id.shogiBoard);
-		} else {
-			activity.setContentView(R.layout.game_interface_flipped);
-			shogiBoard = (ShogiGUIBase) myActivity.findViewById(R.id.shogiBoardFlipped);
-		}
+
+		activity.setContentView(R.layout.game_interface);
+
+		shogiBoard = (ShogiGUI) myActivity.findViewById(R.id.shogiBoard);
+		shogiBoard.setPlayerNumber(playerNum);
 		shogiBoard.setShogiState(state);
 
 		// uncomment when running game state test
@@ -211,10 +210,12 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 				confirmExit();
 			}
 		});
+
 	}
 
 	@Override
 	public boolean onTouch(View view, MotionEvent motionEvent) {
+
 	if (motionEvent.getAction() != MotionEvent.ACTION_DOWN) {
 		return false;
 	}

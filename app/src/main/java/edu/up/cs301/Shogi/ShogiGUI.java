@@ -30,6 +30,7 @@ public class ShogiGUI extends View implements ShogiGUIBase{
     protected Context contextLocal;
     protected List<Bitmap> scaledBitmaps = new ArrayList<>();
     protected boolean isEnglish = false;
+    protected int playerNum;
 
     protected Bitmap kingLower;
     protected Bitmap rook;
@@ -72,10 +73,14 @@ public class ShogiGUI extends View implements ShogiGUIBase{
     public ShogiGUI(Context context, AttributeSet attrs) {
         super(context, attrs);
         contextLocal = context; // needed to call the loadBitmaps method outside of the ctr
-
     }
 
 // ------------------------ Setter methods ---------------------------
+
+    // setter method for the playerNum
+    public void setPlayerNumber(int playerN){
+        playerNum = playerN;
+    }
 
     // setter method for the shogi state
     public void setShogiState(ShogiState state){
@@ -104,7 +109,6 @@ public class ShogiGUI extends View implements ShogiGUIBase{
         this.isEnglish = isEng;
         loadBitmaps(contextLocal);
         invalidate();
-
 
     }
 // ------------------------- INIT methods -----------------------------
@@ -281,18 +285,24 @@ public class ShogiGUI extends View implements ShogiGUIBase{
 
             checkPromoteBitmap(piece.isPromoted(), piece, i);
 
-            checkOwnerBitmap(piece.getOwner(), i);
+            int pieceOwner = (playerNum == 0) ? piece.getOwner() : 1 - piece.getOwner();
+            checkOwnerBitmap(pieceOwner, i);
 
             if (piece.isOnBoard()){
-                // Ensure the position is within bounds
-                row = Math.max(0, Math.min(piecePosition.getRow(), 8));
-                col = Math.max(0, Math.min(piecePosition.getCol(), 8)) + 1; // col 0 -> captured Pieces
+
+                //  get row/col
+                row = (playerNum == 0) ? piecePosition.getRow() : 8 - piecePosition.getRow();
+                col = (playerNum == 0) ? piecePosition.getCol()+1 : 8 - piecePosition.getCol()+1;
 
             }else{
                 // Set column according to owner (10 for player 0, 0 for player 1)
-                col = (piece.getOwner() == 0)? 10 : 0;
+                if (playerNum == 0){
+                    col = (piece.getOwner() == 0)? 10 : 0;
+                } else {
+                    col = (piece.getOwner() == 0)? 0 : 10;
+                }
                 // Set row according to piece type and owner
-                row = drawCaptured(piece); // hides switch statement in method
+                row = (playerNum == 0) ? piecePosition.getRow() : 8 - piecePosition.getRow();
                 // increment captured count if there is a piece already
                 if(shogiState.getPiece(piecePosition) != null) capturedCount[row][col]++;
             }
@@ -437,6 +447,7 @@ public class ShogiGUI extends View implements ShogiGUIBase{
     /**
      function that returns what square has been touched
      important ! -> switches column 0 to column 9 (captured col for player 1)
+     also selects pieces differently according to each player
         in order to function with the game logic
      */
      public ShogiSquare gridSelection(float x, float y){
