@@ -123,7 +123,12 @@ public class ShogiComputerPlayer2 extends GameComputerPlayer {
 		ShogiHumanPlayer.setPriorMove(selectedPiece.getPosition(),targetSquare);
 
 		ShogiMoveAction moveAction = new ShogiMoveAction(this, selectedPiece, targetSquare);
-		game.sendAction(moveAction);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        game.sendAction(moveAction);
 
 	}
 }

@@ -27,6 +27,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import android.widget.CompoundButton;
+import android.widget.TextView;
+
 import java.util.ArrayList;
 
 /**
@@ -47,6 +49,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 	/* instance variables */
 	// The EditText that displays test results or game state information
 	private EditText testResultsEditText;
+	private TextView currentPlayerTextView;
 
 	// the surface view of the board
 	public ShogiGUI shogiBoard;
@@ -148,7 +151,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 
 			this.state = (ShogiState)info;
 			updateDisplay(state);
-
+			updateCurrentPlayerTextView();
 		}
 	}
 	
@@ -174,6 +177,10 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 
 		shogiBoard = (ShogiGUI) myActivity.findViewById(R.id.shogiBoard);
 		shogiBoard.setPlayerNumber(playerNum);
+
+		currentPlayerTextView = myActivity.findViewById(R.id.setCurrPlayer);
+		updateCurrentPlayerTextView();
+
 		shogiBoard.setShogiState(state);
 
 		// uncomment when running game state test
@@ -210,8 +217,25 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 				confirmExit();
 			}
 		});
+	}//setAsGui
 
+	/**
+	 * Updates the "Whose Turn Is It?" TextView to display the current player's turn.
+	 */
+	private void updateCurrentPlayerTextView() {
+		if (currentPlayerTextView != null && state != null) {
+			// Get the current player's number (0 or 1)
+			int currentPlayer = state.getCurrentPlayer();
+
+			// Update the text based on the current player
+			if (currentPlayer == 0) {
+				currentPlayerTextView.setText("Player 1's Turn");
+			} else {
+				currentPlayerTextView.setText("Player 2's Turn");
+			}
+		}
 	}
+
 
 	@Override
 	public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -276,6 +300,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 						selectedPiece = null;
 						shogiBoard.setSelected(null);
 						pieceIsSelected = false;
+						updateCurrentPlayerTextView();
 						return true;
 					}
 				}
