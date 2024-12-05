@@ -120,6 +120,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 
 		if (updatedState != null) {
 			shogiBoard.setShogiState(updatedState);
+			shogiBoard.setPriorMoveSquares(priorGridTouched, gridTouched);
 		}
 
 	/* Code used for game state test
@@ -139,8 +140,10 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 	@Override
 	public void receiveInfo(GameInfo info) {
 
-		shogiBoard.setPlayerNumber(playerNum);
 		if (shogiBoard == null) return;
+
+		// Passes the current players number to GUI so the pieces can be drawn flipped or not flipped
+		shogiBoard.setPlayerNumber(playerNum);
 
 		if (!(info instanceof ShogiState))
 			return;
@@ -195,7 +198,6 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 		activity.setContentView(R.layout.game_interface);
 
 		shogiBoard = (ShogiGUI) myActivity.findViewById(R.id.shogiBoard);
-		shogiBoard.setPlayerNumber(playerNum);
 
 		//currPlayerTxtView = myActivity.findViewById(R.id.setCurrPlayer);
 
@@ -252,6 +254,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 		if (gridTouched != shogiBoard.gridSelection(x,y)) {
 
 			// will return captured pieces being col 9, 10 for player 1, 0
+			// write previous grid touched in a new variable to be able to access later
 			if (gridTouched != null) priorGridTouched = new ShogiSquare(gridTouched);
 			gridTouched = shogiBoard.gridSelection(x, y);
 
@@ -277,8 +280,8 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 						return true;
 					}
 
-					// Invalid drop
-					// TODO draw red fields if it is a illegal drop
+
+
 					 {
 						TextView currentPlayerBar = myActivity.findViewById(R.id.currentPlayerBar);
 						TextView player1Bar = myActivity.findViewById(R.id.tvP1);
@@ -300,8 +303,8 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 							}
 						}
 					}
-					// shogiBoard.setPriorMoveSquares(priorGridTouched, gridTouched);
 
+					// Invalid drop
 					// reset the selected piece
 					selectedPiece = null;
 					shogiBoard.setSelected(null);
