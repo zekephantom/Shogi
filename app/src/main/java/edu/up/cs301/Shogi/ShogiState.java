@@ -1147,8 +1147,6 @@ public class ShogiState extends GameState implements Serializable {
 			return true;
 		}
 
-
-
 	}
 
 	/**

@@ -42,7 +42,7 @@ import java.util.ArrayList;
  * @author Makengo Lokombo
  * @version July 2013 (original), 28 October 2024
  */
-public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchListener, GestureDetector.OnGestureListener {
+public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchListener {
 
 	/* instance variables */
 	// The EditText that displays test results or game state information
@@ -354,8 +354,6 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 					ShogiDropAction dropAction = new ShogiDropAction(this, selectedPiece, gridTouched);
 					if (state.dropPiece(dropAction, false)) {
 						game.sendAction(dropAction);
-						//shogiBoard.setPriorMoveSquares(priorGridTouched, gridTouched);
-						//state.setPriorMove(priorGridTouched, gridTouched);
 
 						// reset the selected piece
 						selectedPiece = null;
@@ -380,8 +378,6 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 						ShogiMoveAction action = new ShogiMoveAction(this, selectedPiece, gridTouched);
 						game.sendAction(action);
 						Log.d("Touch", "Piece selected move valid");
-						//shogiBoard.setPriorMoveSquares(priorGridTouched, gridTouched);
-						//state.setPriorMove(priorGridTouched, gridTouched);
 
 						// reset the selected piece
 						selectedPiece = null;
@@ -412,7 +408,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 				if (selectedPiece != null) {
 					// checks that only pieces from current player can be selected
 					Log.d("Touch", ""+playerNum);
-					if (selectedPiece.getOwner() != playerNum || selectedPiece.getOwner() != state.getCurrentPlayer()){
+					if (selectedPiece.getOwner() != playerNum /*|| selectedPiece.getOwner() != state.getCurrentPlayer()*/){
 						selectedPiece = null;
 						return true;
 					}
@@ -424,7 +420,6 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 					Log.d("Touch", "Piece getting selected");
 				} else {
 					Log.d("Touch", "Piece not selected");
-					// pieceIsSelected = false;
 				}
 
 			}// piece is selected
@@ -433,44 +428,6 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 		return true;
 	}//onTouch
 
-	@Override
-	public boolean onDown(@NonNull MotionEvent motionEvent) {
-		return false;
-	}
-
-	@Override
-	public void onShowPress(@NonNull MotionEvent motionEvent) {
-
-	}
-
-	@Override
-	public boolean onSingleTapUp(@NonNull MotionEvent motionEvent) {
-		return false;
-	}
-
-	/**
-	 * implements drag and drop for moving a piece
-	 * @param motionEvent
-	 * @param motionEvent1
-	 * @param v
-	 * @param v1
-	 * @return
-	 */
-	@Override
-	public boolean onScroll(@Nullable MotionEvent motionEvent, @NonNull MotionEvent motionEvent1, float v, float v1) {
-
-		return false;
-	}
-
-	@Override
-	public void onLongPress(@NonNull MotionEvent motionEvent) {
-
-	}
-
-	@Override
-	public boolean onFling(@Nullable MotionEvent motionEvent, @NonNull MotionEvent motionEvent1, float v, float v1) {
-		return false;
-	}
 
 	private void confirmExit() {
 		// Show a confirmation dialog before exiting
