@@ -49,7 +49,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 	private EditText testResultsEditText;
 	private CountDownTimer turnTimer;
 	private TextView turnTimerTextView;
-	private static final long TURN_TIME_LIMIT = 30000;
+	private static final long TURN_TIME_LIMIT = 45000;
 
 	// the surface view of the board
 	public ShogiGUI shogiBoard;
@@ -59,8 +59,6 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 	
 	// the android activity that we are running
 	private GameMainActivity myActivity;
-
-	// private GestureDetector myDetector = new GestureDetector(this, this);
 
 	private Handler guiHandler = null;
 
@@ -152,8 +150,8 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 		TextView player1TxtView = myActivity.findViewById(R.id.tvP1);
 		TextView player2TxtView = myActivity.findViewById(R.id.tvP2);
 		if (playerNum != 0){
-			player1TxtView.setText("Player 2");
-			player2TxtView.setText("Player 1");
+			player1TxtView.setText(R.string.player2);
+			player2TxtView.setText(R.string.player1);
 		}
 
 		if (!(info instanceof ShogiState))
@@ -173,7 +171,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 				// Cancel the timer if it's not the human player's turn
 				if (turnTimer != null) {
 					turnTimer.cancel();
-					turnTimerTextView.setText("Waiting...");
+					turnTimerTextView.setText(R.string.waiting);
 				}
 			}
 		}
@@ -218,7 +216,6 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 		this.guiHandler = new Handler();
 
 		//  set the right content view
-
 		activity.setContentView(R.layout.game_interface);
 
 		shogiBoard = (ShogiGUI) myActivity.findViewById(R.id.shogiBoard);
@@ -302,7 +299,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 			}
 		};
 
-		turnTimer.start(); // Start the timer
+		turnTimer.start(); // Starts the timer
 	}
 
 	/**
@@ -515,27 +512,6 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 		testResultsEditText.append("Second Copy:\n" + secondCopy.toString() + "\n");
 	}// shogiGameStateTest()
 
-	/**
-	 * This method gets called when the user clicks the 'Run Test' button.
-	 * It performs the following actions:
-	 * 1. Clears any text currently displayed in the EditText.
-	 * 2. Creates a new instance of the game state class.
-	 * 3. Creates a deep copy of the first instance.
-	 *
-	 * @param button
-	 *      the button that was clicked
-	 */
-/*
-	@Override
-	public void onClick(View button) {
-		// if we are not yet connected to a game, ignore
-		if (game == null) return;
-
-		// ShogiStateTest
-		// shogiStateTest();
-
-
-	}// onClick*/
 
 }// class ShogiHumanPlayer
 

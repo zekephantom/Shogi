@@ -8,4 +8,7 @@
     <string name="currentTurn">Current Turn:</string>
     <string name="currTurnBar"> </string>
     <string name="timeRemaining">Time Remaining</string>
+    <string name="player1">Player 1</string>
+    <string name="player2">Player 2</string>
+    <string name="waiting">Waiting…</string>
 </resources>

@@ -3,7 +3,6 @@ package edu.up.cs301.Shogi;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import edu.up.cs301.GameFramework.infoMessage.GameState;
 
 /**
  * Class ShogiPiece represents a piece in the game of Shogi.
