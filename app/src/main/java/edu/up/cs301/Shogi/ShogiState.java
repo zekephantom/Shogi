@@ -1409,7 +1409,6 @@ public class ShogiState extends GameState implements Serializable {
 
 		// Check if any opponent's piece can attack the king
 		for (ShogiPiece piece : pieces) {
-			updatePossibleMoves(piece);
 			if (piece.getOwner() != player && piece.isOnBoard()) {
 				ArrayList<ShogiSquare> possibleMoves = piece.getPossibleMoves();
 
