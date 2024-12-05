@@ -40,7 +40,7 @@ import java.util.ArrayList;
  * @author James Pham
  * @author Arnaj Sandhu
  * @author Makengo Lokombo
- * @version July 2013 (original), 28 October 2024
+ * @version July 2013 (original), 28 October 2024, 5 December 2024
  */
 public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchListener, GestureDetector.OnGestureListener {
 
@@ -60,7 +60,6 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 	// the android activity that we are running
 	private GameMainActivity myActivity;
 
-	// private GestureDetector myDetector = new GestureDetector(this, this);
 
 	private Handler guiHandler = null;
 
@@ -126,10 +125,10 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 			shogiBoard.setPriorMoveSquares(priorGridTouched, gridTouched);
 		}
 
-	/* Code used for game state test
+		/* Code used for game state test
 		// set the text in the appropriate widget
-	if(state == null) return;
-	Log.d("toString", state.toString());
+		if(state == null) return;
+		Log.d("toString", state.toString());
 
 	 */
 	}
@@ -301,7 +300,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 			}
 		};
 
-		turnTimer.start(); // Start the timer
+		turnTimer.start(); // Starts the timer
 	}
 
 	/**
@@ -453,16 +452,34 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 		return true;
 	}//onTouch
 
+	/**
+	 * External Citation
+	 * 	Date: 4 December 2024
+	 * 	Problem: Implementing GestureDetector required to have onDown,
+	 * 			onShowPress, and onSingleTapUp methods.
+	 * 	Resource: https://developer.android.com/reference/android/view/GestureDetector, ChatGPT
+	 * 	Solution: Implemented the required methods below.
+	 * @param motionEvent The down motion event.
+	 * @return
+	 */
 	@Override
 	public boolean onDown(@NonNull MotionEvent motionEvent) {
 		return false;
 	}
 
+	/**
+	 *
+	 * @param motionEvent The down motion event
+	 */
 	@Override
 	public void onShowPress(@NonNull MotionEvent motionEvent) {
 
 	}
 
+	/**
+	 * @param motionEvent The up motion event that completed the first tap
+	 * @return
+	 */
 	@Override
 	public boolean onSingleTapUp(@NonNull MotionEvent motionEvent) {
 		return false;
@@ -478,7 +495,14 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 	 */
 	@Override
 	public boolean onScroll(@Nullable MotionEvent motionEvent, @NonNull MotionEvent motionEvent1, float v, float v1) {
-
+		/**
+		 * External Citation
+		 * 	Date: 4 December 2024
+		 * 	Problem: Implementing GestureDetector required to have onScroll,
+		 * 			onLongPress, and onFling methods.
+		 * 	Resource: https://developer.android.com/reference/android/view/GestureDetector, ChatGPT
+		 * 	Solution: Implemented the required methods above and below.
+		 */
 		return false;
 	}
 
@@ -534,26 +558,28 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 		ShogiMoveAction movePawn1 = new ShogiMoveAction(this, firstInstance.getPiece(new ShogiSquare(6, 2)), new ShogiSquare(5, 2));
 		testResultsEditText.append("Player 1 moves Pawn from (6, 2) to (5, 2): " + (firstInstance.moveAction(movePawn1) ? "Success" : "Failed") + "\n");
 
-// Player 2 moves Pawn from (0, 3) to (1, 2)
+		// Player 2 moves Pawn from (0, 3) to (1, 2)
 		ShogiMoveAction moveGoldG1= new ShogiMoveAction(this, firstInstance.getPiece(new ShogiSquare(0, 3)), new ShogiSquare(1, 2));
 		testResultsEditText.append("Player 2 moves GoldG from (0, 3) to (1, 2): " + (firstInstance.moveAction(moveGoldG1) ? "Success" : "Failed") + "\n");
 
-// Player 1 moves moveBishop1 from (7, 1) to (2, 6)
+		// Player 1 moves moveBishop1 from (7, 1) to (2, 6)
 		ShogiMoveAction moveBishop1 = new ShogiMoveAction(this, firstInstance.getPiece(new ShogiSquare(7, 1)), new ShogiSquare(2, 6));
 		testResultsEditText.append("Player 1 moves Bishop from (7, 1) to (2, 6): " + (firstInstance.moveAction(moveBishop1) ? "Success" : "Failed") + "\n");
 		firstInstance.getPiece(new ShogiSquare(2, 6)).bePromoted(true); // bishop promotion
-// Player 2 moves moveGoldG2 from (0, 5) to (1, 5)
+
+		// Player 2 moves moveGoldG2 from (0, 5) to (1, 5)
 		ShogiMoveAction moveGoldG2 = new ShogiMoveAction(this, firstInstance.getPiece(new ShogiSquare(0, 5)), new ShogiSquare(1, 5));
 		testResultsEditText.append("Player 2 moves GoldG from (0, 5) to (1, 5): " + (firstInstance.moveAction(moveGoldG2) ? "Success" : "Failed") + "\n");
 
-// Player 1 moves moveBishop2 from (2, 6) to (1, 5)
+		// Player 1 moves moveBishop2 from (2, 6) to (1, 5)
 		ShogiMoveAction moveBishop2= new ShogiMoveAction(this, firstInstance.getPiece(new ShogiSquare(2, 6)), new ShogiSquare(1, 5));
 		testResultsEditText.append("Player 1 moves Bishop from (2, 6) to (1, 5): " + (firstInstance.moveAction( moveBishop2) ? "Success" : "Failed") + "\n");
 
-// Player 2 moves King from (0, 4) to (0, 3)
+		// Player 2 moves King from (0, 4) to (0, 3)
 		ShogiMoveAction moveKing = new ShogiMoveAction(this, firstInstance.getPiece(new ShogiSquare(0, 4)), new ShogiSquare(0, 3));
 		testResultsEditText.append("Player 2 moves King from (0, 4) to (0, 3): " + (firstInstance.moveAction(moveKing) ? "Success" : "Failed") + "\n");
-// player1 drops Gold General (1,4)
+
+		// player1 drops Gold General (1,4)
 		firstInstance.getPieces().get(35).setOnBoard(true);
 		ShogiMoveAction dropGoldG = new ShogiMoveAction(this, firstInstance.getPieces().get(35), new ShogiSquare(1, 4));
 		testResultsEditText.append("Player 2 drops Gold General to (1, 4): " + (firstInstance.moveAction(dropGoldG) ? "Success" : "Failed") + "\n");
@@ -576,29 +602,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 		//Print string representations for both copies
 		testResultsEditText.append("First Copy: \n" + firstCopy.toString() + "\n");
 		testResultsEditText.append("Second Copy:\n" + secondCopy.toString() + "\n");
-	}// shogiGameStateTest()
-
-	/**
-	 * This method gets called when the user clicks the 'Run Test' button.
-	 * It performs the following actions:
-	 * 1. Clears any text currently displayed in the EditText.
-	 * 2. Creates a new instance of the game state class.
-	 * 3. Creates a deep copy of the first instance.
-	 *
-	 * @param button
-	 *      the button that was clicked
-	 */
-/*
-	@Override
-	public void onClick(View button) {
-		// if we are not yet connected to a game, ignore
-		if (game == null) return;
-
-		// ShogiStateTest
-		// shogiStateTest();
-
-
-	}// onClick*/
+	}// shogiGameStateTest
 
 }// class ShogiHumanPlayer
 

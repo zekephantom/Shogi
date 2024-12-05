@@ -1,12 +1,7 @@
 package edu.up.cs301.Shogi;
 
-import android.content.DialogInterface;
-
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
-
 import edu.up.cs301.GameFramework.GameMainActivity;
 import edu.up.cs301.GameFramework.infoMessage.GameState;
 import edu.up.cs301.GameFramework.players.GamePlayer;

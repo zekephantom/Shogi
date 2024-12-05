@@ -137,7 +137,7 @@ public class ShogiGUI extends View {
             prom_lance = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.eng_plance));
             pawn = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.eng_pawn));
             prom_pawn = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.eng_ppawn));
-            // kingUpper = BitmapFactory.decodeResource(context.getResources(), R.drawable.kingupper); // optional line of code
+
         }else {
             kingLower = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.kinglower));
 
@@ -154,7 +154,6 @@ public class ShogiGUI extends View {
             prom_lance = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.prom_lance));
             pawn = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.pawn));
             prom_pawn = scaleBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.prom_pawn));
-            // kingUpper = BitmapFactory.decodeResource(context.getResources(), R.drawable.kingupper); // optional line of code
         }
         // Creates arrayList in the same order to the arrayList holding all the pieces
         initBitmap();
@@ -530,10 +529,12 @@ public class ShogiGUI extends View {
     private void drawCircle(Canvas canvas, int color, float left, float top){
         Paint toPaint = new Paint();
 
-        /*
-         External Citation:
-         ChatGPT: find how to create a gradual gradient
-         November 12th
+        /**
+         * External Citation
+         *  Date: 12 November 2024
+         *  Problem: Could not figure out how to create a gradual gradient
+         *  Resource: ChatGPT
+         *  Solution: Recommended that I use the RadialGradient class, which is implemented below
          */
         RadialGradient gradientSelected = new RadialGradient(
                 left, top, radius,
@@ -589,19 +590,18 @@ public class ShogiGUI extends View {
     }
 
     /**
-     *External Citation
-     *Date: 19 September 2024
-     *Problem: Couldn't figure out how to rotate a bitmap
-     *Resource:
-     * https://stackoverflow.com/a/29982596
-     *Solution: I used the example code from this answer.
-     */
-    /**
      * rotates bitmap 180 degrees to be used as a "enemy" piece
      * @param source
       */
     public static Bitmap flippedBitmap(Bitmap source)
     {
+        /**
+         *External Citation
+         *  Date: 19 September 2024
+         *  Problem: Couldn't figure out how to rotate a bitmap
+         *  Resource: https://stackoverflow.com/a/29982596
+         *  Solution: I used the example code from this answer.
+         */
         Matrix matrix = new Matrix();
         matrix.postRotate(180);
         Bitmap flipped = Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
@@ -690,12 +690,6 @@ public class ShogiGUI extends View {
         }
     }
 
-    // deprecated function -> was overused which slowed down the GUI a lot
-/*  private void scaleBitmaps() {
-        for (int i = 0; i < scaledBitmaps.size(); i++) {
-            scaledBitmaps.set(i, scaleBitmap(scaledBitmaps.get(i)));
-        }
-    } */
 
     /**
      * simplifies the scaling of a singular Bitmap

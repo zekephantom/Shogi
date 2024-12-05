@@ -28,10 +28,6 @@ public class ShogiState extends GameState implements Serializable {
 	private ArrayList<ShogiPiece> pieces;
 	private static final int Player0Lance1  = 0;
 
-	//// Captured pieces for each player
-	//private ArrayList<ShogiPiece> capturedPiecesPlayer0; // Player 0's captured pieces
-	//private ArrayList<ShogiPiece> capturedPiecesPlayer1; // Player 1's captured pieces
-
 	// Current player (0 for Player 0, 1 for Player 1)
 	private int currentPlayer;
 
@@ -57,25 +53,6 @@ public class ShogiState extends GameState implements Serializable {
 		for (ShogiPiece piece : original.pieces) {
 			this.pieces.add(new ShogiPiece(piece));
 		}
-
-		/**
-		 * External Citation//
-		 * 	Date: 8 November 2024
-		 * 	Problem: Needed a way to perform deep copies of captured pieces lists to avoid references to the original objects.
-		 * 	Resource: https://www.geeksforgeeks.org/deep-shallow-lazy-copy-java-examples/, ChatGPT
-		 * 	Solution:
-		 * 		Implemented a loop to create new ShogiPiece objects for each item in the original lists,
-		 *		ensuring each piece is independently copied without linking to the original.
-		 */
-
-		//this.capturedPiecesPlayer0 = new ArrayList<>();
-		//for (ShogiPiece piece : original.capturedPiecesPlayer0) {
-		//	this.capturedPiecesPlayer0.add(new ShogiPiece(piece));
-		//}
-		//this.capturedPiecesPlayer1 = new ArrayList<>();
-		//for (ShogiPiece piece : original.capturedPiecesPlayer1) {
-		//	this.capturedPiecesPlayer1.add(new ShogiPiece(piece));
-		//}
 
 		this.currentPlayer = original.currentPlayer;
 		this.gamePhase = original.gamePhase;

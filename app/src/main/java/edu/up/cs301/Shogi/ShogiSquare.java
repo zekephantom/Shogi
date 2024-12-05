@@ -1,7 +1,6 @@
 package edu.up.cs301.Shogi;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * This class represents a square on the Shogi board

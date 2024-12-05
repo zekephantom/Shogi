@@ -27,7 +27,6 @@ public class ShogiPiece implements Serializable {
      * Solution: Referenced Java's official documentation to understand the syntax, also looked into StackOverflow about enums
      *
      */
-    // Watch this for later: https://www.youtube.com/watch?v=Hzs6OBcvNQE, about enums and performance issues
     public enum PieceType {
         King,
         Rook,
@@ -89,8 +88,6 @@ public class ShogiPiece implements Serializable {
             }
         }
 
-        //this.position.setRow(original.position.getRow());
-        //this.position.setCol(original.position.getCol());
     }
 
     // Getters and Setters

@@ -1,10 +1,8 @@
 package edu.up.cs301.Shogi;
 
-import edu.up.cs301.GameFramework.infoMessage.NotYourTurnInfo;
+
 import edu.up.cs301.GameFramework.players.GameComputerPlayer;
 import edu.up.cs301.GameFramework.infoMessage.GameInfo;
-import edu.up.cs301.GameFramework.utilities.Tickable;
-
 import java.util.ArrayList;
 import java.util.Random;
 

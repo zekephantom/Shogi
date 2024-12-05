@@ -2,7 +2,6 @@ package edu.up.cs301.Shogi;
 
 import edu.up.cs301.GameFramework.infoMessage.GameInfo;
 import edu.up.cs301.GameFramework.players.GameComputerPlayer;
-
 import java.util.ArrayList;
 import java.util.Random;
 

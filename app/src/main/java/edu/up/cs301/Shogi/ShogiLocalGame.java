@@ -4,7 +4,6 @@ import edu.up.cs301.GameFramework.infoMessage.GameState;
 import edu.up.cs301.GameFramework.players.GamePlayer;
 import edu.up.cs301.GameFramework.LocalGame;
 import edu.up.cs301.GameFramework.actionMessage.GameAction;
-import android.util.Log;
 
 /**
  * @author Steven R. Vegdahl
@@ -17,7 +16,6 @@ public class ShogiLocalGame extends LocalGame {
 	
 	/**
 	 * can this player move
-	 *
 	 */
 	@Override
 	protected boolean canMove(int playerIdx) {
@@ -25,9 +23,6 @@ public class ShogiLocalGame extends LocalGame {
 	}
 
 
-	/**
-	 *
-	 */
 	public ShogiLocalGame(GameState state) {
 		// initialize the game state
 		if (! (state instanceof ShogiState)) {
@@ -37,9 +32,7 @@ public class ShogiLocalGame extends LocalGame {
 		super.state = state;
 	}
 
-	/**
-	 *
-	 */
+
 	@Override
 	protected boolean makeMove(GameAction action) {
 		// Get the player who initiated the action
