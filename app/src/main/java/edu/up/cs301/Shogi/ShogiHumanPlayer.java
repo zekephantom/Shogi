@@ -148,11 +148,20 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 		// Passes the current players number to GUI so the pieces can be drawn flipped or not flipped
 		shogiBoard.setPlayerNumber(playerNum);
 
+		// Set the Name of the Player as the textView
+		TextView player1TxtView = myActivity.findViewById(R.id.tvP1);
+		TextView player2TxtView = myActivity.findViewById(R.id.tvP2);
+		if (playerNum != 0){
+			player1TxtView.setText("Player 2");
+			player2TxtView.setText("Player 1");
+		}
+
 		if (!(info instanceof ShogiState))
 			return;
 		else {
 
 			this.state = (ShogiState)info;
+			// Updates the screen with the current state
 			updateDisplay(state);
 			highlightCurrentPlayer();
 
@@ -181,12 +190,12 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 		// Highlight the current player's TextView
 		if (state != null) {
 			int currentPlayer = state.getCurrentPlayer(); // 0 for Player 1, 1 for Player 2
-			if (currentPlayer == 0) {
-				currentPlayerBar.setText("Current Turn: Player 1"); // Update text if needed
-				player1Bar.setBackgroundColor(Color.YELLOW);  // Highlight Player 1
+			if (currentPlayer == playerNum) {
+				currentPlayerBar.setText("Current Turn:\n Player "+(playerNum+1)); // Update text if needed
+				player1Bar.setBackgroundColor(Color.YELLOW);  // Highlight current Player
 			} else {
-				currentPlayerBar.setText("Current Turn: Player 2"); // Update text if needed
-				player2Bar.setBackgroundColor(Color.YELLOW);  // Highlight Player 2
+				currentPlayerBar.setText("Current Turn:\n Player "+(2-playerNum)); // Update text if needed
+				player2Bar.setBackgroundColor(Color.YELLOW);  // Highlight current Player
 			}
 		}
 	}
@@ -355,7 +364,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 
 
 
-					 {
+					/* {
 						TextView currentPlayerBar = myActivity.findViewById(R.id.currentPlayerBar);
 						TextView player1Bar = myActivity.findViewById(R.id.tvP1);
 						TextView player2Bar = myActivity.findViewById(R.id.tvP2);
@@ -375,7 +384,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 								player2Bar.setBackgroundColor(Color.GREEN);  // Highlight Player 2
 							}
 						}
-					}
+					}*/
 
 					// Invalid drop
 					// reset the selected piece
@@ -414,7 +423,6 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 
 				// Draws the prior moves once the move was successful and there was a piece selected
 				if (selectedPiece != null && selectedPiece.getOwner() != state.getCurrentPlayer()) {
-					// TODO block this for if it is on the King
 					shogiBoard.setPriorMoveSquares(selectedPiece.getPosition(), gridTouched);
 				}
 
