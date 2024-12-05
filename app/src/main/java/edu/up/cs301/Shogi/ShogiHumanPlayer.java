@@ -3,7 +3,6 @@ package edu.up.cs301.Shogi;
 
 import static androidx.core.app.ActivityCompat.finishAffinity;
 
-import edu.up.cs301.GameFramework.infoMessage.GameState;
 import edu.up.cs301.GameFramework.players.GameHumanPlayer;
 import edu.up.cs301.GameFramework.GameMainActivity;
 import edu.up.cs301.GameFramework.infoMessage.GameInfo;
@@ -17,10 +16,8 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.textclassifier.TextClassifierEvent;
 import android.widget.Button;
 import android.widget.EditText;
-import android.view.View.OnClickListener;
 import android.widget.Switch;
 
 import androidx.annotation.NonNull;
@@ -49,7 +46,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 	/* instance variables */
 	// The EditText that displays test results or game state information
 	private EditText testResultsEditText;
-	private TextView currentPlayerTextView;
+	private TextView currPlayerTxtView;
 
 	// the surface view of the board
 	public ShogiGUI shogiBoard;
@@ -201,7 +198,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 		shogiBoard = (ShogiGUI) myActivity.findViewById(R.id.shogiBoard);
 		shogiBoard.setPlayerNumber(playerNum);
 
-		currentPlayerTextView = myActivity.findViewById(R.id.setCurrPlayer);
+		currPlayerTxtView = myActivity.findViewById(R.id.setCurrPlayer);
 		updateCurrentPlayerTextView();
 
 		shogiBoard.setShogiState(state);
@@ -246,15 +243,15 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 	 * Updates the "Whose Turn Is It?" TextView to display the current player's turn.
 	 */
 	private void updateCurrentPlayerTextView() {
-		if (currentPlayerTextView != null && state != null) {
+		if (currPlayerTxtView != null && state != null) {
 			// Get the current player's number (0 or 1)
 			int currentPlayer = state.getCurrentPlayer();
 
 			// Update the text based on the current player
 			if (currentPlayer == 0) {
-				currentPlayerTextView.setText("Player 1's Turn");
+				currPlayerTxtView.setText("Player 1's Turn");
 			} else {
-				currentPlayerTextView.setText("Player 2's Turn");
+				currPlayerTxtView.setText("Player 2's Turn");
 			}
 		}
 	}
