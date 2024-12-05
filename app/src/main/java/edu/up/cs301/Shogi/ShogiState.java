@@ -1202,7 +1202,7 @@ public class ShogiState extends GameState implements Serializable {
 	 *
 	 * @param piece The piece to update the possibleMoves ArrayList
 	 */
-	private void updatePossibleMoves(ShogiPiece piece) {
+	public void updatePossibleMoves(ShogiPiece piece) {
 		ArrayList<ShogiSquare> possibleMoves = new ArrayList<>();
 		if (!piece.isOnBoard()) {
 			piece.setPossibleMoves(possibleMoves);
