@@ -49,13 +49,6 @@
                 android:textSize="18sp"
                 android:text="@string/currentTurn" />
 
-            <TextView
-                android:id="@+id/setCurrPlayer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:text="@string/currTurnBar" />
-
         </LinearLayout>
 
         <LinearLayout
