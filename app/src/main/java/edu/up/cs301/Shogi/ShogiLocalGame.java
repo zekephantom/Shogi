@@ -60,6 +60,14 @@ public class ShogiLocalGame extends LocalGame {
 			return success;
 		}
 
+		/**
+		 * External Citation
+		 *  Date: 4 December 2024
+		 *  Problem: Could not figure out how to add logic for dealing
+		 *  		with running out of time
+		 *  Resource: ChatGPT
+		 *  Solution: Needed ShogiPassTurnAction class for the following code below
+		 */
 		if (action instanceof ShogiPassTurnAction) {
 			// Timer expired, pass the turn to the next player
 			gameState.setCurrentPlayer((gameState.getCurrentPlayer() + 1) % 2);
