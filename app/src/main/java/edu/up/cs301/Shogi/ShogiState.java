@@ -1021,22 +1021,14 @@ public class ShogiState extends GameState implements Serializable {
 	public boolean checkIfMoveProtectsKing(GameAction action){
 		if (action instanceof ShogiMoveAction) {
 			ShogiState copy = new ShogiState(this);
-			if (((ShogiMoveAction) action).getPiece().getOwner() == 0) {
-				copy.getPieces().get(4).setPosition(((ShogiMoveAction) action).getTargetPosition());
-			} else {
-				copy.getPieces().get(24).setPosition(((ShogiMoveAction) action).getTargetPosition());
-			}
+			copy.moveAction(action);
 			if (!copy.isKingInCheck(((ShogiMoveAction) action).getPiece().getOwner())) {
 				return true;
 			}
 		}
 		if (action instanceof ShogiDropAction) {
 			ShogiState copy = new ShogiState(this);
-			if (((ShogiDropAction) action).getPiece().getOwner() == 0) {
-				copy.getPieces().get(4).setPosition(((ShogiDropAction) action).getTargetPosition());
-			} else {
-				copy.getPieces().get(24).setPosition(((ShogiDropAction) action).getTargetPosition());
-			}
+			copy.moveAction(action);
 			if (!copy.isKingInCheck(((ShogiDropAction) action).getPiece().getOwner())) {
 				return true;
 			}
