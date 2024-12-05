@@ -358,6 +358,7 @@ public class ShogiGUI extends View {
      * @param canvas
      */
     public void drawPossibleMoves(Canvas canvas){
+
         if(selectedSquare == null || possibleMoves == null) return;
         int possibleMoveColor = 0xFFFFFFFF; // white
 

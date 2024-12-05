@@ -70,6 +70,11 @@ public class ShogiComputerPlayer1 extends GameComputerPlayer{
 					ShogiMoveAction checkMove = new ShogiMoveAction(this, king, targetSquare);
 
 					if (gameState.moveKing(checkMove, false)) {
+						try {
+							Thread.sleep(1000);
+						} catch (InterruptedException e) {
+							throw new RuntimeException(e);
+						}
 						// Sends the move to human player so that he can print the move
 						ShogiHumanPlayer.setPriorMove(king.getPosition(),targetSquare);
 						game.sendAction(checkMove);
@@ -90,8 +95,6 @@ public class ShogiComputerPlayer1 extends GameComputerPlayer{
 
 		ShogiSquare targetSquare = selectedPiece.getPossibleMoves().get(rand.nextInt(selectedPiece.getPossibleMoves().size()));
 
-		// Sends the move to human player so that he can print the move
-		ShogiHumanPlayer.setPriorMove(selectedPiece.getPosition(),targetSquare);
 
 		ShogiMoveAction moveAction = new ShogiMoveAction(this, selectedPiece, targetSquare);
 		try {
@@ -99,6 +102,8 @@ public class ShogiComputerPlayer1 extends GameComputerPlayer{
 		} catch (InterruptedException e) {
 			throw new RuntimeException(e);
 		}
+		// Sends the move to human player so that he can print the move
+		ShogiHumanPlayer.setPriorMove(selectedPiece.getPosition(),targetSquare);
 		game.sendAction(moveAction);
 
 

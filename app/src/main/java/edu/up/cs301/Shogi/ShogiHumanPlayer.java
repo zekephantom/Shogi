@@ -368,7 +368,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 				if (selectedPiece != null) {
 					// checks that only pieces from current player can be selected
 					Log.d("Touch", ""+playerNum);
-					if (selectedPiece.getOwner() != playerNum){
+					if (selectedPiece.getOwner() != playerNum && selectedPiece.getOwner() != state.getCurrentPlayer()){
 						selectedPiece = null;
 						return true;
 					}
