@@ -1011,7 +1011,12 @@ public class ShogiState extends GameState implements Serializable {
 		return false;
 	}
 
-	public boolean checkIfMoveProtectsKing(GameAction action){
+	/**
+	 * Helper method to simulate a action and see if the king is in check after the move
+	 *
+	 * @return True if the move results in the king not being in check, false otherwise.
+	 */
+	private boolean checkIfMoveProtectsKing(GameAction action){
 		if (action instanceof ShogiMoveAction) {
 			ShogiState copy = new ShogiState(this);
 			copy.moveAction(action);
@@ -1391,8 +1396,15 @@ public class ShogiState extends GameState implements Serializable {
 		piece.setPossibleMoves(possibleMoves);
 	}
 
+	/**
+	 * Helper method to see if the king is in check
+	 *
+	 * @param player the player whose king to check
+	 * @return True if the king is in check, false otherwise.
+	 */
 	public boolean isKingInCheck(int player) {
 		ShogiPiece king;
+		// select the correct king
 		if (player == 0) {
 			king = pieces.get(4);
 		}
@@ -1411,7 +1423,7 @@ public class ShogiState extends GameState implements Serializable {
 		for (ShogiPiece piece : pieces) {
 			if (piece.getOwner() != player && piece.isOnBoard()) {
 				ArrayList<ShogiSquare> possibleMoves = piece.getPossibleMoves();
-
+				// go through each of the moves
 				for (ShogiSquare move : possibleMoves) {
 					if (move.equals(kingPosition)) {
 						return true; // The king is in check
@@ -1423,7 +1435,13 @@ public class ShogiState extends GameState implements Serializable {
 		return false; // The king is not in check
 	}
 
-
+	/**
+	 * Helper method to see if king is in checkmate
+	 *
+	 * @param player The GamePlayer to pass into the moveActions
+	 * @param playerNum the player number for whose king we want to check
+	 * @return True if the move is successful, false otherwise.
+	 */
 	public boolean isCheckmate(int playerNum, GamePlayer player) {
 		if (!isKingInCheck(playerNum)) {
 			return false; // Not in check, so not checkmate
@@ -1467,6 +1485,7 @@ public class ShogiState extends GameState implements Serializable {
 				break;
 			}
 		}
+
 		if (checkmate) {
 			for (ShogiPiece piece : pieces) {
 				if (piece.getOwner() == playerNum) {
@@ -1488,23 +1507,9 @@ public class ShogiState extends GameState implements Serializable {
 							}
 						}
 					}
-					//else {
-					//	for (int x = 0; x <= 8; x++) {
-					//		for (int y = 0; y <= 8; y++) {
-					//			ShogiSquare move = new ShogiSquare(x,y);
-					//			ShogiMoveAction moveAction = new ShogiMoveAction(player, piece, move);
-					//			if (isValidDrop(piece, move)) {
-					//				if (checkIfMoveProtectsKing(moveAction)) {
-					//					return false;
-					//				}
-					//			}
-					//		}
-					//	}
-					//}
 				}
 			}
 		}
-
 		return checkmate;
 	}
 
