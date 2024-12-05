@@ -1483,9 +1483,9 @@ public class ShogiState extends GameState implements Serializable {
 								return false;
 							}
 							else {
-								//ArrayList<ShogiSquare> newPossibleMoves = piece.getPossibleMoves();
-								//newPossibleMoves.remove(i);
-								//piece.setPossibleMoves(newPossibleMoves);
+								ArrayList<ShogiSquare> newPossibleMoves = piece.getPossibleMoves();
+								newPossibleMoves.remove(move);
+								piece.setPossibleMoves(newPossibleMoves);
 							}
 						}
 					}

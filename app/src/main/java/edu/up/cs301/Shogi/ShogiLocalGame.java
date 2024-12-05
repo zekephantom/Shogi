@@ -87,12 +87,33 @@ public class ShogiLocalGame extends LocalGame {
 	@Override
 	protected String checkIfGameOver() {
 
-		// force players to make moves that protect the King
-		if(!gameState.getPieces().get(4).isOnBoard()){
-			return "King was captured! Player " +  (gameState.getCurrentPlayer()) + " has won.\n";
+		// if king can't move
+		if (gameState.getPieces().get(4).getPossibleMoves().isEmpty()){
+			boolean isKingOnlyPieceLeft = true;
+			// go through piece and check if any other of player 1's pieces are on board
+			for (ShogiPiece piece : gameState.getPieces()) {
+				if (piece.getOwner() == 0 && piece.isOnBoard()) {
+					isKingOnlyPieceLeft = false;
+					break;
+				}
+			}
+			if (isKingOnlyPieceLeft) {
+				return "Player 2 has won.\n";
+			}
 		}
-		if(!gameState.getPieces().get(24).isOnBoard()){
-			return "King was captured! Player " +  (1 - gameState.getCurrentPlayer()) + " has won.\n";
+
+		if (gameState.getPieces().get(24).getPossibleMoves().isEmpty()){
+			boolean isKingOnlyPieceLeft = true;
+			// go through piece and check if any other of player 1's pieces are on board
+			for (ShogiPiece piece : gameState.getPieces()) {
+				if (piece.getOwner() == 1 && piece.isOnBoard()) {
+					isKingOnlyPieceLeft = false;
+					break;
+				}
+			}
+			if (isKingOnlyPieceLeft) {
+				return "Player 1 has won.\n";
+			}
 		}
 
 		if (gameState.isCheckmate(1 - gameState.getCurrentPlayer(), players[1 - gameState.getCurrentPlayer()])) {
