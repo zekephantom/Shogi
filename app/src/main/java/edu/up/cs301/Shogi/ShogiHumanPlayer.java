@@ -46,7 +46,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 	/* instance variables */
 	// The EditText that displays test results or game state information
 	private EditText testResultsEditText;
-	private TextView currPlayerTxtView;
+	//private TextView currPlayerTxtView;
 
 	// the surface view of the board
 	public ShogiGUI shogiBoard;
@@ -148,7 +148,6 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 
 			this.state = (ShogiState)info;
 			updateDisplay(state);
-			updateCurrentPlayerTextView();
 			highlightCurrentPlayer();
 		}
 	}
@@ -198,8 +197,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 		shogiBoard = (ShogiGUI) myActivity.findViewById(R.id.shogiBoard);
 		shogiBoard.setPlayerNumber(playerNum);
 
-		currPlayerTxtView = myActivity.findViewById(R.id.setCurrPlayer);
-		updateCurrentPlayerTextView();
+		//currPlayerTxtView = myActivity.findViewById(R.id.setCurrPlayer);
 
 		shogiBoard.setShogiState(state);
 
@@ -238,23 +236,6 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 			}
 		});
 	}//setAsGui
-
-	/**
-	 * Updates the "Whose Turn Is It?" TextView to display the current player's turn.
-	 */
-	private void updateCurrentPlayerTextView() {
-		if (currPlayerTxtView != null && state != null) {
-			// Get the current player's number (0 or 1)
-			int currentPlayer = state.getCurrentPlayer();
-
-			// Update the text based on the current player
-			if (currentPlayer == 0) {
-				currPlayerTxtView.setText("Player 1's Turn");
-			} else {
-				currPlayerTxtView.setText("Player 2's Turn");
-			}
-		}
-	}
 
 
 	@Override
@@ -341,7 +322,6 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 						selectedPiece = null;
 						shogiBoard.setSelected(null);
 						pieceIsSelected = false;
-						updateCurrentPlayerTextView();
 						return true;
 					}
 				}
