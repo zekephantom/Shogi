@@ -103,7 +103,6 @@ public class ShogiLocalGame extends LocalGame {
 			for (ShogiPiece piece : gameState.getPieces()) {
 				if (piece.getOwner() == 0 && piece.isOnBoard()) {
 					isKingOnlyPieceLeft = false;
-					break;
 				}
 			}
 			if (isKingOnlyPieceLeft) {
@@ -117,7 +116,6 @@ public class ShogiLocalGame extends LocalGame {
 			for (ShogiPiece piece : gameState.getPieces()) {
 				if (piece.getOwner() == 1 && piece.isOnBoard()) {
 					isKingOnlyPieceLeft = false;
-					break;
 				}
 			}
 			if (isKingOnlyPieceLeft) {
