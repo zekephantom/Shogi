@@ -361,6 +361,13 @@ public class ShogiState extends GameState implements Serializable {
 			return false;
 		}
 
+		// if the king is in check after this move
+		if (!finalizeMove) {
+			if (!checkIfMoveProtectsKing(action)) {
+				return false;
+			}
+		}
+
 		if (finalizeMove) {
 			return finalizeMove(piece, targetPosition);
 		}
@@ -831,7 +838,7 @@ public class ShogiState extends GameState implements Serializable {
 		int targetCol = action.getTargetPosition().getCol();
 		ShogiSquare targetPosition = action.getTargetPosition();
 
-		int rowDirection = (currentPlayer == 0) ? -1 : 1;
+		int rowDirection = (piece.getOwner() == 0) ? -1 : 1;
 
 		// if the piece is trying to move to where is the piece currently is, or not within bounds, or one of the current players pieces, return false
 		if (targetRow == currentRow && targetCol == currentCol || isOutOfBounds(targetPosition)) {
@@ -1374,7 +1381,7 @@ public class ShogiState extends GameState implements Serializable {
 					}
 				}
 				else {
-					for (int x = -2; x <= 2; x++) {
+					for (int x = -1; x <= 1; x++) {
 						ShogiSquare targetPosition = new ShogiSquare(piece.getPosition().getRow() + x, piece.getPosition().getCol());
 						ShogiMoveAction checkMove = new ShogiMoveAction(null, piece, targetPosition);
 
