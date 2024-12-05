@@ -26,7 +26,10 @@ public class ShogiState extends GameState implements Serializable {
 	// Instance variables
 	// List of all active pieces on the board
 	private ArrayList<ShogiPiece> pieces;
-	private static final int Player0Lance1  = 0;
+
+	// To print the prior move on another network player we pass through priorMoved piece locations
+	public ShogiSquare priorMoveOrig;
+	public ShogiSquare priorMoveTarget;
 
 	// Current player (0 for Player 0, 1 for Player 1)
 	private int currentPlayer;
@@ -54,8 +57,29 @@ public class ShogiState extends GameState implements Serializable {
 			this.pieces.add(new ShogiPiece(piece));
 		}
 
+		/**
+		 * External Citation//
+		 * 	Date: 8 November 2024
+		 * 	Problem: Needed a way to perform deep copies of captured pieces lists to avoid references to the original objects.
+		 * 	Resource: https://www.geeksforgeeks.org/deep-shallow-lazy-copy-java-examples/, ChatGPT
+		 * 	Solution:
+		 * 		Implemented a loop to create new ShogiPiece objects for each item in the original lists,
+		 *		ensuring each piece is independently copied without linking to the original.
+		 */
+
+		//this.capturedPiecesPlayer0 = new ArrayList<>();
+		//for (ShogiPiece piece : original.capturedPiecesPlayer0) {
+		//	this.capturedPiecesPlayer0.add(new ShogiPiece(piece));
+		//}
+		//this.capturedPiecesPlayer1 = new ArrayList<>();
+		//for (ShogiPiece piece : original.capturedPiecesPlayer1) {
+		//	this.capturedPiecesPlayer1.add(new ShogiPiece(piece));
+		//}
+
 		this.currentPlayer = original.currentPlayer;
 		this.gamePhase = original.gamePhase;
+		this.priorMoveOrig = original.priorMoveOrig;
+		this.priorMoveTarget = original.priorMoveTarget;
 	}
 
 	// Getters and setters
@@ -77,6 +101,11 @@ public class ShogiState extends GameState implements Serializable {
 
 	public void setGamePhase(String gamePhase) {
 		this.gamePhase = gamePhase;
+	}
+
+	public void setPriorMove(ShogiSquare orig, ShogiSquare target){
+		this.priorMoveOrig = orig;
+		this.priorMoveTarget = target;
 	}
 
 	/**
@@ -206,6 +235,9 @@ public class ShogiState extends GameState implements Serializable {
 		if (targetPiece != null && targetPiece.getOwner() != piece.getOwner()) {
 			capturePiece(targetPiece);
 		}
+
+		// set priorMove fields so that they can be printed by a remote player
+		setPriorMove(piece.getPosition(), targetPosition);
 
 		// Update position
 		piece.setPosition(targetPosition);
@@ -988,7 +1020,12 @@ public class ShogiState extends GameState implements Serializable {
 		return false;
 	}
 
-	public boolean checkIfMoveProtectsKing(GameAction action){
+	/**
+	 * Helper method to simulate a action and see if the king is in check after the move
+	 *
+	 * @return True if the move results in the king not being in check, false otherwise.
+	 */
+	private boolean checkIfMoveProtectsKing(GameAction action){
 		if (action instanceof ShogiMoveAction) {
 			ShogiState copy = new ShogiState(this);
 			copy.moveAction(action);
@@ -1096,6 +1133,10 @@ public class ShogiState extends GameState implements Serializable {
 		// Place the piece on the board
 		if (finalizeMove) {
 			piece.setOnBoard(true);
+
+			// set priorMove fields so that they can be printed by a remote player
+			setPriorMove(piece.getPosition(), targetPosition);
+
 			piece.setPosition(targetPosition);
 
 			// Switch turn
@@ -1105,8 +1146,6 @@ public class ShogiState extends GameState implements Serializable {
 		else{
 			return true;
 		}
-
-
 
 	}
 
@@ -1368,8 +1407,15 @@ public class ShogiState extends GameState implements Serializable {
 		piece.setPossibleMoves(possibleMoves);
 	}
 
+	/**
+	 * Helper method to see if the king is in check
+	 *
+	 * @param player the player whose king to check
+	 * @return True if the king is in check, false otherwise.
+	 */
 	public boolean isKingInCheck(int player) {
 		ShogiPiece king;
+		// select the correct king
 		if (player == 0) {
 			king = pieces.get(4);
 		}
@@ -1388,7 +1434,7 @@ public class ShogiState extends GameState implements Serializable {
 		for (ShogiPiece piece : pieces) {
 			if (piece.getOwner() != player && piece.isOnBoard()) {
 				ArrayList<ShogiSquare> possibleMoves = piece.getPossibleMoves();
-
+				// go through each of the moves
 				for (ShogiSquare move : possibleMoves) {
 					if (move.equals(kingPosition)) {
 						return true; // The king is in check
@@ -1400,7 +1446,13 @@ public class ShogiState extends GameState implements Serializable {
 		return false; // The king is not in check
 	}
 
-
+	/**
+	 * Helper method to see if king is in checkmate
+	 *
+	 * @param player The GamePlayer to pass into the moveActions
+	 * @param playerNum the player number for whose king we want to check
+	 * @return True if the move is successful, false otherwise.
+	 */
 	public boolean isCheckmate(int playerNum, GamePlayer player) {
 		if (!isKingInCheck(playerNum)) {
 			return false; // Not in check, so not checkmate
@@ -1444,6 +1496,7 @@ public class ShogiState extends GameState implements Serializable {
 				break;
 			}
 		}
+
 		if (checkmate) {
 			for (ShogiPiece piece : pieces) {
 				if (piece.getOwner() == playerNum) {
@@ -1465,23 +1518,9 @@ public class ShogiState extends GameState implements Serializable {
 							}
 						}
 					}
-					//else {
-					//	for (int x = 0; x <= 8; x++) {
-					//		for (int y = 0; y <= 8; y++) {
-					//			ShogiSquare move = new ShogiSquare(x,y);
-					//			ShogiMoveAction moveAction = new ShogiMoveAction(player, piece, move);
-					//			if (isValidDrop(piece, move)) {
-					//				if (checkIfMoveProtectsKing(moveAction)) {
-					//					return false;
-					//				}
-					//			}
-					//		}
-					//	}
-					//}
 				}
 			}
 		}
-
 		return checkmate;
 	}
 

@@ -394,29 +394,39 @@ public class ShogiGUI extends View {
      */
     public void drawCheck(Canvas canvas){
         int checkColor = 0xFFFF0000; // red
-        ShogiSquare king;
+        ShogiSquare king = new ShogiSquare(0, 9);
+        // Checks if current player's king is in Check
         if (shogiState.isKingInCheck(shogiState.getCurrentPlayer())){
             if (shogiState.getCurrentPlayer() == 0) {
                 king = shogiState.getPieces().get(4).getPosition();
             }
-            else {
+            if (shogiState.getCurrentPlayer() != 0){
                 king = shogiState.getPieces().get(24).getPosition();
             }
             float left = (king.getCol() + (float)1.5) * cellDimensions;
             float top = (king.getRow() + (float)0.5) * cellDimensions;
+            // mirror for player 1
+            left = (playerNum == 1) ? cellDimensions * 11 - left : left;
+            top = (playerNum == 1) ? cellDimensions * 9 - top : top;
             drawCircle(canvas, checkColor,left, top);
         }
+        // Check if opponents player's king is in check
         if (shogiState.isKingInCheck(1 - shogiState.getCurrentPlayer())){
             if (shogiState.getCurrentPlayer() == 0) {
-                king = shogiState.getPieces().get(4).getPosition();
-            }
-            else {
                 king = shogiState.getPieces().get(24).getPosition();
+            }
+            if (shogiState.getCurrentPlayer() != 0){
+                king = shogiState.getPieces().get(4).getPosition();
             }
             float left = (king.getCol() + (float)1.5) * cellDimensions;
             float top = (king.getRow() + (float)0.5) * cellDimensions;
+            // mirror for player 1
+            left = (playerNum == 1) ? cellDimensions * 11 - left : left;
+            top = (playerNum == 1) ? cellDimensions * 9 - top : top;
             drawCircle(canvas, checkColor,left, top);
         }
+
+
     }
 
 
