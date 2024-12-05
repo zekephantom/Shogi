@@ -152,9 +152,32 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 			this.state = (ShogiState)info;
 			updateDisplay(state);
 			updateCurrentPlayerTextView();
+			highlightCurrentPlayer();
 		}
 	}
-	
+
+	private void highlightCurrentPlayer() {
+		TextView currentPlayerBar = myActivity.findViewById(R.id.currentPlayerBar);
+		TextView player1Bar = myActivity.findViewById(R.id.tvP1);
+		TextView player2Bar = myActivity.findViewById(R.id.tvP2);
+
+		// Reset background color for both players
+		player1Bar.setBackgroundColor(Color.TRANSPARENT);
+		player2Bar.setBackgroundColor(Color.TRANSPARENT);
+
+		// Highlight the current player's TextView
+		if (state != null) {
+			int currentPlayer = state.getCurrentPlayer(); // 0 for Player 1, 1 for Player 2
+			if (currentPlayer == 0) {
+				currentPlayerBar.setText("Current Turn: Player 1"); // Update text if needed
+				player1Bar.setBackgroundColor(Color.YELLOW);  // Highlight Player 1
+			} else {
+				currentPlayerBar.setText("Current Turn: Player 2"); // Update text if needed
+				player2Bar.setBackgroundColor(Color.YELLOW);  // Highlight Player 2
+			}
+		}
+	}
+
 	/**
 	 * callback method--our game has been chosen/rechosen to be the GUI,
 	 * called from the GUI thread
@@ -278,6 +301,27 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 
 					// Invalid drop
 					// TODO draw red fields if it is a illegal drop
+					 {
+						TextView currentPlayerBar = myActivity.findViewById(R.id.currentPlayerBar);
+						TextView player1Bar = myActivity.findViewById(R.id.tvP1);
+						TextView player2Bar = myActivity.findViewById(R.id.tvP2);
+
+						// Reset background color for both players
+						player1Bar.setBackgroundColor(Color.TRANSPARENT);
+						player2Bar.setBackgroundColor(Color.TRANSPARENT);
+
+						// Highlight the current player's TextView
+						if (state != null) {
+							int currentPlayer = state.getCurrentPlayer(); // 0 for Player 1, 1 for Player 2
+							if (currentPlayer == 0) {
+								currentPlayerBar.setText("Current Turn: Player 1"); // Update text if needed
+								player1Bar.setBackgroundColor(Color.GREEN);  // Highlight Player 1
+							} else {
+								currentPlayerBar.setText("Current Turn: Player 2"); // Update text if needed
+								player2Bar.setBackgroundColor(Color.GREEN);  // Highlight Player 2
+							}
+						}
+					}
 					// shogiBoard.setPriorMoveSquares(priorGridTouched, gridTouched);
 
 					// reset the selected piece
