@@ -49,6 +49,20 @@
                 android:textSize="18sp"
                 android:text="@string/currentTurn" />
 
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:text="@string/timeRemaining" />
+
+            <TextView
+                android:id="@+id/tvTurnTimer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:text="0:00" />
+
         </LinearLayout>
 
         <LinearLayout

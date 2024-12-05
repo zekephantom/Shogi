@@ -7,4 +7,5 @@
     <string name="quit">Quit</string>
     <string name="currentTurn">Current Turn:</string>
     <string name="currTurnBar"> </string>
+    <string name="timeRemaining">Time Remaining</string>
 </resources>

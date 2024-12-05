@@ -1,7 +1,5 @@
 package edu.up.cs301.Shogi;
 
-
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

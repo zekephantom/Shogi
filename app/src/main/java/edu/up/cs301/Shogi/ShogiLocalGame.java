@@ -60,6 +60,15 @@ public class ShogiLocalGame extends LocalGame {
 			return success;
 		}
 
+		if (action instanceof ShogiPassTurnAction) {
+			// Timer expired, pass the turn to the next player
+			gameState.setCurrentPlayer((gameState.getCurrentPlayer() + 1) % 2);
+
+			// Notify all players about the state update
+			sendAllUpdatedState();
+			return true;
+		}
+
 		// Action type not recognized
 		return false;
 	}

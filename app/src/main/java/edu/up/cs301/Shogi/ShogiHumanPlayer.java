@@ -11,6 +11,7 @@ import edu.up.cs301.shogi.R;
 
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -46,7 +47,9 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 	/* instance variables */
 	// The EditText that displays test results or game state information
 	private EditText testResultsEditText;
-	//private TextView currPlayerTxtView;
+	private CountDownTimer turnTimer;
+	private TextView turnTimerTextView;
+	private static final long TURN_TIME_LIMIT = 30000;
 
 	// the surface view of the board
 	public ShogiGUI shogiBoard;
@@ -152,6 +155,17 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 			this.state = (ShogiState)info;
 			updateDisplay(state);
 			highlightCurrentPlayer();
+
+			// Restart the turn timer if it's the human player's turn
+			if (state.getCurrentPlayer() == playerNum) {
+				startTurnTimer();
+			} else {
+				// Cancel the timer if it's not the human player's turn
+				if (turnTimer != null) {
+					turnTimer.cancel();
+					turnTimerTextView.setText("Waiting...");
+				}
+			}
 		}
 	}
 
@@ -200,9 +214,14 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 		shogiBoard = (ShogiGUI) myActivity.findViewById(R.id.shogiBoard);
 
 		//currPlayerTxtView = myActivity.findViewById(R.id.setCurrPlayer);
-
+		turnTimerTextView = myActivity.findViewById(R.id.tvTurnTimer);
 		shogiBoard.setShogiState(state);
 
+		// Initialize the handler for the GUI thread
+		this.guiHandler = new Handler();
+
+		// Start the timer when the GUI is set
+		startTurnTimer();
 		// uncomment when running game state test
 		/*
 		this.testResultsEditText = (EditText) activity.findViewById(R.id.tv_test_results);
@@ -238,6 +257,46 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 			}
 		});
 	}//setAsGui
+
+	/**
+	 * Starts or resets the turn timer.
+	 */
+	private void startTurnTimer() {
+		if (turnTimer != null) {
+			turnTimer.cancel(); // Cancel any existing timer
+		}
+
+		turnTimer = new CountDownTimer(TURN_TIME_LIMIT, 1000) { // Update every second
+			@Override
+			public void onTick(long millisUntilFinished) {
+				// Update the timer TextView
+				turnTimerTextView.setText(String.valueOf(millisUntilFinished / 1000));
+			}
+
+			@Override
+			public void onFinish() {
+				// Handle turn timeout
+				handleTurnTimeout();
+			}
+		};
+
+		turnTimer.start(); // Start the timer
+	}
+
+	/**
+	 * Handles actions when the timer reaches 0.
+	 */
+	private void handleTurnTimeout() {
+		if (turnTimerTextView != null) {
+			turnTimerTextView.setText("Time's up!");
+		}
+
+		if (state != null && state.getCurrentPlayer() == playerNum) {
+			// Send an action to pass the turn
+			game.sendAction(new ShogiPassTurnAction(this));
+		}
+	}
+
 
 
 	@Override
