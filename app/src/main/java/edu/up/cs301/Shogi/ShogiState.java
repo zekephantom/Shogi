@@ -361,13 +361,6 @@ public class ShogiState extends GameState implements Serializable {
 			return false;
 		}
 
-		// if the king is in check after this move
-		if (!finalizeMove) {
-			if (!checkIfMoveProtectsKing(action)) {
-				return false;
-			}
-		}
-
 		if (finalizeMove) {
 			return finalizeMove(piece, targetPosition);
 		}
