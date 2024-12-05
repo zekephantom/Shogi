@@ -222,6 +222,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 
 		// Start the timer when the GUI is set
 		startTurnTimer();
+
 		// uncomment when running game state test
 		/*
 		this.testResultsEditText = (EditText) activity.findViewById(R.id.tv_test_results);
@@ -258,6 +259,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 		});
 	}//setAsGui
 
+
 	/**
 	 * Starts or resets the turn timer.
 	 */
@@ -265,6 +267,16 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 		if (turnTimer != null) {
 			turnTimer.cancel(); // Cancel any existing timer
 		}
+
+		/**
+		 * External Citation
+		 * 	Date: 4 December 2024
+		 * 	Problem: I do not know how to implement the timer for the Shogi Game.
+		 * 	Resource: https://developer.android.com/reference/android/os/CountDownTimer, ChatGPT
+		 * 	Solution: ChatGPT recommended me to use the CountDownTimer class from Android, so I read the class documentation.
+		 * 			Then, I used the class below. Also created a private CountDownTimer variable above.
+		 *
+		 */
 
 		turnTimer = new CountDownTimer(TURN_TIME_LIMIT, 1000) { // Update every second
 			@Override
@@ -285,18 +297,20 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 
 	/**
 	 * Handles actions when the timer reaches 0.
+	 *
+	 * External Citation:
+	 * 	Date: 4 December 2024
+	 * 	Problem: Needed a method to handle timer expiration
+	 * 	Resource: ChatGPT
+	 * 	Solution: ChatGPT helped me write the method below which
+	 * 			sends an action to pass the turn
 	 */
 	private void handleTurnTimeout() {
-		if (turnTimerTextView != null) {
-			turnTimerTextView.setText("Time's up!");
-		}
-
 		if (state != null && state.getCurrentPlayer() == playerNum) {
 			// Send an action to pass the turn
 			game.sendAction(new ShogiPassTurnAction(this));
 		}
 	}
-
 
 
 	@Override
