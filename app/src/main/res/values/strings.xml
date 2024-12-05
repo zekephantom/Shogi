@@ -2,7 +2,7 @@
 
     <string name="app_name">Shogi Game</string>
     <string name="run_test">Run Test</string>
-    <string name="language">English/Japanese</string>
+    <string name="language">Japanese/English</string>
     <string name="game_name">Shogi</string>
     <string name="quit">Quit</string>
     <string name="currentTurn">Current Turn:</string>

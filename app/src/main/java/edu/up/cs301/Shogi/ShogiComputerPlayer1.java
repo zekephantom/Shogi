@@ -106,6 +106,5 @@ public class ShogiComputerPlayer1 extends GameComputerPlayer{
 		ShogiHumanPlayer.setPriorMove(selectedPiece.getPosition(),targetSquare);
 		game.sendAction(moveAction);
 
-
 	}
 }

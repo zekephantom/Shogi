@@ -26,11 +26,10 @@ public class ShogiState extends GameState implements Serializable {
 	// Instance variables
 	// List of all active pieces on the board
 	private ArrayList<ShogiPiece> pieces;
-	private static final int Player0Lance1  = 0;
 
-	//// Captured pieces for each player
-	//private ArrayList<ShogiPiece> capturedPiecesPlayer0; // Player 0's captured pieces
-	//private ArrayList<ShogiPiece> capturedPiecesPlayer1; // Player 1's captured pieces
+	// To print the prior move on another network player we pass through priorMoved piece locations
+	public ShogiSquare priorMoveOrig;
+	public ShogiSquare priorMoveTarget;
 
 	// Current player (0 for Player 0, 1 for Player 1)
 	private int currentPlayer;
@@ -79,6 +78,8 @@ public class ShogiState extends GameState implements Serializable {
 
 		this.currentPlayer = original.currentPlayer;
 		this.gamePhase = original.gamePhase;
+		this.priorMoveOrig = original.priorMoveOrig;
+		this.priorMoveTarget = original.priorMoveTarget;
 	}
 
 	// Getters and setters
@@ -100,6 +101,11 @@ public class ShogiState extends GameState implements Serializable {
 
 	public void setGamePhase(String gamePhase) {
 		this.gamePhase = gamePhase;
+	}
+
+	public void setPriorMove(ShogiSquare orig, ShogiSquare target){
+		this.priorMoveOrig = orig;
+		this.priorMoveTarget = target;
 	}
 
 	/**
@@ -229,6 +235,9 @@ public class ShogiState extends GameState implements Serializable {
 		if (targetPiece != null && targetPiece.getOwner() != piece.getOwner()) {
 			capturePiece(targetPiece);
 		}
+
+		// set priorMove fields so that they can be printed by a remote player
+		setPriorMove(piece.getPosition(), targetPosition);
 
 		// Update position
 		piece.setPosition(targetPosition);
@@ -1124,6 +1133,10 @@ public class ShogiState extends GameState implements Serializable {
 		// Place the piece on the board
 		if (finalizeMove) {
 			piece.setOnBoard(true);
+
+			// set priorMove fields so that they can be printed by a remote player
+			setPriorMove(piece.getPosition(), targetPosition);
+
 			piece.setPosition(targetPosition);
 
 			// Switch turn

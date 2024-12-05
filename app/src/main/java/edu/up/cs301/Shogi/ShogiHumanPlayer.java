@@ -163,6 +163,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 			this.state = (ShogiState)info;
 			// Updates the screen with the current state
 			updateDisplay(state);
+			shogiBoard.setPriorMoveSquares(state.priorMoveOrig, state.priorMoveTarget);
 			highlightCurrentPlayer();
 
 			// Restart the turn timer if it's the human player's turn
@@ -344,7 +345,7 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
                 Log.d("Touch", "field touched: \n row: " + gridTouched.getRow() + " col: " + gridTouched.getCol());
             }
 
-			// -----------  move a selected piece ----------------
+			// -----------  verify to move/drop a selected piece ----------------
 			if (pieceIsSelected) {
 
 				// DROP action
@@ -353,7 +354,8 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 					ShogiDropAction dropAction = new ShogiDropAction(this, selectedPiece, gridTouched);
 					if (state.dropPiece(dropAction, false)) {
 						game.sendAction(dropAction);
-						shogiBoard.setPriorMoveSquares(priorGridTouched, gridTouched);
+						//shogiBoard.setPriorMoveSquares(priorGridTouched, gridTouched);
+						//state.setPriorMove(priorGridTouched, gridTouched);
 
 						// reset the selected piece
 						selectedPiece = null;
@@ -362,29 +364,6 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 						return true;
 					}
 
-
-
-					/* {
-						TextView currentPlayerBar = myActivity.findViewById(R.id.currentPlayerBar);
-						TextView player1Bar = myActivity.findViewById(R.id.tvP1);
-						TextView player2Bar = myActivity.findViewById(R.id.tvP2);
-
-						// Reset background color for both players
-						player1Bar.setBackgroundColor(Color.TRANSPARENT);
-						player2Bar.setBackgroundColor(Color.TRANSPARENT);
-
-						// Highlight the current player's TextView
-						if (state != null) {
-							int currentPlayer = state.getCurrentPlayer(); // 0 for Player 1, 1 for Player 2
-							if (currentPlayer == 0) {
-								currentPlayerBar.setText("Current Turn: Player 1"); // Update text if needed
-								player1Bar.setBackgroundColor(Color.GREEN);  // Highlight Player 1
-							} else {
-								currentPlayerBar.setText("Current Turn: Player 2"); // Update text if needed
-								player2Bar.setBackgroundColor(Color.GREEN);  // Highlight Player 2
-							}
-						}
-					}*/
 
 					// Invalid drop
 					// reset the selected piece
@@ -401,7 +380,8 @@ public class ShogiHumanPlayer extends GameHumanPlayer implements View.OnTouchLis
 						ShogiMoveAction action = new ShogiMoveAction(this, selectedPiece, gridTouched);
 						game.sendAction(action);
 						Log.d("Touch", "Piece selected move valid");
-						shogiBoard.setPriorMoveSquares(priorGridTouched, gridTouched);
+						//shogiBoard.setPriorMoveSquares(priorGridTouched, gridTouched);
+						//state.setPriorMove(priorGridTouched, gridTouched);
 
 						// reset the selected piece
 						selectedPiece = null;
