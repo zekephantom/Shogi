@@ -22,7 +22,6 @@ import edu.up.cs301.shogi.R;
 /**
  * ShogiGUI renders the board and pieces based on the state of ShogiBoard.
  */
-//TODO flip GUI for second network player
 public class ShogiGUI extends View {
     protected ShogiState shogiState;
     protected Context contextLocal;
@@ -213,16 +212,18 @@ public class ShogiGUI extends View {
         canvas.drawColor(Color.WHITE);
 
         // Initializing colors used
+        Paint paintWhite = new Paint();
         Paint paintBlack = new Paint();
         Paint paintBackground = new Paint();
         Paint paintCapturedField = new Paint();
+        paintWhite.setColor(Color.WHITE);
         paintBlack.setColor(Color.BLACK);
         paintBlack.setStrokeWidth(4);
         paintBackground.setColor(0xFF926211); // brown
         paintCapturedField.setColor(0xa3d3d3d3); // grey
 
         // add background
-        canvas.drawRect(0,0,width,height, paintBlack);
+        canvas.drawRect(0,0,width,height, paintWhite);
         // add background color for board
         canvas.drawRect(cellDimensions,0, cellDimensions+fieldDimensions, fieldDimensions, paintBackground);
 
